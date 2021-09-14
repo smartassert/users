@@ -83,6 +83,11 @@
         ],
         "static-analysis": "./vendor/bin/phpstan analyse --ansi",
         "test-unit": "./vendor/bin/phpunit --colors=always tests/Unit",
+        "test-functional": "./vendor/bin/phpunit --colors=always tests/Functional",
+        "test": [
+            "@test-unit",
+            "@test-functional"
+        ],
         "functional-start": "docker-compose -f ./tests/build/docker-compose.yml up -d postgres",
         "functional-status": "docker-compose -f ./tests/build/docker-compose.yml ps postgres",
         "functional-teardown": [
