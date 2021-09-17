@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Services;
 
-use App\Entity\User;
 use App\Exception\UserAlreadyExistsException;
 use App\Repository\UserRepository;
 use App\Services\UserFactory;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Tests\Services\UserRemover;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Uid\Ulid;
 
 class UserFactoryTest extends WebTestCase
 {
     private UserFactory $userFactory;
-    private EntityManagerInterface $entityManager;
     private UserRepository $userRepository;
 
     protected function setUp(): void
@@ -25,10 +23,6 @@ class UserFactoryTest extends WebTestCase
         $userFactory = self::getContainer()->get(UserFactory::class);
         \assert($userFactory instanceof UserFactory);
         $this->userFactory = $userFactory;
-
-        $entityManager = self::getContainer()->get(EntityManagerInterface::class);
-        \assert($entityManager instanceof EntityManagerInterface);
-        $this->entityManager = $entityManager;
 
         $userRepository = self::getContainer()->get(UserRepository::class);
         \assert($userRepository instanceof UserRepository);
@@ -80,11 +74,9 @@ class UserFactoryTest extends WebTestCase
 
     private function removeAllUsers(): void
     {
-        $users = $this->userRepository->findAll();
-        array_walk($users, function (User $user) {
-            $this->entityManager->remove($user);
-        });
-
-        $this->entityManager->flush();
+        $userRemover = self::getContainer()->get(UserRemover::class);
+        if ($userRemover instanceof UserRemover) {
+            $userRemover->removeAll();
+        }
     }
 }
