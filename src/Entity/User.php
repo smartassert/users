@@ -38,9 +38,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     /**
-     * @param string $id
-     * @param string $email
-     * @param string $password
      * @param array<UserRoleInterface::ROLE_*> $roles
      */
     public function __construct(string $id, string $email, string $password, array $roles = [])
