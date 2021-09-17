@@ -92,6 +92,7 @@
             "@test-unit",
             "@test-functional"
         ],
+        "functional-create-jwt-keys": "php bin/console lexik:jwt:generate-keypair --env=test --skip-if-exists",
         "functional-start": "docker-compose -f ./tests/build/docker-compose.yml up -d postgres",
         "functional-status": "docker-compose -f ./tests/build/docker-compose.yml ps postgres",
         "functional-teardown": [
@@ -100,7 +101,8 @@
         "functional-setup": [
             "@functional-start",
             "sleep 2",
-            "@db-setup"
+            "@db-setup",
+            "@functional-create-jwt-keys"
         ]
     },
     "conflict": {
