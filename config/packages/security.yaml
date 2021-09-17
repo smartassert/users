@@ -19,11 +19,11 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         token_create:
-            pattern:  ^/token/create
+            pattern:  !php/const App\Controller\TokenController::ROUTE_CREATE
             stateless: true
             jwt: ~
             json_login:
-                check_path: /token/create
+                check_path: !php/const App\Controller\TokenController::ROUTE_CREATE
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
         main:

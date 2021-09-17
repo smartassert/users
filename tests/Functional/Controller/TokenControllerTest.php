@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Controller;
 
+use App\Controller\TokenController;
 use App\Services\UserFactory;
 use App\Tests\Services\UserRemover;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -85,7 +86,7 @@ class TokenControllerTest extends WebTestCase
     {
         $this->client->request(
             'POST',
-            '/token/create',
+            TokenController::ROUTE_CREATE,
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
