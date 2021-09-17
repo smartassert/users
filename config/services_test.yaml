@@ -1,6 +1,6 @@
 parameters:
-    test_user_email: '%env(resolve:TEST_USER_EMAIL)%'
-    test_user_password: '%env(TEST_USER_PASSWORD)%'
+    test_user_email: 'test-user-email'
+    test_user_password: 'test-user-password'
 
 services:
     _defaults:
