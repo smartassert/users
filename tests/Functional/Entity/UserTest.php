@@ -6,10 +6,10 @@ namespace App\Tests\Functional\Entity;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Tests\Functional\AbstractBaseFunctionalTest;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class UserTest extends AbstractBaseFunctionalTest
+class UserTest extends WebTestCase
 {
     private EntityManagerInterface $entityManager;
     private UserRepository $userRepository;
