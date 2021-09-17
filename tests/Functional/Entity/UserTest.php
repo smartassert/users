@@ -58,9 +58,9 @@ class UserTest extends AbstractBaseFunctionalTest
     private function removeAllUsers(): void
     {
         $users = $this->userRepository->findAll();
-        foreach ($users as $user) {
+        array_walk($users, function (User $user) {
             $this->entityManager->remove($user);
-        }
+        });
 
         $this->entityManager->flush();
     }
