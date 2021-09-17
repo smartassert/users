@@ -1,3 +1,0 @@
-token_create:
-  path: /token/create
-  methods: [POST]
