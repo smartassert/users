@@ -1,0 +1,10 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\Services\UserFactory:
+        public: true
+
+    App\Tests\Services\UserRemover:
+        public: true
