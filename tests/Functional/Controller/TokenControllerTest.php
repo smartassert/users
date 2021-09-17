@@ -86,6 +86,25 @@ class TokenControllerTest extends WebTestCase
         self::assertSame($this->testUserEmail, $tokenUserData['username']);
     }
 
+    public function testCreateUserDoesNotExist(): void
+    {
+        $this->client->request(
+            'POST',
+            '/token/create',
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            (string) json_encode([
+                'username' => $this->testUserEmail,
+                'password' => $this->testUserPlainPassword,
+            ])
+        );
+
+        $response = $this->client->getResponse();
+
+        self::assertSame(401, $response->getStatusCode());
+    }
+
     private function removeAllUsers(): void
     {
         $userRemover = self::getContainer()->get(UserRemover::class);
