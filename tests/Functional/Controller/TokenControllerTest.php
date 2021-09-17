@@ -10,6 +10,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class TokenControllerTest extends WebTestCase
 {
@@ -53,20 +54,7 @@ class TokenControllerTest extends WebTestCase
     public function testCreateSuccess(): void
     {
         $this->userFactory->create($this->testUserEmail, $this->testUserPlainPassword);
-
-        $this->client->request(
-            'POST',
-            '/token/create',
-            [],
-            [],
-            ['CONTENT_TYPE' => 'application/json'],
-            (string) json_encode([
-                'username' => $this->testUserEmail,
-                'password' => $this->testUserPlainPassword,
-            ])
-        );
-
-        $response = $this->client->getResponse();
+        $response = $this->makeTokenCreateRequest();
 
         self::assertSame(200, $response->getStatusCode());
         self::assertInstanceOf(JsonResponse::class, $response);
@@ -88,6 +76,13 @@ class TokenControllerTest extends WebTestCase
 
     public function testCreateUserDoesNotExist(): void
     {
+        $response = $this->makeTokenCreateRequest();
+
+        self::assertSame(401, $response->getStatusCode());
+    }
+
+    private function makeTokenCreateRequest(): Response
+    {
         $this->client->request(
             'POST',
             '/token/create',
@@ -100,9 +95,7 @@ class TokenControllerTest extends WebTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
-
-        self::assertSame(401, $response->getStatusCode());
+        return $this->client->getResponse();
     }
 
     private function removeAllUsers(): void
