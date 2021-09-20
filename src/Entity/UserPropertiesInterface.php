@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-interface UserIdInterface
+interface UserPropertiesInterface
 {
     public const LENGTH = 32;
 }
