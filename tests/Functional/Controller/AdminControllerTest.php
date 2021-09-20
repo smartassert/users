@@ -96,9 +96,7 @@ class AdminControllerTest extends WebTestCase
 
         $response = $this->makeCreateUserRequest($email, $password, $this->adminToken);
 
-        $expectedUser = $this->userRepository->findOneBy([
-            'email' => $email,
-        ]);
+        $expectedUser = $this->userRepository->findByEmail($email);
         self::assertInstanceOf(User::class, $expectedUser);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
