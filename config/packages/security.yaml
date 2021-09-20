@@ -16,6 +16,8 @@ security:
                 property: email
         jwt:
             lexik_jwt: ~
+        admin_user_provider:
+            id: App\Security\Admin\UserProvider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -35,6 +37,12 @@ security:
             anonymous: false
             jwt: ~
             provider: jwt
+        admin:
+            pattern:  !php/const App\Controller\AdminController::ROUTE_PREFIX
+            stateless: true
+            custom_authenticators:
+                - App\Security\Admin\Authenticator
+            provider: admin_user_provider
         main:
             lazy: true
             provider: app_user_provider
@@ -50,5 +58,6 @@ security:
     access_control:
         - { path: !php/const App\Controller\TokenController::ROUTE_CREATE, roles: PUBLIC_ACCESS }
         - { path: !php/const App\Controller\TokenController::ROUTE_VERIFY, roles: IS_AUTHENTICATED_FULLY }
+        - { path: !php/const App\Controller\AdminController::ROUTE_PREFIX, roles: ROLE_ADMIN }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
