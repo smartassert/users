@@ -58,6 +58,6 @@ security:
     access_control:
         - { path: !php/const App\Controller\TokenController::ROUTE_CREATE, roles: PUBLIC_ACCESS }
         - { path: !php/const App\Controller\TokenController::ROUTE_VERIFY, roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
-        - { path: !php/const App\Controller\AdminController::ROUTE_PREFIX, roles: ROLE_ADMIN }
+        - { path: !php/const App\Controller\AdminController::ROUTE_PREFIX, roles: !php/const App\Security\UserRoleInterface::ROLE_ADMIN }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
