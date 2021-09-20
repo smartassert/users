@@ -16,7 +16,7 @@ class UserProvider implements UserProviderInterface
 
     public function supportsClass(string $class): bool
     {
-        return $class === User::class;
+        return User::class === $class;
     }
 
     public function loadUserByUsername(string $username): UserInterface
