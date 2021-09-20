@@ -6,5 +6,5 @@ namespace App\Entity;
 
 interface UserPropertiesInterface
 {
-    public const LENGTH = 32;
+    public const ID_LENGTH = 32;
 }
