@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Security\Admin;
 
 use App\Security\Admin\User;
+use App\Security\UserRoleInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -28,7 +29,12 @@ class UserTest extends TestCase
 
     public function testGetRoles(): void
     {
-        self::assertSame(['ROLE_ADMIN'], $this->user->getRoles());
+        self::assertSame(
+            [
+                UserRoleInterface::ROLE_ADMIN,
+            ],
+            $this->user->getRoles()
+        );
     }
 
     public function testGetUserIdentifier(): void
