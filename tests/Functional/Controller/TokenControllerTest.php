@@ -115,6 +115,8 @@ class TokenControllerTest extends WebTestCase
         $this->userFactory->create($this->testUserEmail, $this->testUserPlainPassword);
         $createTokenResponse = $this->makeTokenCreateRequest();
 
+        $this->removeAllUsers();
+
         $createTokenResponseData = json_decode((string) $createTokenResponse->getContent(), true);
         $this->makeTokenVerifyRequest($createTokenResponseData['token']);
 
