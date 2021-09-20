@@ -26,6 +26,11 @@ security:
                 check_path: !php/const App\Controller\TokenController::ROUTE_CREATE
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        token_verify:
+            pattern: !php/const App\Controller\TokenController::ROUTE_VERIFY
+            stateless: true
+            anonymous: false
+            jwt: ~
         main:
             lazy: true
             provider: app_user_provider
@@ -40,5 +45,6 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: !php/const App\Controller\TokenController::ROUTE_CREATE, roles: PUBLIC_ACCESS }
+        - { path: !php/const App\Controller\TokenController::ROUTE_VERIFY, roles: IS_AUTHENTICATED_FULLY }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
