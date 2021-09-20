@@ -32,22 +32,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
      */
     private string $password;
 
-    /**
-     * @var array<UserRoleInterface::ROLE_*>
-     *
-     * @ORM\Column(type="json")
-     */
-    private array $roles = [];
-
-    /**
-     * @param array<UserRoleInterface::ROLE_*> $roles
-     */
-    public function __construct(string $id, string $email, string $password, array $roles = [])
+    public function __construct(string $id, string $email, string $password)
     {
         $this->id = $id;
         $this->email = $email;
         $this->password = $password;
-        $this->roles = $roles;
     }
 
     public function getId(): string
@@ -83,11 +72,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return [
+            UserRoleInterface::ROLE_USER,
+        ];
     }
 
     /**
