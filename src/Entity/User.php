@@ -18,7 +18,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="string", length=UserIdInterface::LENGTH, unique=true)
+     * @ORM\Column(type="string", length=UserPropertiesInterface::ID_LENGTH, unique=true)
      */
     private string $id;
 

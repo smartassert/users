@@ -50,9 +50,7 @@ class UserFactoryTest extends WebTestCase
         self::assertNotEquals($plainPassword, $user->getPassword());
         self::assertTrue(Ulid::isValid($user->getId()));
 
-        $retrievedUser = $this->userRepository->findOneBy([
-            'email' => $email,
-        ]);
+        $retrievedUser = $this->userRepository->findByEmail($email);
 
         self::assertEquals($user, $retrievedUser);
     }
