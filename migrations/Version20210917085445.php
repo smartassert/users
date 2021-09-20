@@ -21,7 +21,6 @@ final class Version20210917085445 extends AbstractMigration
                 id VARCHAR(32) NOT NULL, 
                 email VARCHAR(254) NOT NULL, 
                 password VARCHAR(255) NOT NULL, 
-                roles JSON NOT NULL, 
                 PRIMARY KEY(id)
             )
         ');
