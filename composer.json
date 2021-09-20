@@ -11,6 +11,7 @@
         "doctrine/doctrine-bundle": "^2.4",
         "doctrine/doctrine-migrations-bundle": "^3.1",
         "doctrine/orm": "^2.9",
+        "lexik/jwt-authentication-bundle": "^2.13",
         "symfony/console": "5.3.*",
         "symfony/dotenv": "5.3.*",
         "symfony/flex": "^1.3.1",
@@ -19,6 +20,7 @@
         "symfony/proxy-manager-bridge": "5.3.*",
         "symfony/runtime": "5.3.*",
         "symfony/security-bundle": "5.3.*",
+        "symfony/uid": "5.3.*",
         "symfony/yaml": "5.3.*"
     },
     "require-dev": {
@@ -90,6 +92,7 @@
             "@test-unit",
             "@test-functional"
         ],
+        "functional-create-jwt-keys": "php bin/console lexik:jwt:generate-keypair --env=test --skip-if-exists",
         "functional-start": "docker-compose -f ./tests/build/docker-compose.yml up -d postgres",
         "functional-status": "docker-compose -f ./tests/build/docker-compose.yml ps postgres",
         "functional-teardown": [
@@ -98,7 +101,8 @@
         "functional-setup": [
             "@functional-start",
             "sleep 2",
-            "@db-setup"
+            "@db-setup",
+            "@functional-create-jwt-keys"
         ]
     },
     "conflict": {

@@ -6,6 +6,7 @@ namespace App\Tests\Functional\Entity;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Tests\Services\UserRemover;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -57,11 +58,9 @@ class UserTest extends WebTestCase
 
     private function removeAllUsers(): void
     {
-        $users = $this->userRepository->findAll();
-        array_walk($users, function (User $user) {
-            $this->entityManager->remove($user);
-        });
-
-        $this->entityManager->flush();
+        $userRemover = self::getContainer()->get(UserRemover::class);
+        if ($userRemover instanceof UserRemover) {
+            $userRemover->removeAll();
+        }
     }
 }

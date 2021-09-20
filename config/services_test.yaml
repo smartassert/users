@@ -1,0 +1,14 @@
+parameters:
+    test_user_email: 'test-user-email'
+    test_user_password: 'test-user-password'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\Services\UserFactory:
+        public: true
+
+    App\Tests\Services\UserRemover:
+        public: true
