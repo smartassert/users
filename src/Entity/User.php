@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
  */
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -121,5 +121,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // Required by UserInterface.
         // Intentionally empty implementation.
+    }
+
+    /**
+     * @return array{"id": string, "email": string}
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'email' => $this->email,
+        ];
     }
 }
