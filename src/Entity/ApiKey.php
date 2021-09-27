@@ -23,10 +23,17 @@ class ApiKey
      */
     private string $label;
 
-    public function __construct(string $id, string $label)
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private User $owner;
+
+    public function __construct(string $id, string $label, User $owner)
     {
         $this->id = $id;
         $this->label = $label;
+        $this->owner = $owner;
     }
 
     public function getId(): string
@@ -37,5 +44,10 @@ class ApiKey
     public function getLabel(): ?string
     {
         return $this->label;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
     }
 }
