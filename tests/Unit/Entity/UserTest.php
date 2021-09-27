@@ -33,7 +33,7 @@ class UserTest extends TestCase
                 ),
                 'expectedSerializedUser' => [
                     'id' => 'id-value',
-                    'email' => 'email-value',
+                    'user-identifier' => 'email-value',
                 ],
             ],
         ];

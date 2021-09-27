@@ -13,9 +13,10 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\User
-                property: email
+                property: userIdentifier
         jwt:
-            lexik_jwt: ~
+            lexik_jwt:
+                class: App\Security\JWTUser
         admin_user_provider:
             id: App\Security\Admin\UserProvider
     firewalls:

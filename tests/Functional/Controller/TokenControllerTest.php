@@ -72,7 +72,7 @@ class TokenControllerTest extends WebTestCase
 
         self::assertIsArray($tokenUserData);
         self::assertArrayHasKey('username', $tokenUserData);
-        self::assertSame($user->getEmail(), $tokenUserData['username']);
+        self::assertSame($user->getUserIdentifier(), $tokenUserData['username']);
         self::assertArrayHasKey('id', $tokenUserData);
         self::assertSame($user->getId(), $tokenUserData['id']);
     }
@@ -114,7 +114,7 @@ class TokenControllerTest extends WebTestCase
 
     public function testVerifyValidJwt(): void
     {
-        $this->userFactory->create($this->testUserEmail, $this->testUserPlainPassword);
+        $user = $this->userFactory->create($this->testUserEmail, $this->testUserPlainPassword);
         $createTokenResponse = $this->makeTokenCreateRequest();
 
         $this->removeAllUsers();
@@ -124,7 +124,13 @@ class TokenControllerTest extends WebTestCase
 
         $response = $this->client->getResponse();
 
-        self::assertSame(200, $response->getStatusCode());
+        self::assertInstanceOf(JsonResponse::class, $response);
+        $responseData = json_decode((string) $response->getContent(), true);
+
+        self::assertArrayHasKey('id', $responseData);
+        self::assertSame($user->getId(), $responseData['id']);
+        self::assertArrayHasKey('user-identifier', $responseData);
+        self::assertSame($user->getUserIdentifier(), $responseData['user-identifier']);
     }
 
     private function makeTokenCreateRequest(): Response
