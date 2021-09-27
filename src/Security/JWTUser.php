@@ -6,7 +6,7 @@ namespace App\Security;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 
-class JWTUser extends User implements JWTUserInterface, \JsonSerializable
+class JWTUser extends AbstractUser implements JWTUserInterface, \JsonSerializable
 {
     /**
      * @param array<mixed> $payload

@@ -6,7 +6,7 @@ namespace App\Security;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class User implements UserInterface, \JsonSerializable
+abstract class AbstractUser implements UserInterface, \JsonSerializable
 {
     /**
      * @param array<UserRoleInterface::ROLE_*> $roles
