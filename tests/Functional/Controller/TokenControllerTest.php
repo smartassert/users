@@ -6,7 +6,7 @@ namespace App\Tests\Functional\Controller;
 
 use App\Controller\TokenController;
 use App\Security\TokenInterface;
-use App\Services\UserFactory;
+use App\Tests\Services\TestUserFactory;
 use App\Tests\Services\UserRemover;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -17,9 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 class TokenControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
-    private UserFactory $userFactory;
-    private string $testUserEmail;
-    private string $testUserPlainPassword;
+    private TestUserFactory $testUserFactory;
 
     protected function setUp(): void
     {
@@ -27,21 +25,9 @@ class TokenControllerTest extends WebTestCase
 
         $this->client = static::createClient();
 
-        $userFactory = self::getContainer()->get(UserFactory::class);
-        \assert($userFactory instanceof UserFactory);
-        $this->userFactory = $userFactory;
-
-        $testUserEmail = self::getContainer()->getParameter('test_user_email');
-        if (!is_string($testUserEmail)) {
-            $this->fail('test_user_email parameter not set correctly');
-        }
-        $this->testUserEmail = $testUserEmail;
-
-        $testUserPlainPassword = self::getContainer()->getParameter('test_user_password');
-        if (!is_string($testUserPlainPassword)) {
-            $this->fail('test_user_password parameter not set correctly');
-        }
-        $this->testUserPlainPassword = $testUserPlainPassword;
+        $testUserFactory = self::getContainer()->get(TestUserFactory::class);
+        \assert($testUserFactory instanceof TestUserFactory);
+        $this->testUserFactory = $testUserFactory;
 
         $this->removeAllUsers();
     }
@@ -55,8 +41,8 @@ class TokenControllerTest extends WebTestCase
 
     public function testCreateSuccess(): void
     {
-        $user = $this->userFactory->create($this->testUserEmail, $this->testUserPlainPassword);
-        $response = $this->makeTokenCreateRequest();
+        $user = $this->testUserFactory->create();
+        $response = $this->makeTokenCreateRequest(...$this->testUserFactory->getCredentials());
 
         self::assertSame(200, $response->getStatusCode());
         self::assertInstanceOf(JsonResponse::class, $response);
@@ -80,7 +66,7 @@ class TokenControllerTest extends WebTestCase
 
     public function testCreateUserDoesNotExist(): void
     {
-        $response = $this->makeTokenCreateRequest();
+        $response = $this->makeTokenCreateRequest('', '');
 
         self::assertSame(401, $response->getStatusCode());
     }
@@ -115,8 +101,8 @@ class TokenControllerTest extends WebTestCase
 
     public function testVerifyValidJwt(): void
     {
-        $user = $this->userFactory->create($this->testUserEmail, $this->testUserPlainPassword);
-        $createTokenResponse = $this->makeTokenCreateRequest();
+        $user = $this->testUserFactory->create();
+        $createTokenResponse = $this->makeTokenCreateRequest(...$this->testUserFactory->getCredentials());
 
         $this->removeAllUsers();
 
@@ -134,7 +120,7 @@ class TokenControllerTest extends WebTestCase
         self::assertSame($user->getUserIdentifier(), $responseData['user-identifier']);
     }
 
-    private function makeTokenCreateRequest(): Response
+    private function makeTokenCreateRequest(string $userIdentifier, string $password): Response
     {
         $this->client->request(
             'POST',
@@ -143,8 +129,8 @@ class TokenControllerTest extends WebTestCase
             [],
             ['CONTENT_TYPE' => 'application/json'],
             (string) json_encode([
-                'username' => $this->testUserEmail,
-                'password' => $this->testUserPlainPassword,
+                'username' => $userIdentifier,
+                'password' => $password,
             ])
         );
 

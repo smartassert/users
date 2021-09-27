@@ -7,8 +7,14 @@ services:
         autowire: true
         autoconfigure: true
 
-    App\Services\UserFactory:
+    App\Services\ApiKeyFactory:
         public: true
+
+    App\Tests\Services\TestUserFactory:
+        public: true
+        arguments:
+            $testUserEmail: '%test_user_email%'
+            $testUserPassword: '%test_user_password%'
 
     App\Tests\Services\UserRemover:
         public: true
