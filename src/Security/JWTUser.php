@@ -17,6 +17,6 @@ class JWTUser extends User implements JWTUserInterface, \JsonSerializable
         $id = $payload['id'] ?? '';
         $roles = $payload['roles'] ?? [];
 
-        return new JWTUser($username, $id, $roles);
+        return new JWTUser($id, $username, $roles);
     }
 }

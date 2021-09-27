@@ -12,8 +12,8 @@ class User implements UserInterface, \JsonSerializable
      * @param array<UserRoleInterface::ROLE_*> $roles
      */
     public function __construct(
-        private string $userIdentifier,
         private string $id,
+        private string $userIdentifier,
         private array $roles
     ) {
     }
