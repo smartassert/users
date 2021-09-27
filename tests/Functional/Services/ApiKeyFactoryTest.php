@@ -7,7 +7,7 @@ namespace App\Tests\Functional\Services;
 use App\Entity\User;
 use App\Repository\ApiKeyRepository;
 use App\Services\ApiKeyFactory;
-use App\Services\UserFactory;
+use App\Tests\Services\TestUserFactory;
 use App\Tests\Services\UserRemover;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -31,9 +31,9 @@ class ApiKeyFactoryTest extends WebTestCase
 
         $this->removeAllUsers();
 
-        $userFactory = self::getContainer()->get(UserFactory::class);
-        \assert($userFactory instanceof UserFactory);
-        $this->user = $userFactory->create('user@example.com', 'password');
+        $testUserFactory = self::getContainer()->get(TestUserFactory::class);
+        \assert($testUserFactory instanceof TestUserFactory);
+        $this->user = $testUserFactory->create();
     }
 
     protected function tearDown(): void
