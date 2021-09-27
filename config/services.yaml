@@ -41,3 +41,8 @@ services:
             $validTokens:
                 - '%primary-admin-token%'
                 - '%secondary-admin-token%'
+
+    app.eventlistener.jwt.created:
+        class: App\EventListener\TokenCreatedListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created }

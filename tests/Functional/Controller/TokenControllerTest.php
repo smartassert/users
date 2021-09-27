@@ -54,7 +54,7 @@ class TokenControllerTest extends WebTestCase
 
     public function testCreateSuccess(): void
     {
-        $this->userFactory->create($this->testUserEmail, $this->testUserPlainPassword);
+        $user = $this->userFactory->create($this->testUserEmail, $this->testUserPlainPassword);
         $response = $this->makeTokenCreateRequest();
 
         self::assertSame(200, $response->getStatusCode());
@@ -72,7 +72,9 @@ class TokenControllerTest extends WebTestCase
 
         self::assertIsArray($tokenUserData);
         self::assertArrayHasKey('username', $tokenUserData);
-        self::assertSame($this->testUserEmail, $tokenUserData['username']);
+        self::assertSame($user->getEmail(), $tokenUserData['username']);
+        self::assertArrayHasKey('id', $tokenUserData);
+        self::assertSame($user->getId(), $tokenUserData['id']);
     }
 
     public function testCreateUserDoesNotExist(): void
