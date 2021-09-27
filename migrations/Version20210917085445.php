@@ -24,7 +24,7 @@ final class Version20210917085445 extends AbstractMigration
                 PRIMARY KEY(id)
             )
         ');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649E7927C74 ON "user" (user_identifier)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649D0494586 ON "user" (user_identifier)');
     }
 
     public function down(Schema $schema): void
