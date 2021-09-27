@@ -72,8 +72,8 @@ class TokenControllerTest extends WebTestCase
         $payload = $jwtManager->parse($token);
 
         self::assertIsArray($payload);
-        self::assertArrayHasKey('username', $payload);
-        self::assertSame($user->getUserIdentifier(), $payload['username']);
+        self::assertArrayHasKey(TokenInterface::CLAIM_EMAIL, $payload);
+        self::assertSame($user->getUserIdentifier(), $payload[TokenInterface::CLAIM_EMAIL]);
         self::assertArrayHasKey(TokenInterface::CLAIM_USER_ID, $payload);
         self::assertSame($user->getId(), $payload[TokenInterface::CLAIM_USER_ID]);
     }
