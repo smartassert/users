@@ -20,7 +20,7 @@ class TokenCreatedListener
     {
         $payload = $event->getData();
 
-        $user = $this->userRepository->findByEmail($payload['username'] ?? '');
+        $user = $this->userRepository->findByEmail($payload[TokenInterface::CLAIM_USER_IDENTIFIER] ?? '');
         if ($user instanceof User) {
             $payload[TokenInterface::CLAIM_USER_ID] = $user->getId();
         }
