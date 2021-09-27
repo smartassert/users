@@ -13,7 +13,7 @@ class UserAlreadyExistsException extends \Exception
     ) {
         parent::__construct(sprintf(
             'User "%s" already exists',
-            $user->getEmail()
+            $user->getUserIdentifier()
         ));
     }
 

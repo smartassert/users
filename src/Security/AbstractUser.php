@@ -4,30 +4,23 @@ declare(strict_types=1);
 
 namespace App\Security;
 
-use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-class User implements JWTUserInterface, \JsonSerializable
+abstract class AbstractUser implements UserInterface, \JsonSerializable
 {
     /**
      * @param array<UserRoleInterface::ROLE_*> $roles
      */
     public function __construct(
-        private string $userIdentifier,
-        private string $id,
-        private array $roles
+        protected string $id,
+        protected string $userIdentifier,
+        protected array $roles
     ) {
     }
 
-    /**
-     * @param array<mixed> $payload
-     * @param mixed        $username
-     */
-    public static function createFromPayload($username, array $payload): JWTUserInterface
+    public function getId(): string
     {
-        $id = $payload['id'] ?? '';
-        $roles = $payload['roles'] ?? [];
-
-        return new User($username, $id, $roles);
+        return $this->id;
     }
 
     /**
@@ -68,13 +61,13 @@ class User implements JWTUserInterface, \JsonSerializable
     }
 
     /**
-     * @return array{"id": string, "email": string}
+     * @return array{"id": string, "user-identifier": string}
      */
     public function jsonSerialize(): array
     {
         return [
             'id' => $this->id,
-            'email' => $this->userIdentifier,
+            'user-identifier' => $this->userIdentifier,
         ];
     }
 }
