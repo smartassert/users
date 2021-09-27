@@ -7,5 +7,5 @@ namespace App\Entity;
 interface UserPropertiesInterface
 {
     public const ID_LENGTH = 32;
-    public const IDENTIFIER = 'email';
+    public const IDENTIFIER = 'userIdentifier';
 }

@@ -19,12 +19,12 @@ final class Version20210917085445 extends AbstractMigration
         $this->addSql('
             CREATE TABLE "user" (
                 id VARCHAR(32) NOT NULL, 
-                email VARCHAR(254) NOT NULL, 
+                user_identifier VARCHAR(254) NOT NULL, 
                 password VARCHAR(255) NOT NULL, 
                 PRIMARY KEY(id)
             )
         ');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649E7927C74 ON "user" (email)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649E7927C74 ON "user" (user_identifier)');
     }
 
     public function down(Schema $schema): void

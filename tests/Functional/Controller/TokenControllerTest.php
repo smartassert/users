@@ -72,7 +72,7 @@ class TokenControllerTest extends WebTestCase
 
         self::assertIsArray($tokenUserData);
         self::assertArrayHasKey('username', $tokenUserData);
-        self::assertSame($user->getEmail(), $tokenUserData['username']);
+        self::assertSame($user->getUserIdentifier(), $tokenUserData['username']);
         self::assertArrayHasKey('id', $tokenUserData);
         self::assertSame($user->getId(), $tokenUserData['id']);
     }
@@ -129,8 +129,8 @@ class TokenControllerTest extends WebTestCase
 
         self::assertArrayHasKey('id', $responseData);
         self::assertSame($user->getId(), $responseData['id']);
-        self::assertArrayHasKey('email', $responseData);
-        self::assertSame($user->getEmail(), $responseData['email']);
+        self::assertArrayHasKey('user-identifier', $responseData);
+        self::assertSame($user->getUserIdentifier(), $responseData['user-identifier']);
     }
 
     private function makeTokenCreateRequest(): Response

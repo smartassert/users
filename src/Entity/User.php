@@ -26,7 +26,7 @@ class User extends AbstractUser implements UserInterface, PasswordAuthenticatedU
     /**
      * @ORM\Column(type="string", length=254, unique=true)
      */
-    protected string $email;
+    protected string $userIdentifier;
 
     /**
      * @var string The hashed password
@@ -34,24 +34,19 @@ class User extends AbstractUser implements UserInterface, PasswordAuthenticatedU
      */
     protected string $password;
 
-    public function __construct(string $id, string $email, string $password)
+    public function __construct(string $id, string $userIdentifier, string $password)
     {
         $this->id = $id;
-        $this->email = $email;
+        $this->userIdentifier = $userIdentifier;
         $this->password = $password;
 
         parent::__construct(
             $id,
-            $email,
+            $userIdentifier,
             [
                 UserRoleInterface::ROLE_USER,
             ]
         );
-    }
-
-    public function getEmail(): string
-    {
-        return $this->email;
     }
 
     public function getPassword(): string

@@ -61,13 +61,13 @@ abstract class AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * @return array{"id": string, "email": string}
+     * @return array{"id": string, "user-identifier": string}
      */
     public function jsonSerialize(): array
     {
         return [
             'id' => $this->id,
-            'email' => $this->userIdentifier,
+            'user-identifier' => $this->userIdentifier,
         ];
     }
 }
