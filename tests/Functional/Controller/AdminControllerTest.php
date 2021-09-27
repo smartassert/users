@@ -8,7 +8,7 @@ use App\Controller\AdminController;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Request\CreateUserRequest;
-use App\Services\UserFactory;
+use App\Tests\Services\TestUserFactory;
 use App\Tests\Services\UserRemover;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -19,8 +19,8 @@ class AdminControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
     private string $adminToken;
-    private UserFactory $userFactory;
     private UserRepository $userRepository;
+    private TestUserFactory $testUserFactory;
 
     protected function setUp(): void
     {
@@ -31,13 +31,13 @@ class AdminControllerTest extends WebTestCase
         $adminToken = $this->getContainer()->getParameter('primary-admin-token');
         $this->adminToken = is_string($adminToken) ? $adminToken : '';
 
-        $userFactory = self::getContainer()->get(UserFactory::class);
-        \assert($userFactory instanceof UserFactory);
-        $this->userFactory = $userFactory;
-
         $userRepository = self::getContainer()->get(UserRepository::class);
         \assert($userRepository instanceof UserRepository);
         $this->userRepository = $userRepository;
+
+        $testUserFactory = self::getContainer()->get(TestUserFactory::class);
+        \assert($testUserFactory instanceof TestUserFactory);
+        $this->testUserFactory = $testUserFactory;
     }
 
     /**
@@ -69,12 +69,8 @@ class AdminControllerTest extends WebTestCase
     {
         $this->removeAllUsers();
 
-        $email = 'email';
-        $password = 'password';
-
-        $user = $this->userFactory->create($email, $password);
-
-        $response = $this->makeCreateUserRequest($email, $password, $this->adminToken);
+        $user = $this->testUserFactory->create();
+        $response = $this->makeCreateUserRequest($user->getUserIdentifier(), $user->getPassword(), $this->adminToken);
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertInstanceOf(JsonResponse::class, $response);
