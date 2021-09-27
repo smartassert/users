@@ -14,7 +14,7 @@ class JWTUser extends AbstractUser implements JWTUserInterface, \JsonSerializabl
      */
     public static function createFromPayload($username, array $payload): JWTUserInterface
     {
-        $id = $payload['id'] ?? '';
+        $id = $payload[TokenInterface::CLAIM_USER_ID] ?? '';
         $roles = $payload['roles'] ?? [];
 
         return new JWTUser($id, $username, $roles);

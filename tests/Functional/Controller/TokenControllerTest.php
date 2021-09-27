@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Controller;
 
 use App\Controller\TokenController;
+use App\Security\TokenInterface;
 use App\Services\UserFactory;
 use App\Tests\Services\UserRemover;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -68,13 +69,13 @@ class TokenControllerTest extends WebTestCase
         $jwtManager = self::getContainer()->get('lexik_jwt_authentication.jwt_manager');
         \assert($jwtManager instanceof JWTTokenManagerInterface);
 
-        $tokenUserData = $jwtManager->parse($token);
+        $payload = $jwtManager->parse($token);
 
-        self::assertIsArray($tokenUserData);
-        self::assertArrayHasKey('username', $tokenUserData);
-        self::assertSame($user->getUserIdentifier(), $tokenUserData['username']);
-        self::assertArrayHasKey('id', $tokenUserData);
-        self::assertSame($user->getId(), $tokenUserData['id']);
+        self::assertIsArray($payload);
+        self::assertArrayHasKey('username', $payload);
+        self::assertSame($user->getUserIdentifier(), $payload['username']);
+        self::assertArrayHasKey(TokenInterface::CLAIM_USER_ID, $payload);
+        self::assertSame($user->getId(), $payload[TokenInterface::CLAIM_USER_ID]);
     }
 
     public function testCreateUserDoesNotExist(): void

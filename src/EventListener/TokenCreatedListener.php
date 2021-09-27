@@ -6,6 +6,7 @@ namespace App\EventListener;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Security\TokenInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 
 class TokenCreatedListener
@@ -21,7 +22,7 @@ class TokenCreatedListener
 
         $user = $this->userRepository->findByEmail($payload['username'] ?? '');
         if ($user instanceof User) {
-            $payload['id'] = $user->getId();
+            $payload[TokenInterface::CLAIM_USER_ID] = $user->getId();
         }
 
         $event->setData($payload);
