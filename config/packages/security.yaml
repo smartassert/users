@@ -16,7 +16,7 @@ security:
                 property: email
         jwt:
             lexik_jwt:
-                class: App\Security\User
+                class: App\Security\JWTUser
         admin_user_provider:
             id: App\Security\Admin\UserProvider
     firewalls:
