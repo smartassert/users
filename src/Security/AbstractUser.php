@@ -12,10 +12,15 @@ abstract class AbstractUser implements UserInterface, \JsonSerializable
      * @param array<UserRoleInterface::ROLE_*> $roles
      */
     public function __construct(
-        private string $id,
-        private string $userIdentifier,
-        private array $roles
+        protected string $id,
+        protected string $userIdentifier,
+        protected array $roles
     ) {
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     /**
