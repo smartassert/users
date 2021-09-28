@@ -64,7 +64,7 @@ class TokenControllerTest extends WebTestCase
 
         JsonResponseAsserter::create()
             ->withExpectedStatusCode(200)
-            ->addBodyAsserter(
+            ->withBodyAsserter(
                 $jwtTokenBodyAsserterFactory->create(
                     'token',
                     [
@@ -124,7 +124,7 @@ class TokenControllerTest extends WebTestCase
 
         JsonResponseAsserter::create()
             ->withExpectedStatusCode(200)
-            ->addBodyAsserter(new ArrayBodyAsserter([
+            ->withBodyAsserter(new ArrayBodyAsserter([
                 'id' => $user->getId(),
                 'user-identifier' => $user->getUserIdentifier(),
             ]))

@@ -14,7 +14,7 @@ class JsonResponseAsserter extends ResponseAsserter
     {
         return (new self())
             ->withExpectedClass(JsonResponse::class)
-            ->addHeaderAsserter(new HeaderAsserter([
+            ->withHeaderAsserter(new HeaderAsserter([
                 'content-type' => 'application/json'
             ]))
         ;

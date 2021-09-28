@@ -26,11 +26,6 @@ class ResponseAsserter
      */
     private array $bodyAsserters = [];
 
-    public static function create(): self
-    {
-        return new self();
-    }
-
     public function withExpectedStatusCode(int $expectedStatusCode): static
     {
         $new = clone $this;
@@ -50,7 +45,7 @@ class ResponseAsserter
         return $new;
     }
 
-    public function addHeaderAsserter(HeaderAsserterInterface $headerAsserter): static
+    public function withHeaderAsserter(HeaderAsserterInterface $headerAsserter): static
     {
         $new = clone $this;
         $new->headerAsserters[] = $headerAsserter;
@@ -58,7 +53,7 @@ class ResponseAsserter
         return $new;
     }
 
-    public function addBodyAsserter(BodyAsserterInterface $bodyAsserter): static
+    public function withBodyAsserter(BodyAsserterInterface $bodyAsserter): static
     {
         $new = clone $this;
         $new->bodyAsserters[] = $bodyAsserter;
