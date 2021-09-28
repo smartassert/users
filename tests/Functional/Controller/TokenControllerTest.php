@@ -7,6 +7,7 @@ namespace App\Tests\Functional\Controller;
 use App\Controller\TokenController;
 use App\Security\TokenInterface;
 use App\Services\UserFactory;
+use App\Tests\Services\Asserter\ResponseAsserter\ArrayBodyAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory;
 use App\Tests\Services\UserRemover;
@@ -123,10 +124,10 @@ class TokenControllerTest extends WebTestCase
 
         JsonResponseAsserter::create()
             ->withExpectedStatusCode(200)
-            ->withExpectedData([
+            ->addBodyAsserter(new ArrayBodyAsserter([
                 'id' => $user->getId(),
                 'user-identifier' => $user->getUserIdentifier(),
-            ])
+            ]))
             ->assert($response)
         ;
     }

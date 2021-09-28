@@ -19,14 +19,4 @@ class JsonResponseAsserter extends ResponseAsserter
             ]))
         ;
     }
-
-    /**
-     * @param array<int|string, null|bool|int|string> $expected
-     */
-    public function withExpectedData(array $expected): static
-    {
-        return $this->addBodyAsserter(
-            new ArrayBodyAsserter($expected)
-        );
-    }
 }
