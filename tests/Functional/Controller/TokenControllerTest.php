@@ -62,17 +62,14 @@ class TokenControllerTest extends WebTestCase
         $jwtTokenBodyAsserterFactory = self::getContainer()->get(JwtTokenBodyAsserterFactory::class);
         \assert($jwtTokenBodyAsserterFactory instanceof JwtTokenBodyAsserterFactory);
 
-        JsonResponseAsserter::create()
-            ->withExpectedStatusCode(200)
-            ->withBodyAsserter(
-                $jwtTokenBodyAsserterFactory->create(
-                    'token',
-                    [
-                        TokenInterface::CLAIM_EMAIL => $user->getUserIdentifier(),
-                        TokenInterface::CLAIM_USER_ID => $user->getId(),
-                    ]
-                )
-            )
+        (new JsonResponseAsserter(200))
+            ->addBodyAsserter($jwtTokenBodyAsserterFactory->create(
+                'token',
+                [
+                    TokenInterface::CLAIM_EMAIL => $user->getUserIdentifier(),
+                    TokenInterface::CLAIM_USER_ID => $user->getId(),
+                ]
+            ))
             ->assert($response)
         ;
     }
@@ -122,9 +119,8 @@ class TokenControllerTest extends WebTestCase
         $createTokenResponseData = json_decode((string) $createTokenResponse->getContent(), true);
         $response = $this->makeTokenVerifyRequest($createTokenResponseData['token']);
 
-        JsonResponseAsserter::create()
-            ->withExpectedStatusCode(200)
-            ->withBodyAsserter(new ArrayBodyAsserter([
+        (new JsonResponseAsserter(200))
+            ->addBodyAsserter(new ArrayBodyAsserter([
                 'id' => $user->getId(),
                 'user-identifier' => $user->getUserIdentifier(),
             ]))

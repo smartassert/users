@@ -9,13 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ResponseAsserter
 {
-    private int $expectedStatusCode = 200;
-
-    /**
-     * @var class-string
-     */
-    private string $expectedClass = Response::class;
-
     /**
      * @var HeaderAsserterInterface[]
      */
@@ -26,39 +19,28 @@ class ResponseAsserter
      */
     private array $bodyAsserters = [];
 
-    public function withExpectedStatusCode(int $expectedStatusCode): static
-    {
-        $new = clone $this;
-        $new->expectedStatusCode = $expectedStatusCode;
-
-        return $new;
-    }
-
     /**
+     * @param int          $expectedStatusCode
      * @param class-string $expectedClass
      */
-    public function withExpectedClass(string $expectedClass): static
-    {
-        $new = clone $this;
-        $new->expectedClass = $expectedClass;
-
-        return $new;
+    public function __construct(
+        private int $expectedStatusCode,
+        private string $expectedClass
+    ) {
     }
 
-    public function withHeaderAsserter(HeaderAsserterInterface $headerAsserter): static
+    public function addHeaderAsserter(HeaderAsserterInterface $headerAsserter): self
     {
-        $new = clone $this;
-        $new->headerAsserters[] = $headerAsserter;
+        $this->headerAsserters[] = $headerAsserter;
 
-        return $new;
+        return $this;
     }
 
-    public function withBodyAsserter(BodyAsserterInterface $bodyAsserter): static
+    public function addBodyAsserter(BodyAsserterInterface $bodyAsserter): self
     {
-        $new = clone $this;
-        $new->bodyAsserters[] = $bodyAsserter;
+        $this->bodyAsserters[] = $bodyAsserter;
 
-        return $new;
+        return $this;
     }
 
     public function assert(Response $response): void
