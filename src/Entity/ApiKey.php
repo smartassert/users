@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=ApiKeyRepository::class)
  */
-class ApiKey
+class ApiKey implements \Stringable
 {
     /**
      * @ORM\Id
@@ -34,6 +34,11 @@ class ApiKey
         $this->id = $id;
         $this->label = $label;
         $this->owner = $owner;
+    }
+
+    public function __toString()
+    {
+        return $this->id;
     }
 
     public function getId(): string
