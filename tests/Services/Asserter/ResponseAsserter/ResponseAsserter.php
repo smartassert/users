@@ -9,53 +9,38 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ResponseAsserter
 {
-    private int $expectedStatusCode = 200;
-    private ?HeaderAsserterInterface $headerAsserter = null;
-    private ?BodyAsserterInterface $bodyAsserter = null;
-
     /**
-     * @var class-string
+     * @var HeaderAsserterInterface[]
      */
-    private string $expectedClass = Response::class;
-
-    public static function create(): self
-    {
-        return new self();
-    }
-
-    public function withExpectedStatusCode(int $expectedStatusCode): static
-    {
-        $new = clone $this;
-        $new->expectedStatusCode = $expectedStatusCode;
-
-        return $new;
-    }
+    private array $headerAsserters = [];
 
     /**
+     * @var BodyAsserterInterface[]
+     */
+    private array $bodyAsserters = [];
+
+    /**
+     * @param int          $expectedStatusCode
      * @param class-string $expectedClass
      */
-    public function withExpectedClass(string $expectedClass): static
-    {
-        $new = clone $this;
-        $new->expectedClass = $expectedClass;
-
-        return $new;
+    public function __construct(
+        private int $expectedStatusCode,
+        private string $expectedClass
+    ) {
     }
 
-    public function withExpectedHeaders(HeaderAsserterInterface $headerAsserter): static
+    public function addHeaderAsserter(HeaderAsserterInterface $headerAsserter): self
     {
-        $new = clone $this;
-        $new->headerAsserter = $headerAsserter;
+        $this->headerAsserters[] = $headerAsserter;
 
-        return $new;
+        return $this;
     }
 
-    public function withExpectedBody(BodyAsserterInterface $bodyAsserter): static
+    public function addBodyAsserter(BodyAsserterInterface $bodyAsserter): self
     {
-        $new = clone $this;
-        $new->bodyAsserter = $bodyAsserter;
+        $this->bodyAsserters[] = $bodyAsserter;
 
-        return $new;
+        return $this;
     }
 
     public function assert(Response $response): void
@@ -63,12 +48,16 @@ class ResponseAsserter
         Assert::assertSame($this->expectedStatusCode, $response->getStatusCode());
         Assert::assertInstanceOf($this->expectedClass, $response);
 
-        if ($this->headerAsserter instanceof HeaderAsserterInterface) {
-            $this->headerAsserter->assert($response->headers);
+        foreach ($this->headerAsserters as $headerAsserter) {
+            if ($headerAsserter instanceof HeaderAsserterInterface) {
+                $headerAsserter->assert($response->headers);
+            }
         }
 
-        if ($this->bodyAsserter instanceof BodyAsserterInterface) {
-            $this->bodyAsserter->assert((string) $response->getContent());
+        foreach ($this->bodyAsserters as $bodyAsserter) {
+            if ($bodyAsserter instanceof BodyAsserterInterface) {
+                $bodyAsserter->assert((string) $response->getContent());
+            }
         }
     }
 }

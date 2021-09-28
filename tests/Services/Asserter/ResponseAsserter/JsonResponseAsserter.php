@@ -10,23 +10,12 @@ class JsonResponseAsserter extends ResponseAsserter
 {
     public const IGNORE_VALUE = null;
 
-    public static function create(): self
+    public function __construct(int $expectedStatusCode)
     {
-        return (new self())
-            ->withExpectedClass(JsonResponse::class)
-            ->withExpectedHeaders(new HeaderAsserter([
-                'content-type' => 'application/json'
-            ]))
-        ;
-    }
+        parent::__construct($expectedStatusCode, JsonResponse::class);
 
-    /**
-     * @param array<int|string, null|bool|int|string> $expected
-     */
-    public function withExpectedData(array $expected): static
-    {
-        return $this->withExpectedBody(
-            new ArrayBodyAsserter($expected)
-        );
+        $this->addHeaderAsserter(new HeaderAsserter([
+            'content-type' => 'application/json'
+        ]));
     }
 }
