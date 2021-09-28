@@ -7,11 +7,12 @@ namespace App\Tests\Functional\Controller;
 use App\Controller\TokenController;
 use App\Security\TokenInterface;
 use App\Services\UserFactory;
+use App\Tests\Services\Asserter\AssociativeArrayAsserter;
+use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
 use App\Tests\Services\UserRemover;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class TokenControllerTest extends WebTestCase
@@ -58,12 +59,15 @@ class TokenControllerTest extends WebTestCase
         $user = $this->userFactory->create($this->testUserEmail, $this->testUserPlainPassword);
         $response = $this->makeTokenCreateRequest();
 
-        self::assertSame(200, $response->getStatusCode());
-        self::assertInstanceOf(JsonResponse::class, $response);
+        JsonResponseAsserter::create()
+            ->withExpectedStatusCode(200)
+            ->withExpectedData([
+                'token' => JsonResponseAsserter::IGNORE_VALUE,
+            ])
+            ->assert($response)
+        ;
 
         $responseData = json_decode((string) $response->getContent(), true);
-        self::assertArrayHasKey('token', $responseData);
-
         $token = $responseData['token'];
 
         $jwtManager = self::getContainer()->get('lexik_jwt_authentication.jwt_manager');
@@ -72,10 +76,11 @@ class TokenControllerTest extends WebTestCase
         $payload = $jwtManager->parse($token);
 
         self::assertIsArray($payload);
-        self::assertArrayHasKey(TokenInterface::CLAIM_EMAIL, $payload);
-        self::assertSame($user->getUserIdentifier(), $payload[TokenInterface::CLAIM_EMAIL]);
-        self::assertArrayHasKey(TokenInterface::CLAIM_USER_ID, $payload);
-        self::assertSame($user->getId(), $payload[TokenInterface::CLAIM_USER_ID]);
+
+        (new AssociativeArrayAsserter([
+            TokenInterface::CLAIM_EMAIL => $user->getUserIdentifier(),
+            TokenInterface::CLAIM_USER_ID => $user->getId(),
+        ]))->assert($payload);
     }
 
     public function testCreateUserDoesNotExist(): void
@@ -121,17 +126,16 @@ class TokenControllerTest extends WebTestCase
         $this->removeAllUsers();
 
         $createTokenResponseData = json_decode((string) $createTokenResponse->getContent(), true);
-        $this->makeTokenVerifyRequest($createTokenResponseData['token']);
+        $response = $this->makeTokenVerifyRequest($createTokenResponseData['token']);
 
-        $response = $this->client->getResponse();
-
-        self::assertInstanceOf(JsonResponse::class, $response);
-        $responseData = json_decode((string) $response->getContent(), true);
-
-        self::assertArrayHasKey('id', $responseData);
-        self::assertSame($user->getId(), $responseData['id']);
-        self::assertArrayHasKey('user-identifier', $responseData);
-        self::assertSame($user->getUserIdentifier(), $responseData['user-identifier']);
+        JsonResponseAsserter::create()
+            ->withExpectedStatusCode(200)
+            ->withExpectedData([
+                'id' => $user->getId(),
+                'user-identifier' => $user->getUserIdentifier(),
+            ])
+            ->assert($response)
+        ;
     }
 
     private function makeTokenCreateRequest(): Response
