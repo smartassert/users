@@ -21,10 +21,15 @@ class ArrayBodyAsserter implements BodyAsserterInterface
         ;
     }
 
-    public function assert(string $body): void
+    /**
+     * @return array<mixed>
+     */
+    public function assert(string $body): array
     {
         $data = json_decode($body, true);
         Assert::assertIsArray($data);
         $this->arrayDataAsserter->assert($data);
+
+        return $data;
     }
 }

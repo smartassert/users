@@ -7,10 +7,9 @@ namespace App\Tests\Functional\Controller;
 use App\Controller\TokenController;
 use App\Security\TokenInterface;
 use App\Services\UserFactory;
-use App\Tests\Services\Asserter\AssociativeArrayAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
+use App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory;
 use App\Tests\Services\UserRemover;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,28 +58,22 @@ class TokenControllerTest extends WebTestCase
         $user = $this->userFactory->create($this->testUserEmail, $this->testUserPlainPassword);
         $response = $this->makeTokenCreateRequest();
 
+        $jwtTokenBodyAsserterFactory = self::getContainer()->get(JwtTokenBodyAsserterFactory::class);
+        \assert($jwtTokenBodyAsserterFactory instanceof JwtTokenBodyAsserterFactory);
+
         JsonResponseAsserter::create()
             ->withExpectedStatusCode(200)
-            ->withExpectedData([
-                'token' => JsonResponseAsserter::IGNORE_VALUE,
-            ])
+            ->addBodyAsserter(
+                $jwtTokenBodyAsserterFactory->create(
+                    'token',
+                    [
+                        TokenInterface::CLAIM_EMAIL => $user->getUserIdentifier(),
+                        TokenInterface::CLAIM_USER_ID => $user->getId(),
+                    ]
+                )
+            )
             ->assert($response)
         ;
-
-        $responseData = json_decode((string) $response->getContent(), true);
-        $token = $responseData['token'];
-
-        $jwtManager = self::getContainer()->get('lexik_jwt_authentication.jwt_manager');
-        \assert($jwtManager instanceof JWTTokenManagerInterface);
-
-        $payload = $jwtManager->parse($token);
-
-        self::assertIsArray($payload);
-
-        (new AssociativeArrayAsserter([
-            TokenInterface::CLAIM_EMAIL => $user->getUserIdentifier(),
-            TokenInterface::CLAIM_USER_ID => $user->getId(),
-        ]))->assert($payload);
     }
 
     public function testCreateUserDoesNotExist(): void
