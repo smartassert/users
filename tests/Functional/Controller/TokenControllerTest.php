@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Controller;
 
 use App\Controller\TokenController;
+use App\Security\AudienceClaimInterface;
 use App\Security\TokenInterface;
 use App\Tests\Services\Asserter\ResponseAsserter\ArrayBodyAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
@@ -54,6 +55,9 @@ class TokenControllerTest extends WebTestCase
                 [
                     TokenInterface::CLAIM_EMAIL => $user->getUserIdentifier(),
                     TokenInterface::CLAIM_USER_ID => $user->getId(),
+                    TokenInterface::CLAIM_AUDIENCE => [
+                        AudienceClaimInterface::AUD_FRONTEND,
+                    ],
                 ]
             ))
             ->assert($response)

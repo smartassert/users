@@ -14,7 +14,7 @@ class JwtTokenBodyAsserterFactory
     }
 
     /**
-     * @param array<string, null|bool|int|string> $expectedPayload $expectedPayload
+     * @param array<string, null|bool|int|string|string[]> $expectedPayload $expectedPayload
      */
     public function create(string $expectedTokenKey, array $expectedPayload): JwtTokenBodyAsserter
     {
