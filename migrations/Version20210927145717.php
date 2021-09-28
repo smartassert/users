@@ -11,7 +11,7 @@ final class Version20210927145717 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Create ApiKeys';
     }
 
     public function up(Schema $schema): void
