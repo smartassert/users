@@ -4,23 +4,27 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Controller;
 
-use App\Controller\TokenController;
+use App\Controller\ApiTokenController;
+use App\Entity\ApiKey;
+use App\Entity\User;
+use App\Security\AudienceClaimInterface;
 use App\Security\TokenInterface;
-use App\Services\UserFactory;
-use App\Tests\Services\Asserter\ResponseAsserter\ArrayBodyAsserter;
+use App\Services\ApiKeyFactory;
 use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory;
+use App\Tests\Services\Asserter\ResponseAsserter\TextPlainBodyAsserter;
+use App\Tests\Services\Asserter\ResponseAsserter\TextPlainResponseAsserter;
+use App\Tests\Services\TestUserFactory;
 use App\Tests\Services\UserRemover;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class TokenControllerTest extends WebTestCase
+class ApiTokenControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
-    private UserFactory $userFactory;
-    private string $testUserEmail;
-    private string $testUserPlainPassword;
+    private User $user;
+    private ApiKey $apiKey;
 
     protected function setUp(): void
     {
@@ -28,36 +32,20 @@ class TokenControllerTest extends WebTestCase
 
         $this->client = static::createClient();
 
-        $userFactory = self::getContainer()->get(UserFactory::class);
-        \assert($userFactory instanceof UserFactory);
-        $this->userFactory = $userFactory;
-
-        $testUserEmail = self::getContainer()->getParameter('test_user_email');
-        if (!is_string($testUserEmail)) {
-            $this->fail('test_user_email parameter not set correctly');
-        }
-        $this->testUserEmail = $testUserEmail;
-
-        $testUserPlainPassword = self::getContainer()->getParameter('test_user_password');
-        if (!is_string($testUserPlainPassword)) {
-            $this->fail('test_user_password parameter not set correctly');
-        }
-        $this->testUserPlainPassword = $testUserPlainPassword;
-
-        $this->removeAllUsers();
-    }
-
-    protected function tearDown(): void
-    {
         $this->removeAllUsers();
 
-        parent::tearDown();
+        $testUserFactory = self::getContainer()->get(TestUserFactory::class);
+        \assert($testUserFactory instanceof TestUserFactory);
+        $this->user = $testUserFactory->create();
+
+        $apiKeyFactory = self::getContainer()->get(ApiKeyFactory::class);
+        \assert($apiKeyFactory instanceof ApiKeyFactory);
+        $this->apiKey = $apiKeyFactory->create('api key label', $this->user);
     }
 
     public function testCreateSuccess(): void
     {
-        $user = $this->userFactory->create($this->testUserEmail, $this->testUserPlainPassword);
-        $response = $this->makeTokenCreateRequest();
+        $response = $this->makeCreateTokenRequest((string) $this->apiKey);
 
         $jwtTokenBodyAsserterFactory = self::getContainer()->get(JwtTokenBodyAsserterFactory::class);
         \assert($jwtTokenBodyAsserterFactory instanceof JwtTokenBodyAsserterFactory);
@@ -66,19 +54,15 @@ class TokenControllerTest extends WebTestCase
             ->addBodyAsserter($jwtTokenBodyAsserterFactory->create(
                 'token',
                 [
-                    TokenInterface::CLAIM_EMAIL => $user->getUserIdentifier(),
-                    TokenInterface::CLAIM_USER_ID => $user->getId(),
+                    TokenInterface::CLAIM_EMAIL => $this->user->getUserIdentifier(),
+                    TokenInterface::CLAIM_USER_ID => $this->user->getId(),
+                    TokenInterface::CLAIM_AUDIENCE => [
+                        AudienceClaimInterface::AUD_API,
+                    ],
                 ]
             ))
             ->assert($response)
         ;
-    }
-
-    public function testCreateUserDoesNotExist(): void
-    {
-        $response = $this->makeTokenCreateRequest();
-
-        self::assertSame(401, $response->getStatusCode());
     }
 
     /**
@@ -86,7 +70,7 @@ class TokenControllerTest extends WebTestCase
      */
     public function testVerifyUnauthorized(?string $jwt): void
     {
-        $response = $this->makeTokenVerifyRequest($jwt);
+        $response = $this->makeVerifyTokenRequest($jwt);
 
         self::assertSame(401, $response->getStatusCode());
     }
@@ -111,41 +95,46 @@ class TokenControllerTest extends WebTestCase
 
     public function testVerifyValidJwt(): void
     {
-        $user = $this->userFactory->create($this->testUserEmail, $this->testUserPlainPassword);
-        $createTokenResponse = $this->makeTokenCreateRequest();
+        $createTokenResponse = $this->makeCreateTokenRequest((string) $this->apiKey);
+        $userId = $this->user->getId();
 
         $this->removeAllUsers();
 
         $createTokenResponseData = json_decode((string) $createTokenResponse->getContent(), true);
-        $response = $this->makeTokenVerifyRequest($createTokenResponseData['token']);
 
-        (new JsonResponseAsserter(200))
-            ->addBodyAsserter(new ArrayBodyAsserter([
-                'id' => $user->getId(),
-                'user-identifier' => $user->getUserIdentifier(),
-            ]))
+        $response = $this->makeVerifyTokenRequest($createTokenResponseData['token']);
+
+        (new TextPlainResponseAsserter(200))
+            ->addBodyAsserter(new TextPlainBodyAsserter($userId))
             ->assert($response)
         ;
     }
 
-    private function makeTokenCreateRequest(): Response
+    public function testCreateUserDoesNotExist(): void
     {
+        $response = $this->makeCreateTokenRequest('');
+
+        self::assertSame(401, $response->getStatusCode());
+    }
+
+    private function makeCreateTokenRequest(string $token): Response
+    {
+        $headers = [
+            'HTTP_AUTHORIZATION' => $token,
+        ];
+
         $this->client->request(
             'POST',
-            TokenController::ROUTE_CREATE,
+            ApiTokenController::ROUTE_CREATE,
             [],
             [],
-            ['CONTENT_TYPE' => 'application/json'],
-            (string) json_encode([
-                'username' => $this->testUserEmail,
-                'password' => $this->testUserPlainPassword,
-            ])
+            $headers,
         );
 
         return $this->client->getResponse();
     }
 
-    private function makeTokenVerifyRequest(?string $jwt): Response
+    private function makeVerifyTokenRequest(?string $jwt): Response
     {
         $headers = [];
         if (is_string($jwt)) {
@@ -154,7 +143,7 @@ class TokenControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            TokenController::ROUTE_VERIFY,
+            ApiTokenController::ROUTE_VERIFY,
             [],
             [],
             $headers,

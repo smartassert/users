@@ -14,6 +14,9 @@ security:
             entity:
                 class: App\Entity\User
                 property: userIdentifier
+        api_user_provider:
+            entity:
+                class: App\Entity\ApiKey
         jwt:
             lexik_jwt:
                 class: App\Security\JWTUser
@@ -23,17 +26,29 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        token_create:
-            pattern:  !php/const App\Controller\TokenController::ROUTE_CREATE
+        api_token_create:
+          pattern:  !php/const App\Controller\ApiTokenController::ROUTE_CREATE
+          stateless: true
+          custom_authenticators:
+            - App\Security\Api\Authenticator
+          provider: api_user_provider
+        api_token_verify:
+            pattern: !php/const App\Controller\ApiTokenController::ROUTE_VERIFY
+            stateless: true
+            anonymous: false
+            jwt: ~
+            provider: jwt
+        frontend_token_create:
+            pattern:  !php/const App\Controller\FrontendTokenController::ROUTE_CREATE
             stateless: true
             jwt: ~
             json_login:
-                check_path: !php/const App\Controller\TokenController::ROUTE_CREATE
+                check_path: !php/const App\Controller\FrontendTokenController::ROUTE_CREATE
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             provider: app_user_provider
-        token_verify:
-            pattern: !php/const App\Controller\TokenController::ROUTE_VERIFY
+        frontend_token_verify:
+            pattern: !php/const App\Controller\FrontendTokenController::ROUTE_VERIFY
             stateless: true
             anonymous: false
             jwt: ~
@@ -57,8 +72,10 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: !php/const App\Controller\TokenController::ROUTE_CREATE, roles: PUBLIC_ACCESS }
-        - { path: !php/const App\Controller\TokenController::ROUTE_VERIFY, roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
+        - { path: !php/const App\Controller\FrontendTokenController::ROUTE_CREATE, roles: PUBLIC_ACCESS }
+        - { path: !php/const App\Controller\FrontendTokenController::ROUTE_VERIFY, roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
         - { path: !php/const App\Controller\AdminController::ROUTE_PREFIX, roles: !php/const App\Security\UserRoleInterface::ROLE_ADMIN }
+        - { path: !php/const App\Controller\ApiTokenController::ROUTE_CREATE, roles: PUBLIC_ACCESS }
+        - { path: !php/const App\Controller\ApiTokenController::ROUTE_VERIFY, roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
