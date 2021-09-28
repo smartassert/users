@@ -12,6 +12,8 @@ use App\Security\TokenInterface;
 use App\Services\ApiKeyFactory;
 use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory;
+use App\Tests\Services\Asserter\ResponseAsserter\TextPlainBodyAsserter;
+use App\Tests\Services\Asserter\ResponseAsserter\TextPlainResponseAsserter;
 use App\Tests\Services\TestUserFactory;
 use App\Tests\Services\UserRemover;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -63,6 +65,51 @@ class ApiTokenControllerTest extends WebTestCase
         ;
     }
 
+    /**
+     * @dataProvider verifyUnauthorizedDataProvider
+     */
+    public function testVerifyUnauthorized(?string $jwt): void
+    {
+        $response = $this->makeVerifyTokenRequest($jwt);
+
+        self::assertSame(401, $response->getStatusCode());
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function verifyUnauthorizedDataProvider(): array
+    {
+        return [
+            'no jwt' => [
+                'token' => null,
+            ],
+            'malformed jwt' => [
+                'token' => 'malformed.jwt.token',
+            ],
+            'invalid jwt' => [
+                'token' => 'eyJhbGciOiJIUzI1NiJ9.e30.ZRrHA1JJJW8opsbCGfG_HACGpVUMN_a9IV7pAx_Zmeo',
+            ],
+        ];
+    }
+
+    public function testVerifyValidJwt(): void
+    {
+        $createTokenResponse = $this->makeCreateTokenRequest((string) $this->apiKey);
+        $userId = $this->user->getId();
+
+        $this->removeAllUsers();
+
+        $createTokenResponseData = json_decode((string) $createTokenResponse->getContent(), true);
+
+        $response = $this->makeVerifyTokenRequest($createTokenResponseData['token']);
+
+        (new TextPlainResponseAsserter(200))
+            ->addBodyAsserter(new TextPlainBodyAsserter($userId))
+            ->assert($response)
+        ;
+    }
+
     public function testCreateUserDoesNotExist(): void
     {
         $response = $this->makeCreateTokenRequest('');
@@ -79,6 +126,24 @@ class ApiTokenControllerTest extends WebTestCase
         $this->client->request(
             'POST',
             ApiTokenController::ROUTE_CREATE,
+            [],
+            [],
+            $headers,
+        );
+
+        return $this->client->getResponse();
+    }
+
+    private function makeVerifyTokenRequest(?string $jwt): Response
+    {
+        $headers = [];
+        if (is_string($jwt)) {
+            $headers['HTTP_AUTHORIZATION'] = 'Bearer ' . $jwt;
+        }
+
+        $this->client->request(
+            'GET',
+            ApiTokenController::ROUTE_VERIFY,
             [],
             [],
             $headers,

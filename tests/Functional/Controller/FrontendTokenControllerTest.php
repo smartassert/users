@@ -44,7 +44,7 @@ class FrontendTokenControllerTest extends WebTestCase
     public function testCreateSuccess(): void
     {
         $user = $this->testUserFactory->create();
-        $response = $this->makeTokenCreateRequest(...$this->testUserFactory->getCredentials());
+        $response = $this->makeCreateTokenRequest(...$this->testUserFactory->getCredentials());
 
         $jwtTokenBodyAsserterFactory = self::getContainer()->get(JwtTokenBodyAsserterFactory::class);
         \assert($jwtTokenBodyAsserterFactory instanceof JwtTokenBodyAsserterFactory);
@@ -66,7 +66,7 @@ class FrontendTokenControllerTest extends WebTestCase
 
     public function testCreateUserDoesNotExist(): void
     {
-        $response = $this->makeTokenCreateRequest('', '');
+        $response = $this->makeCreateTokenRequest('', '');
 
         self::assertSame(401, $response->getStatusCode());
     }
@@ -76,7 +76,7 @@ class FrontendTokenControllerTest extends WebTestCase
      */
     public function testVerifyUnauthorized(?string $jwt): void
     {
-        $response = $this->makeTokenVerifyRequest($jwt);
+        $response = $this->makeVerifyTokenRequest($jwt);
 
         self::assertSame(401, $response->getStatusCode());
     }
@@ -102,12 +102,12 @@ class FrontendTokenControllerTest extends WebTestCase
     public function testVerifyValidJwt(): void
     {
         $user = $this->testUserFactory->create();
-        $createTokenResponse = $this->makeTokenCreateRequest(...$this->testUserFactory->getCredentials());
+        $createTokenResponse = $this->makeCreateTokenRequest(...$this->testUserFactory->getCredentials());
 
         $this->removeAllUsers();
 
         $createTokenResponseData = json_decode((string) $createTokenResponse->getContent(), true);
-        $response = $this->makeTokenVerifyRequest($createTokenResponseData['token']);
+        $response = $this->makeVerifyTokenRequest($createTokenResponseData['token']);
 
         (new JsonResponseAsserter(200))
             ->addBodyAsserter(new ArrayBodyAsserter([
@@ -118,7 +118,7 @@ class FrontendTokenControllerTest extends WebTestCase
         ;
     }
 
-    private function makeTokenCreateRequest(string $userIdentifier, string $password): Response
+    private function makeCreateTokenRequest(string $userIdentifier, string $password): Response
     {
         $this->client->request(
             'POST',
@@ -135,7 +135,7 @@ class FrontendTokenControllerTest extends WebTestCase
         return $this->client->getResponse();
     }
 
-    private function makeTokenVerifyRequest(?string $jwt): Response
+    private function makeVerifyTokenRequest(?string $jwt): Response
     {
         $headers = [];
         if (is_string($jwt)) {
