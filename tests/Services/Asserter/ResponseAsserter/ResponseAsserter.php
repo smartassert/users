@@ -10,13 +10,21 @@ use Symfony\Component\HttpFoundation\Response;
 class ResponseAsserter
 {
     private int $expectedStatusCode = 200;
-    private ?HeaderAsserterInterface $headerAsserter = null;
-    private ?BodyAsserterInterface $bodyAsserter = null;
 
     /**
      * @var class-string
      */
     private string $expectedClass = Response::class;
+
+    /**
+     * @var HeaderAsserterInterface[]
+     */
+    private array $headerAsserters = [];
+
+    /**
+     * @var BodyAsserterInterface[]
+     */
+    private array $bodyAsserters = [];
 
     public static function create(): self
     {
@@ -42,18 +50,18 @@ class ResponseAsserter
         return $new;
     }
 
-    public function withExpectedHeaders(HeaderAsserterInterface $headerAsserter): static
+    public function addHeaderAsserter(HeaderAsserterInterface $headerAsserter): static
     {
         $new = clone $this;
-        $new->headerAsserter = $headerAsserter;
+        $new->headerAsserters[] = $headerAsserter;
 
         return $new;
     }
 
-    public function withExpectedBody(BodyAsserterInterface $bodyAsserter): static
+    public function addBodyAsserter(BodyAsserterInterface $bodyAsserter): static
     {
         $new = clone $this;
-        $new->bodyAsserter = $bodyAsserter;
+        $new->bodyAsserters[] = $bodyAsserter;
 
         return $new;
     }
@@ -63,12 +71,16 @@ class ResponseAsserter
         Assert::assertSame($this->expectedStatusCode, $response->getStatusCode());
         Assert::assertInstanceOf($this->expectedClass, $response);
 
-        if ($this->headerAsserter instanceof HeaderAsserterInterface) {
-            $this->headerAsserter->assert($response->headers);
+        foreach ($this->headerAsserters as $headerAsserter) {
+            if ($headerAsserter instanceof HeaderAsserterInterface) {
+                $headerAsserter->assert($response->headers);
+            }
         }
 
-        if ($this->bodyAsserter instanceof BodyAsserterInterface) {
-            $this->bodyAsserter->assert((string) $response->getContent());
+        foreach ($this->bodyAsserters as $bodyAsserter) {
+            if ($bodyAsserter instanceof BodyAsserterInterface) {
+                $bodyAsserter->assert((string) $response->getContent());
+            }
         }
     }
 }
