@@ -11,7 +11,6 @@ use PHPUnit\Framework\Assert;
 class JwtTokenBodyAsserter extends ArrayBodyAsserter implements BodyAsserterInterface
 {
     private JWTTokenManagerInterface $JWTTokenManager;
-//    private AssociativeArrayAsserter $arrayDataAsserter;
     private string $expectedTokenKey;
     private AssociativeArrayAsserter $payloadAsserter;
 
@@ -46,29 +45,5 @@ class JwtTokenBodyAsserter extends ArrayBodyAsserter implements BodyAsserterInte
         $this->payloadAsserter->assert($payload);
 
         return $payload;
-//
-//        (new AssociativeArrayAsserter([
-//            TokenInterface::CLAIM_EMAIL => $user->getUserIdentifier(),
-//            TokenInterface::CLAIM_USER_ID => $user->getId(),
-//        ]))->assert($payload);
-
-//        $data = json_decode($body, true);
-//        Assert::assertIsArray($data);
-//        $this->arrayDataAsserter->assert($data);
-//
-//        $responseData = json_decode((string) $response->getContent(), true);
-//        $token = $responseData['token'];
-//
-//        $jwtManager = self::getContainer()->get('lexik_jwt_authentication.jwt_manager');
-//        \assert($jwtManager instanceof JWTTokenManagerInterface);
-//
-//        $payload = $jwtManager->parse($token);
-//
-//        self::assertIsArray($payload);
-//
-//        (new AssociativeArrayAsserter([
-//            TokenInterface::CLAIM_EMAIL => $user->getUserIdentifier(),
-//            TokenInterface::CLAIM_USER_ID => $user->getId(),
-//        ]))->assert($payload);
     }
 }
