@@ -32,6 +32,12 @@ security:
           custom_authenticators:
             - App\Security\Api\Authenticator
           provider: api_user_provider
+        api_token_verify:
+            pattern: !php/const App\Controller\ApiTokenController::ROUTE_VERIFY
+            stateless: true
+            anonymous: false
+            jwt: ~
+            provider: jwt
         frontend_token_create:
             pattern:  !php/const App\Controller\FrontendTokenController::ROUTE_CREATE
             stateless: true
@@ -70,5 +76,6 @@ security:
         - { path: !php/const App\Controller\FrontendTokenController::ROUTE_VERIFY, roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
         - { path: !php/const App\Controller\AdminController::ROUTE_PREFIX, roles: !php/const App\Security\UserRoleInterface::ROLE_ADMIN }
         - { path: !php/const App\Controller\ApiTokenController::ROUTE_CREATE, roles: PUBLIC_ACCESS }
+        - { path: !php/const App\Controller\ApiTokenController::ROUTE_VERIFY, roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
