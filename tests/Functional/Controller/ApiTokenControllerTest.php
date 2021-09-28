@@ -52,11 +52,13 @@ class ApiTokenControllerTest extends WebTestCase
             ->addBodyAsserter($jwtTokenBodyAsserterFactory->create(
                 'token',
                 [
-                    TokenInterface::CLAIM_EMAIL => $this->user->getUserIdentifier(),
                     TokenInterface::CLAIM_USER_ID => $this->user->getId(),
                     TokenInterface::CLAIM_AUDIENCE => [
                         AudienceClaimInterface::AUD_API,
                     ],
+                ],
+                [
+                    TokenInterface::CLAIM_EMAIL,
                 ]
             ))
             ->assert($response)

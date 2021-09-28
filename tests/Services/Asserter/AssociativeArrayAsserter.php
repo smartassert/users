@@ -11,10 +11,12 @@ class AssociativeArrayAsserter
     private bool $interpretNullAsIgnoreValue = false;
 
     /**
-     * @param array<int|string, mixed> $expected
+     * @param array<int|string, mixed> $expectedData
+     * @param array<int, int|string>   $expectedKeysShouldNotBeSet
      */
     public function __construct(
-        private array $expected = [],
+        private array $expectedData = [],
+        private array $expectedKeysShouldNotBeSet = [],
     ) {
     }
 
@@ -33,12 +35,16 @@ class AssociativeArrayAsserter
     {
         $hasKeyFailureMessage = 'Available keys: ' . implode(', ', array_keys($actual));
 
-        foreach ($this->expected as $expectedKey => $expectedValue) {
+        foreach ($this->expectedData as $expectedKey => $expectedValue) {
             Assert::assertArrayHasKey($expectedKey, $actual, $hasKeyFailureMessage);
 
             if (null !== $expectedValue || false === $this->interpretNullAsIgnoreValue) {
                 Assert::assertEquals($expectedValue, $actual[$expectedKey]);
             }
+        }
+
+        foreach ($this->expectedKeysShouldNotBeSet as $expectedKey) {
+            Assert::assertArrayNotHasKey($expectedKey, $actual);
         }
     }
 }

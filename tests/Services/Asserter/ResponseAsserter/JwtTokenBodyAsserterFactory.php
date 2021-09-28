@@ -14,14 +14,19 @@ class JwtTokenBodyAsserterFactory
     }
 
     /**
-     * @param array<string, null|bool|int|string|string[]> $expectedPayload $expectedPayload
+     * @param array<string, null|bool|int|string|string[]> $expectedPayload
+     * @param array<int, int|string>                       $expectedPayloadKeysShouldNotBeSet
      */
-    public function create(string $expectedTokenKey, array $expectedPayload): JwtTokenBodyAsserter
-    {
+    public function create(
+        string $expectedTokenKey,
+        array $expectedPayload,
+        array $expectedPayloadKeysShouldNotBeSet = []
+    ): JwtTokenBodyAsserter {
         return new JwtTokenBodyAsserter(
             $this->JWTTokenManager,
             $expectedTokenKey,
             $expectedPayload,
+            $expectedPayloadKeysShouldNotBeSet,
         );
     }
 }

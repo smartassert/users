@@ -21,6 +21,10 @@ class TokenCreatedListener
 
         $payload[TokenInterface::CLAIM_AUDIENCE] ??= AudienceClaimInterface::AUD_DEFAULT;
 
+        if (AudienceClaimInterface::AUD_API === $payload[TokenInterface::CLAIM_AUDIENCE]) {
+            unset($payload['email']);
+        }
+
         $event->setData($payload);
     }
 }

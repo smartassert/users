@@ -16,15 +16,17 @@ class JwtTokenBodyAsserter extends ArrayBodyAsserter implements BodyAsserterInte
 
     /**
      * @param array<string, null|bool|int|string|string[]> $expectedPayload
+     * @param array<int, int|string>                       $expectedPayloadKeysShouldNotBeSet
      */
     public function __construct(
         JWTTokenManagerInterface $JWTTokenManager,
         string $expectedTokenKey,
-        array $expectedPayload
+        array $expectedPayload,
+        array $expectedPayloadKeysShouldNotBeSet,
     ) {
         $this->JWTTokenManager = $JWTTokenManager;
         $this->expectedTokenKey = $expectedTokenKey;
-        $this->payloadAsserter = (new AssociativeArrayAsserter($expectedPayload));
+        $this->payloadAsserter = (new AssociativeArrayAsserter($expectedPayload, $expectedPayloadKeysShouldNotBeSet));
 
         parent::__construct([
             $expectedTokenKey => null,
