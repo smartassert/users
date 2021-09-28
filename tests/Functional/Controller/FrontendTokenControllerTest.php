@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Controller;
 
-use App\Controller\TokenController;
+use App\Controller\FrontendTokenController;
 use App\Security\AudienceClaimInterface;
 use App\Security\TokenInterface;
 use App\Tests\Services\Asserter\ResponseAsserter\ArrayBodyAsserter;
@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class TokenControllerTest extends WebTestCase
+class FrontendTokenControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
     private TestUserFactory $testUserFactory;
@@ -122,7 +122,7 @@ class TokenControllerTest extends WebTestCase
     {
         $this->client->request(
             'POST',
-            TokenController::ROUTE_CREATE,
+            FrontendTokenController::ROUTE_CREATE,
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
@@ -144,7 +144,7 @@ class TokenControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            TokenController::ROUTE_VERIFY,
+            FrontendTokenController::ROUTE_VERIFY,
             [],
             [],
             $headers,
