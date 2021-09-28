@@ -15,7 +15,7 @@ class JwtTokenBodyAsserter extends ArrayBodyAsserter implements BodyAsserterInte
     private AssociativeArrayAsserter $payloadAsserter;
 
     /**
-     * @param array<string, null|bool|int|string> $expectedPayload
+     * @param array<string, null|bool|int|string|string[]> $expectedPayload
      */
     public function __construct(
         JWTTokenManagerInterface $JWTTokenManager,
