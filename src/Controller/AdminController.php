@@ -12,14 +12,9 @@ use App\Services\UserFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends AbstractController
 {
-    public const ROUTE_PREFIX = '/admin';
-    public const ROUTE_ADMIN_USER_CREATE = self::ROUTE_PREFIX . '/user/create';
-
-    #[Route(self::ROUTE_ADMIN_USER_CREATE, name: 'admin_user_create', methods: ['POST'])]
     public function createUser(
         CreateUserRequest $createUserRequest,
         UserFactory $userFactory,

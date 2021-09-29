@@ -10,6 +10,8 @@ parameters:
     route-frontend-token-verify: '/frontend/token/verify'
     route-api-token-create: '/api/token/create'
     route-api-token-verify: '/api/token/verify'
+    route-admin-prefix: '/admin'
+    route-admin-user-create: '%route-admin-prefix%/user/create'
 
 services:
     # default configuration for services in *this* file
