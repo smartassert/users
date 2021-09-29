@@ -2,23 +2,28 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Functional\Controller;
+namespace App\Tests\Functional\Token;
 
+use App\Entity\ApiKey;
+use App\Entity\User;
 use App\Security\AudienceClaimInterface;
 use App\Security\TokenInterface;
-use App\Tests\Services\Asserter\ResponseAsserter\ArrayBodyAsserter;
+use App\Services\ApiKeyFactory;
 use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory;
+use App\Tests\Services\Asserter\ResponseAsserter\TextPlainBodyAsserter;
+use App\Tests\Services\Asserter\ResponseAsserter\TextPlainResponseAsserter;
 use App\Tests\Services\TestUserFactory;
 use App\Tests\Services\UserRemover;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class FrontendTokenControllerTest extends WebTestCase
+class ApiCreateVerifyTest extends WebTestCase
 {
     private KernelBrowser $client;
-    private TestUserFactory $testUserFactory;
+    private User $user;
+    private ApiKey $apiKey;
     private string $tokenCreateUrl = '';
     private string $tokenVerifyUrl = '';
 
@@ -28,34 +33,30 @@ class FrontendTokenControllerTest extends WebTestCase
 
         $this->client = static::createClient();
 
+        $this->removeAllUsers();
+
         $testUserFactory = self::getContainer()->get(TestUserFactory::class);
         \assert($testUserFactory instanceof TestUserFactory);
-        $this->testUserFactory = $testUserFactory;
+        $this->user = $testUserFactory->create();
 
-        $tokenCreateUrl = self::getContainer()->getParameter('route-frontend-token-create');
+        $apiKeyFactory = self::getContainer()->get(ApiKeyFactory::class);
+        \assert($apiKeyFactory instanceof ApiKeyFactory);
+        $this->apiKey = $apiKeyFactory->create('api key label', $this->user);
+
+        $tokenCreateUrl = self::getContainer()->getParameter('route-api-token-create');
         if (is_string($tokenCreateUrl)) {
             $this->tokenCreateUrl = $tokenCreateUrl;
         }
 
-        $tokenVerifyUrl = self::getContainer()->getParameter('route-frontend-token-verify');
+        $tokenVerifyUrl = self::getContainer()->getParameter('route-api-token-verify');
         if (is_string($tokenVerifyUrl)) {
             $this->tokenVerifyUrl = $tokenVerifyUrl;
         }
-
-        $this->removeAllUsers();
-    }
-
-    protected function tearDown(): void
-    {
-        $this->removeAllUsers();
-
-        parent::tearDown();
     }
 
     public function testCreateSuccess(): void
     {
-        $user = $this->testUserFactory->create();
-        $response = $this->makeCreateTokenRequest(...$this->testUserFactory->getCredentials());
+        $response = $this->makeCreateTokenRequest((string) $this->apiKey);
 
         $jwtTokenBodyAsserterFactory = self::getContainer()->get(JwtTokenBodyAsserterFactory::class);
         \assert($jwtTokenBodyAsserterFactory instanceof JwtTokenBodyAsserterFactory);
@@ -64,22 +65,15 @@ class FrontendTokenControllerTest extends WebTestCase
             ->addBodyAsserter($jwtTokenBodyAsserterFactory->create(
                 'token',
                 [
-                    TokenInterface::CLAIM_EMAIL => $user->getUserIdentifier(),
-                    TokenInterface::CLAIM_USER_ID => $user->getId(),
+                    TokenInterface::CLAIM_EMAIL => $this->user->getUserIdentifier(),
+                    TokenInterface::CLAIM_USER_ID => $this->user->getId(),
                     TokenInterface::CLAIM_AUDIENCE => [
-                        AudienceClaimInterface::AUD_FRONTEND,
+                        AudienceClaimInterface::AUD_API,
                     ],
                 ]
             ))
             ->assert($response)
         ;
-    }
-
-    public function testCreateUserDoesNotExist(): void
-    {
-        $response = $this->makeCreateTokenRequest('', '');
-
-        self::assertSame(401, $response->getStatusCode());
     }
 
     /**
@@ -112,35 +106,40 @@ class FrontendTokenControllerTest extends WebTestCase
 
     public function testVerifyValidJwt(): void
     {
-        $user = $this->testUserFactory->create();
-        $createTokenResponse = $this->makeCreateTokenRequest(...$this->testUserFactory->getCredentials());
+        $createTokenResponse = $this->makeCreateTokenRequest((string) $this->apiKey);
+        $userId = $this->user->getId();
 
         $this->removeAllUsers();
 
         $createTokenResponseData = json_decode((string) $createTokenResponse->getContent(), true);
+
         $response = $this->makeVerifyTokenRequest($createTokenResponseData['token']);
 
-        (new JsonResponseAsserter(200))
-            ->addBodyAsserter(new ArrayBodyAsserter([
-                'id' => $user->getId(),
-                'user-identifier' => $user->getUserIdentifier(),
-            ]))
+        (new TextPlainResponseAsserter(200))
+            ->addBodyAsserter(new TextPlainBodyAsserter($userId))
             ->assert($response)
         ;
     }
 
-    private function makeCreateTokenRequest(string $userIdentifier, string $password): Response
+    public function testCreateUserDoesNotExist(): void
     {
+        $response = $this->makeCreateTokenRequest('');
+
+        self::assertSame(401, $response->getStatusCode());
+    }
+
+    private function makeCreateTokenRequest(string $token): Response
+    {
+        $headers = [
+            'HTTP_AUTHORIZATION' => $token,
+        ];
+
         $this->client->request(
             'POST',
             $this->tokenCreateUrl,
             [],
             [],
-            ['CONTENT_TYPE' => 'application/json'],
-            (string) json_encode([
-                'username' => $userIdentifier,
-                'password' => $password,
-            ])
+            $headers,
         );
 
         return $this->client->getResponse();
