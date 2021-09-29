@@ -10,8 +10,8 @@ use App\Tests\Services\Asserter\ResponseAsserter\ArrayBodyAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory;
 use Doctrine\ORM\EntityManagerInterface;
-use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshTokenRepository;
 use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
+use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshTokenRepository;
 use Symfony\Component\HttpFoundation\Response;
 
 class FrontendCreateVerifyTest extends AbstractTokenTest

@@ -8,6 +8,7 @@ parameters:
     secondary-admin-token: '%env(SECONDARY_ADMIN_TOKEN)%'
     route-frontend-token-create: '/frontend/token/create'
     route-frontend-token-verify: '/frontend/token/verify'
+    route-frontend-token-refresh: '/api/token/refresh'
     route-api-token-create: '/api/token/create'
     route-api-token-verify: '/api/token/verify'
 
