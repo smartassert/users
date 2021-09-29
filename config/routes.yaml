@@ -9,3 +9,7 @@ api_token_create:
 
 api_token_verify:
   path: '%route-api-token-verify%'
+
+admin_user_create:
+  path: '%route-admin-user-create%'
+  controller: App\Controller\AdminController::createUser

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Controller;
 
-use App\Controller\AdminController;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Request\CreateUserRequest;
@@ -21,6 +20,7 @@ class AdminControllerTest extends WebTestCase
     private string $adminToken;
     private UserRepository $userRepository;
     private TestUserFactory $testUserFactory;
+    private string $createUserUrl = '';
 
     protected function setUp(): void
     {
@@ -38,6 +38,11 @@ class AdminControllerTest extends WebTestCase
         $testUserFactory = self::getContainer()->get(TestUserFactory::class);
         \assert($testUserFactory instanceof TestUserFactory);
         $this->testUserFactory = $testUserFactory;
+
+        $createUserUrl = self::getContainer()->getParameter('route-admin-user-create');
+        if (is_string($createUserUrl)) {
+            $this->createUserUrl = $createUserUrl;
+        }
     }
 
     /**
@@ -114,7 +119,7 @@ class AdminControllerTest extends WebTestCase
 
         $this->client->request(
             'POST',
-            AdminController::ROUTE_ADMIN_USER_CREATE,
+            $this->createUserUrl,
             [
                 CreateUserRequest::KEY_EMAIL => $email,
                 CreateUserRequest::KEY_PASSWORD => $password,

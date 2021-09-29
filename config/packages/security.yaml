@@ -56,7 +56,7 @@ security:
                 authenticator: App\Security\Frontend\VerifyAuthenticator
             provider: jwt
         admin:
-            pattern:  !php/const App\Controller\AdminController::ROUTE_PREFIX
+            pattern:  '%route-admin-prefix%'
             stateless: true
             custom_authenticators:
                 - App\Security\Admin\Authenticator
@@ -76,7 +76,7 @@ security:
     access_control:
         - { path: '%route-frontend-token-create%', roles: PUBLIC_ACCESS }
         - { path: '%route-frontend-token-verify%', roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
-        - { path: !php/const App\Controller\AdminController::ROUTE_PREFIX, roles: !php/const App\Security\UserRoleInterface::ROLE_ADMIN }
+        - { path: '%route-admin-prefix%', roles: !php/const App\Security\UserRoleInterface::ROLE_ADMIN }
         - { path: '%route-api-token-create%', roles: PUBLIC_ACCESS }
         - { path: '%route-api-token-verify%', roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
         # - { path: ^/admin, roles: ROLE_ADMIN }
