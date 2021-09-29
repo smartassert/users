@@ -36,7 +36,8 @@ security:
             pattern: '%route-api-token-verify%'
             stateless: true
             anonymous: false
-            jwt: ~
+            jwt:
+                authenticator: App\Security\Api\VerifyAuthenticator
             provider: jwt
         frontend_token_create:
             pattern:  '%route-frontend-token-create%'
