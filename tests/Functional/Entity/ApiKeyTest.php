@@ -7,11 +7,10 @@ namespace App\Tests\Functional\Entity;
 use App\Entity\ApiKey;
 use App\Entity\User;
 use App\Repository\ApiKeyRepository;
-use App\Tests\Services\UserRemover;
+use App\Tests\Functional\AbstractBaseFunctionalTest;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class ApiKeyTest extends WebTestCase
+class ApiKeyTest extends AbstractBaseFunctionalTest
 {
     private EntityManagerInterface $entityManager;
     private ApiKeyRepository $apiKeyRepository;
@@ -29,13 +28,6 @@ class ApiKeyTest extends WebTestCase
         $this->apiKeyRepository = $apiKeyRepository;
 
         $this->removeAllUsers();
-    }
-
-    protected function tearDown(): void
-    {
-        $this->removeAllUsers();
-
-        parent::tearDown();
     }
 
     public function testEntityMapping(): void
@@ -59,13 +51,5 @@ class ApiKeyTest extends WebTestCase
 
         $this->entityManager->persist($apiKey);
         $this->entityManager->flush();
-    }
-
-    private function removeAllUsers(): void
-    {
-        $userRemover = self::getContainer()->get(UserRemover::class);
-        if ($userRemover instanceof UserRemover) {
-            $userRemover->removeAll();
-        }
     }
 }

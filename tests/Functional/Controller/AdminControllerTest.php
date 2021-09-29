@@ -7,16 +7,13 @@ namespace App\Tests\Functional\Controller;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Request\CreateUserRequest;
+use App\Tests\Functional\AbstractBaseWebTestCase;
 use App\Tests\Services\TestUserFactory;
-use App\Tests\Services\UserRemover;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminControllerTest extends WebTestCase
+class AdminControllerTest extends AbstractBaseWebTestCase
 {
-    private KernelBrowser $client;
     private string $adminToken;
     private UserRepository $userRepository;
     private TestUserFactory $testUserFactory;
@@ -25,8 +22,6 @@ class AdminControllerTest extends WebTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->client = static::createClient();
 
         $adminToken = $this->getContainer()->getParameter('primary-admin-token');
         $this->adminToken = is_string($adminToken) ? $adminToken : '';
@@ -129,13 +124,5 @@ class AdminControllerTest extends WebTestCase
         );
 
         return $this->client->getResponse();
-    }
-
-    private function removeAllUsers(): void
-    {
-        $userRemover = self::getContainer()->get(UserRemover::class);
-        if ($userRemover instanceof UserRemover) {
-            $userRemover->removeAll();
-        }
     }
 }

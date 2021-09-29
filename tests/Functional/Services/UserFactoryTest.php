@@ -7,11 +7,10 @@ namespace App\Tests\Functional\Services;
 use App\Exception\UserAlreadyExistsException;
 use App\Repository\UserRepository;
 use App\Services\UserFactory;
-use App\Tests\Services\UserRemover;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\Functional\AbstractBaseFunctionalTest;
 use Symfony\Component\Uid\Ulid;
 
-class UserFactoryTest extends WebTestCase
+class UserFactoryTest extends AbstractBaseFunctionalTest
 {
     private UserFactory $userFactory;
     private UserRepository $userRepository;
@@ -29,13 +28,6 @@ class UserFactoryTest extends WebTestCase
         $this->userRepository = $userRepository;
 
         $this->removeAllUsers();
-    }
-
-    protected function tearDown(): void
-    {
-        $this->removeAllUsers();
-
-        parent::tearDown();
     }
 
     public function testCreate(): void
@@ -67,14 +59,6 @@ class UserFactoryTest extends WebTestCase
             $this->fail(UserAlreadyExistsException::class . ' not thrown');
         } catch (UserAlreadyExistsException $userAlreadyExistsException) {
             self::assertEquals($user, $userAlreadyExistsException->getUser());
-        }
-    }
-
-    private function removeAllUsers(): void
-    {
-        $userRemover = self::getContainer()->get(UserRemover::class);
-        if ($userRemover instanceof UserRemover) {
-            $userRemover->removeAll();
         }
     }
 }

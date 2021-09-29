@@ -9,19 +9,16 @@ use App\Entity\User;
 use App\Security\AudienceClaimInterface;
 use App\Security\TokenInterface;
 use App\Services\ApiKeyFactory;
+use App\Tests\Functional\AbstractBaseWebTestCase;
 use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory;
 use App\Tests\Services\Asserter\ResponseAsserter\TextPlainBodyAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\TextPlainResponseAsserter;
 use App\Tests\Services\TestUserFactory;
-use App\Tests\Services\UserRemover;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class ApiCreateVerifyTest extends WebTestCase
+class ApiCreateVerifyTest extends AbstractBaseWebTestCase
 {
-    private KernelBrowser $client;
     private User $user;
     private ApiKey $apiKey;
     private string $createUrl = '';
@@ -31,7 +28,6 @@ class ApiCreateVerifyTest extends WebTestCase
     {
         parent::setUp();
 
-        $this->client = static::createClient();
         $this->removeAllUsers();
 
         $testUserFactory = self::getContainer()->get(TestUserFactory::class);
@@ -51,13 +47,6 @@ class ApiCreateVerifyTest extends WebTestCase
         if (is_string($verifyUrl)) {
             $this->verifyUrl = $verifyUrl;
         }
-    }
-
-    protected function tearDown(): void
-    {
-        $this->removeAllUsers();
-
-        parent::tearDown();
     }
 
     public function testCreateSuccess(): void
@@ -132,14 +121,6 @@ class ApiCreateVerifyTest extends WebTestCase
         $response = $this->makeCreateTokenRequest('');
 
         self::assertSame(401, $response->getStatusCode());
-    }
-
-    protected function removeAllUsers(): void
-    {
-        $userRemover = self::getContainer()->get(UserRemover::class);
-        if ($userRemover instanceof UserRemover) {
-            $userRemover->removeAll();
-        }
     }
 
     private function makeCreateTokenRequest(string $token): Response

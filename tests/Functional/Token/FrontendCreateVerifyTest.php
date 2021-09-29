@@ -6,18 +6,15 @@ namespace App\Tests\Functional\Token;
 
 use App\Security\AudienceClaimInterface;
 use App\Security\TokenInterface;
+use App\Tests\Functional\AbstractBaseWebTestCase;
 use App\Tests\Services\Asserter\ResponseAsserter\ArrayBodyAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory;
 use App\Tests\Services\TestUserFactory;
-use App\Tests\Services\UserRemover;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class FrontendCreateVerifyTest extends WebTestCase
+class FrontendCreateVerifyTest extends AbstractBaseWebTestCase
 {
-    protected KernelBrowser $client;
     protected TestUserFactory $testUserFactory;
     protected string $createUrl = '';
     protected string $verifyUrl = '';
@@ -25,8 +22,6 @@ class FrontendCreateVerifyTest extends WebTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->client = static::createClient();
 
         $testUserFactory = self::getContainer()->get(TestUserFactory::class);
         \assert($testUserFactory instanceof TestUserFactory);
@@ -43,13 +38,6 @@ class FrontendCreateVerifyTest extends WebTestCase
         }
 
         $this->removeAllUsers();
-    }
-
-    protected function tearDown(): void
-    {
-        $this->removeAllUsers();
-
-        parent::tearDown();
     }
 
     public function testCreateSuccess(): void
@@ -127,14 +115,6 @@ class FrontendCreateVerifyTest extends WebTestCase
             ]))
             ->assert($response)
         ;
-    }
-
-    protected function removeAllUsers(): void
-    {
-        $userRemover = self::getContainer()->get(UserRemover::class);
-        if ($userRemover instanceof UserRemover) {
-            $userRemover->removeAll();
-        }
     }
 
     private function makeCreateTokenRequest(string $userIdentifier, string $password): Response

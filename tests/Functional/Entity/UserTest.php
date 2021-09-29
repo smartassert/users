@@ -6,11 +6,10 @@ namespace App\Tests\Functional\Entity;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Tests\Services\UserRemover;
+use App\Tests\Functional\AbstractBaseFunctionalTest;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class UserTest extends WebTestCase
+class UserTest extends AbstractBaseFunctionalTest
 {
     private EntityManagerInterface $entityManager;
     private UserRepository $userRepository;
@@ -30,13 +29,6 @@ class UserTest extends WebTestCase
         $this->removeAllUsers();
     }
 
-    protected function tearDown(): void
-    {
-        $this->removeAllUsers();
-
-        parent::tearDown();
-    }
-
     public function testEntityMapping(): void
     {
         self::assertCount(0, $this->userRepository->findAll());
@@ -54,13 +46,5 @@ class UserTest extends WebTestCase
 
         self::assertCount(1, $users);
         self::assertEquals($entity, $users[0]);
-    }
-
-    private function removeAllUsers(): void
-    {
-        $userRemover = self::getContainer()->get(UserRemover::class);
-        if ($userRemover instanceof UserRemover) {
-            $userRemover->removeAll();
-        }
     }
 }
