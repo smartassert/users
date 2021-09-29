@@ -6,6 +6,10 @@
 parameters:
     primary-admin-token: '%env(PRIMARY_ADMIN_TOKEN)%'
     secondary-admin-token: '%env(SECONDARY_ADMIN_TOKEN)%'
+    route-frontend-token-create: '/frontend/token/create'
+    route-frontend-token-verify: '/frontend/token/verify'
+    route-api-token-create: '/api/token/create'
+    route-api-token-verify: '/api/token/verify'
 
 services:
     # default configuration for services in *this* file
@@ -47,6 +51,12 @@ services:
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created }
 
-    App\Security\Api\Authenticator:
+    App\Security\Api\CreateAuthenticator:
         arguments:
             $tokenExtractor: '@app.admin-authenticator-token-extractor'
+
+    App\Security\Api\VerifyAuthenticator:
+        parent: lexik_jwt_authentication.security.jwt_authenticator
+
+    App\Security\Frontend\VerifyAuthenticator:
+        parent: lexik_jwt_authentication.security.jwt_authenticator

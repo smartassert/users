@@ -27,31 +27,33 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         api_token_create:
-          pattern:  !php/const App\Controller\ApiTokenController::ROUTE_CREATE
+          pattern:  '%route-api-token-create%'
           stateless: true
           custom_authenticators:
-            - App\Security\Api\Authenticator
+            - App\Security\Api\CreateAuthenticator
           provider: api_user_provider
         api_token_verify:
-            pattern: !php/const App\Controller\ApiTokenController::ROUTE_VERIFY
+            pattern: '%route-api-token-verify%'
             stateless: true
             anonymous: false
-            jwt: ~
+            jwt:
+                authenticator: App\Security\Api\VerifyAuthenticator
             provider: jwt
         frontend_token_create:
-            pattern:  !php/const App\Controller\FrontendTokenController::ROUTE_CREATE
+            pattern:  '%route-frontend-token-create%'
             stateless: true
             jwt: ~
             json_login:
-                check_path: !php/const App\Controller\FrontendTokenController::ROUTE_CREATE
+                check_path: '%route-frontend-token-create%'
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             provider: app_user_provider
         frontend_token_verify:
-            pattern: !php/const App\Controller\FrontendTokenController::ROUTE_VERIFY
+            pattern: '%route-frontend-token-verify%'
             stateless: true
             anonymous: false
-            jwt: ~
+            jwt:
+                authenticator: App\Security\Frontend\VerifyAuthenticator
             provider: jwt
         admin:
             pattern:  !php/const App\Controller\AdminController::ROUTE_PREFIX
@@ -72,10 +74,10 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: !php/const App\Controller\FrontendTokenController::ROUTE_CREATE, roles: PUBLIC_ACCESS }
-        - { path: !php/const App\Controller\FrontendTokenController::ROUTE_VERIFY, roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
+        - { path: '%route-frontend-token-create%', roles: PUBLIC_ACCESS }
+        - { path: '%route-frontend-token-verify%', roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
         - { path: !php/const App\Controller\AdminController::ROUTE_PREFIX, roles: !php/const App\Security\UserRoleInterface::ROLE_ADMIN }
-        - { path: !php/const App\Controller\ApiTokenController::ROUTE_CREATE, roles: PUBLIC_ACCESS }
-        - { path: !php/const App\Controller\ApiTokenController::ROUTE_VERIFY, roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
+        - { path: '%route-api-token-create%', roles: PUBLIC_ACCESS }
+        - { path: '%route-api-token-verify%', roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
