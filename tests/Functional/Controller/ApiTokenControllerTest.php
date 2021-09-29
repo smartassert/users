@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Controller;
 
-use App\Controller\ApiTokenController;
 use App\Entity\ApiKey;
 use App\Entity\User;
 use App\Security\AudienceClaimInterface;
