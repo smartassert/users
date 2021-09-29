@@ -9,10 +9,49 @@ use App\Security\TokenInterface;
 use App\Tests\Services\Asserter\ResponseAsserter\ArrayBodyAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory;
+use App\Tests\Services\TestUserFactory;
+use App\Tests\Services\UserRemover;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class FrontendCreateVerifyTest extends AbstractTokenTest
+class FrontendCreateVerifyTest extends WebTestCase
 {
+    protected KernelBrowser $client;
+    protected TestUserFactory $testUserFactory;
+    protected string $createUrl = '';
+    protected string $verifyUrl = '';
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->client = static::createClient();
+
+        $testUserFactory = self::getContainer()->get(TestUserFactory::class);
+        \assert($testUserFactory instanceof TestUserFactory);
+        $this->testUserFactory = $testUserFactory;
+
+        $createUrl = self::getContainer()->getParameter('route-frontend-token-create');
+        if (is_string($createUrl)) {
+            $this->createUrl = $createUrl;
+        }
+
+        $verifyUrl = self::getContainer()->getParameter('route-frontend-token-verify');
+        if (is_string($verifyUrl)) {
+            $this->verifyUrl = $verifyUrl;
+        }
+
+        $this->removeAllUsers();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->removeAllUsers();
+
+        parent::tearDown();
+    }
+
     public function testCreateSuccess(): void
     {
         $user = $this->testUserFactory->create();
@@ -90,14 +129,12 @@ class FrontendCreateVerifyTest extends AbstractTokenTest
         ;
     }
 
-    protected function getCreateUrlParameter(): string
+    protected function removeAllUsers(): void
     {
-        return 'route-frontend-token-create';
-    }
-
-    protected function getVerifyUrlParameter(): string
-    {
-        return 'route-frontend-token-verify';
+        $userRemover = self::getContainer()->get(UserRemover::class);
+        if ($userRemover instanceof UserRemover) {
+            $userRemover->removeAll();
+        }
     }
 
     private function makeCreateTokenRequest(string $userIdentifier, string $password): Response
