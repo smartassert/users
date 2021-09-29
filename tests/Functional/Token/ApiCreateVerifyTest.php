@@ -13,22 +13,51 @@ use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory;
 use App\Tests\Services\Asserter\ResponseAsserter\TextPlainBodyAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\TextPlainResponseAsserter;
+use App\Tests\Services\TestUserFactory;
+use App\Tests\Services\UserRemover;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class ApiCreateVerifyTest extends AbstractTokenTest
+class ApiCreateVerifyTest extends WebTestCase
 {
+    private KernelBrowser $client;
     private User $user;
     private ApiKey $apiKey;
+    private string $createUrl = '';
+    private string $verifyUrl = '';
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->user = $this->testUserFactory->create();
+        $this->client = static::createClient();
+        $this->removeAllUsers();
+
+        $testUserFactory = self::getContainer()->get(TestUserFactory::class);
+        \assert($testUserFactory instanceof TestUserFactory);
+        $this->user = $testUserFactory->create();
 
         $apiKeyFactory = self::getContainer()->get(ApiKeyFactory::class);
         \assert($apiKeyFactory instanceof ApiKeyFactory);
         $this->apiKey = $apiKeyFactory->create('api key label', $this->user);
+
+        $createUrl = self::getContainer()->getParameter('route-api-token-create');
+        if (is_string($createUrl)) {
+            $this->createUrl = $createUrl;
+        }
+
+        $verifyUrl = self::getContainer()->getParameter('route-api-token-verify');
+        if (is_string($verifyUrl)) {
+            $this->verifyUrl = $verifyUrl;
+        }
+    }
+
+    protected function tearDown(): void
+    {
+        $this->removeAllUsers();
+
+        parent::tearDown();
     }
 
     public function testCreateSuccess(): void
@@ -105,14 +134,12 @@ class ApiCreateVerifyTest extends AbstractTokenTest
         self::assertSame(401, $response->getStatusCode());
     }
 
-    protected function getCreateUrlParameter(): string
+    protected function removeAllUsers(): void
     {
-        return 'route-api-token-create';
-    }
-
-    protected function getVerifyUrlParameter(): string
-    {
-        return 'route-api-token-verify';
+        $userRemover = self::getContainer()->get(UserRemover::class);
+        if ($userRemover instanceof UserRemover) {
+            $userRemover->removeAll();
+        }
     }
 
     private function makeCreateTokenRequest(string $token): Response
