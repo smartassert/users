@@ -20,6 +20,7 @@ class FrontendTokenControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
     private TestUserFactory $testUserFactory;
+    private string $tokenCreateUrl = '';
 
     protected function setUp(): void
     {
@@ -30,6 +31,11 @@ class FrontendTokenControllerTest extends WebTestCase
         $testUserFactory = self::getContainer()->get(TestUserFactory::class);
         \assert($testUserFactory instanceof TestUserFactory);
         $this->testUserFactory = $testUserFactory;
+
+        $tokenCreateUrl = self::getContainer()->getParameter('route-frontend-token-create');
+        if (is_string($tokenCreateUrl)) {
+            $this->tokenCreateUrl = $tokenCreateUrl;
+        }
 
         $this->removeAllUsers();
     }
@@ -122,7 +128,7 @@ class FrontendTokenControllerTest extends WebTestCase
     {
         $this->client->request(
             'POST',
-            '/frontend/token/create',
+            $this->tokenCreateUrl,
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],

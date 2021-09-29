@@ -6,6 +6,7 @@
 parameters:
     primary-admin-token: '%env(PRIMARY_ADMIN_TOKEN)%'
     secondary-admin-token: '%env(SECONDARY_ADMIN_TOKEN)%'
+    route-frontend-token-create: '/frontend/token/create'
 
 services:
     # default configuration for services in *this* file
