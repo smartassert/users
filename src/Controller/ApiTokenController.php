@@ -14,11 +14,6 @@ class ApiTokenController
     public const ROUTE_CREATE = '/api/token/create';
     public const ROUTE_VERIFY = '/api/token/verify';
 
-    #[Route(self::ROUTE_CREATE, name: 'api_token_create')]
-    public function create(): void
-    {
-    }
-
     #[Route(self::ROUTE_VERIFY, name: 'api_token_verify')]
     public function index(UserInterface $user): Response
     {
