@@ -30,7 +30,7 @@ security:
             pattern: '%route-frontend-token-refresh%'
             stateless: true
             refresh_jwt:
-                provider: app_user_provider
+                provider: frontend_user_provider
         api_token_create:
           pattern:  '%route-api-token-create%'
           stateless: true
