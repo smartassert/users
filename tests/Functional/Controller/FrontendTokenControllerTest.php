@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Controller;
 
-use App\Controller\FrontendTokenController;
 use App\Security\AudienceClaimInterface;
 use App\Security\TokenInterface;
 use App\Tests\Services\Asserter\ResponseAsserter\ArrayBodyAsserter;
@@ -21,6 +20,7 @@ class FrontendTokenControllerTest extends WebTestCase
     private KernelBrowser $client;
     private TestUserFactory $testUserFactory;
     private string $tokenCreateUrl = '';
+    private string $tokenVerifyUrl = '';
 
     protected function setUp(): void
     {
@@ -35,6 +35,11 @@ class FrontendTokenControllerTest extends WebTestCase
         $tokenCreateUrl = self::getContainer()->getParameter('route-frontend-token-create');
         if (is_string($tokenCreateUrl)) {
             $this->tokenCreateUrl = $tokenCreateUrl;
+        }
+
+        $tokenVerifyUrl = self::getContainer()->getParameter('route-frontend-token-verify');
+        if (is_string($tokenVerifyUrl)) {
+            $this->tokenVerifyUrl = $tokenVerifyUrl;
         }
 
         $this->removeAllUsers();
@@ -150,7 +155,7 @@ class FrontendTokenControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            FrontendTokenController::ROUTE_VERIFY,
+            $this->tokenVerifyUrl,
             [],
             [],
             $headers,

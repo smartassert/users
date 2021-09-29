@@ -1,5 +1,9 @@
 frontend_token_create:
   path: '%route-frontend-token-create%'
 
+frontend_token_verify:
+  path: '%route-frontend-token-verify%'
+  controller: App\Controller\FrontendTokenController::verify
+
 api_token_create:
   path: '%route-api-token-create%'

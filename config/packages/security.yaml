@@ -48,7 +48,7 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             provider: app_user_provider
         frontend_token_verify:
-            pattern: !php/const App\Controller\FrontendTokenController::ROUTE_VERIFY
+            pattern: '%route-frontend-token-verify%'
             stateless: true
             anonymous: false
             jwt: ~
@@ -73,7 +73,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: '%route-frontend-token-create%', roles: PUBLIC_ACCESS }
-        - { path: !php/const App\Controller\FrontendTokenController::ROUTE_VERIFY, roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
+        - { path: '%route-frontend-token-verify%', roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
         - { path: !php/const App\Controller\AdminController::ROUTE_PREFIX, roles: !php/const App\Security\UserRoleInterface::ROLE_ADMIN }
         - { path: '%route-api-token-create%', roles: PUBLIC_ACCESS }
         - { path: !php/const App\Controller\ApiTokenController::ROUTE_VERIFY, roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
