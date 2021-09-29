@@ -39,11 +39,11 @@ security:
             jwt: ~
             provider: jwt
         frontend_token_create:
-            pattern:  !php/const App\Controller\FrontendTokenController::ROUTE_CREATE
+            pattern:  ^/frontend/token/create
             stateless: true
             jwt: ~
             json_login:
-                check_path: !php/const App\Controller\FrontendTokenController::ROUTE_CREATE
+                check_path: /frontend/token/create
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             provider: app_user_provider
@@ -72,7 +72,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: !php/const App\Controller\FrontendTokenController::ROUTE_CREATE, roles: PUBLIC_ACCESS }
+        - { path: /frontend/token/create, roles: PUBLIC_ACCESS }
         - { path: !php/const App\Controller\FrontendTokenController::ROUTE_VERIFY, roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
         - { path: !php/const App\Controller\AdminController::ROUTE_PREFIX, roles: !php/const App\Security\UserRoleInterface::ROLE_ADMIN }
         - { path: !php/const App\Controller\ApiTokenController::ROUTE_CREATE, roles: PUBLIC_ACCESS }
