@@ -125,7 +125,7 @@ class ApiTokenControllerTest extends WebTestCase
 
         $this->client->request(
             'POST',
-            ApiTokenController::ROUTE_CREATE,
+            '/api/token/create',
             [],
             [],
             $headers,

@@ -122,7 +122,7 @@ class FrontendTokenControllerTest extends WebTestCase
     {
         $this->client->request(
             'POST',
-            FrontendTokenController::ROUTE_CREATE,
+            '/frontend/token/create',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],

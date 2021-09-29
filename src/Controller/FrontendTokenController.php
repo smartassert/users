@@ -11,7 +11,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class FrontendTokenController extends AbstractController
 {
-    public const ROUTE_CREATE = '/frontend/token/create';
     public const ROUTE_VERIFY = '/frontend/token/verify';
 
     #[Route(self::ROUTE_VERIFY, name: 'frontend_token_verify')]
