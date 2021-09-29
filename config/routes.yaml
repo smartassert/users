@@ -2,4 +2,4 @@ frontend_token_create:
   path: '%route-frontend-token-create%'
 
 api_token_create:
-  path: /api/token/create
+  path: '%route-api-token-create%'

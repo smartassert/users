@@ -25,6 +25,7 @@ class ApiTokenControllerTest extends WebTestCase
     private KernelBrowser $client;
     private User $user;
     private ApiKey $apiKey;
+    private string $tokenCreateUrl = '';
 
     protected function setUp(): void
     {
@@ -41,6 +42,11 @@ class ApiTokenControllerTest extends WebTestCase
         $apiKeyFactory = self::getContainer()->get(ApiKeyFactory::class);
         \assert($apiKeyFactory instanceof ApiKeyFactory);
         $this->apiKey = $apiKeyFactory->create('api key label', $this->user);
+
+        $tokenCreateUrl = self::getContainer()->getParameter('route-api-token-create');
+        if (is_string($tokenCreateUrl)) {
+            $this->tokenCreateUrl = $tokenCreateUrl;
+        }
     }
 
     public function testCreateSuccess(): void
@@ -125,7 +131,7 @@ class ApiTokenControllerTest extends WebTestCase
 
         $this->client->request(
             'POST',
-            '/api/token/create',
+            $this->tokenCreateUrl,
             [],
             [],
             $headers,
