@@ -9,6 +9,7 @@ parameters:
     route-frontend-token-create: '/frontend/token/create'
     route-frontend-token-verify: '/frontend/token/verify'
     route-api-token-create: '/api/token/create'
+    route-api-token-verify: '/api/token/verify'
 
 services:
     # default configuration for services in *this* file

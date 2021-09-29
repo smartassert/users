@@ -26,6 +26,7 @@ class ApiTokenControllerTest extends WebTestCase
     private User $user;
     private ApiKey $apiKey;
     private string $tokenCreateUrl = '';
+    private string $tokenVerifyUrl = '';
 
     protected function setUp(): void
     {
@@ -46,6 +47,11 @@ class ApiTokenControllerTest extends WebTestCase
         $tokenCreateUrl = self::getContainer()->getParameter('route-api-token-create');
         if (is_string($tokenCreateUrl)) {
             $this->tokenCreateUrl = $tokenCreateUrl;
+        }
+
+        $tokenVerifyUrl = self::getContainer()->getParameter('route-api-token-verify');
+        if (is_string($tokenVerifyUrl)) {
+            $this->tokenVerifyUrl = $tokenVerifyUrl;
         }
     }
 
@@ -149,7 +155,7 @@ class ApiTokenControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            ApiTokenController::ROUTE_VERIFY,
+            $this->tokenVerifyUrl,
             [],
             [],
             $headers,

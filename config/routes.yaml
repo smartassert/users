@@ -7,3 +7,7 @@ frontend_token_verify:
 
 api_token_create:
   path: '%route-api-token-create%'
+
+api_token_verify:
+  path: '%route-api-token-verify%'
+  controller: App\Controller\ApiTokenController::verify
