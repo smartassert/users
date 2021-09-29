@@ -47,21 +47,19 @@ class VerifyTest extends AbstractBaseWebTestCase
         $this->removeAllUsers();
 
         $user = $testUserFactory->create();
-        $createTokenResponse = $this->application->makeFrontendCreateTokenRequest(
-            ...$testUserFactory->getCredentials()
-        );
+        $createResponse = $this->application->makeFrontendCreateTokenRequest(...$testUserFactory->getCredentials());
 
         $this->removeAllUsers();
 
-        $createTokenResponseData = json_decode((string) $createTokenResponse->getContent(), true);
-        $response = $this->application->makeFrontendVerifyTokenRequest($createTokenResponseData['token']);
+        $createResponseData = json_decode((string) $createResponse->getContent(), true);
+        $verifyResponse = $this->application->makeFrontendVerifyTokenRequest($createResponseData['token']);
 
         (new JsonResponseAsserter(200))
             ->addBodyAsserter(new ArrayBodyAsserter([
                 'id' => $user->getId(),
                 'user-identifier' => $user->getUserIdentifier(),
             ]))
-            ->assert($response)
+            ->assert($verifyResponse)
         ;
     }
 }

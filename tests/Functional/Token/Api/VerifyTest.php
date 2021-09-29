@@ -51,17 +51,17 @@ class VerifyTest extends AbstractBaseWebTestCase
         $user = $testUserFactory->create();
         $userId = $user->getId();
         $apiKey = $apiKeyFactory->create('api key label', $user);
-        $createTokenResponse = $this->application->makeApiCreateTokenRequest((string) $apiKey);
+        $createResponse = $this->application->makeApiCreateTokenRequest((string) $apiKey);
 
         $this->removeAllUsers();
 
-        $createTokenResponseData = json_decode((string) $createTokenResponse->getContent(), true);
+        $createResponseData = json_decode((string) $createResponse->getContent(), true);
 
-        $response = $this->application->makeApiVerifyTokenRequest($createTokenResponseData['token']);
+        $verifyResponse = $this->application->makeApiVerifyTokenRequest($createResponseData['token']);
 
         (new TextPlainResponseAsserter(200))
             ->addBodyAsserter(new TextPlainBodyAsserter($userId))
-            ->assert($response)
+            ->assert($verifyResponse)
         ;
     }
 }
