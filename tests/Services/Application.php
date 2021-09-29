@@ -103,6 +103,7 @@ class Application
 
     /**
      * @param array<string, string> $headers
+     *
      * @return array<string, string>
      */
     private function addJwtAuthorizationHeader(array $headers, ?string $jwt): array
@@ -112,6 +113,7 @@ class Application
 
     /**
      * @param array<string, string> $headers
+     *
      * @return array<string, string>
      */
     private function addHttpAuthorizationHeader(array $headers, ?string $value, ?string $prefix = null): array
