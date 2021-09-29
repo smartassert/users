@@ -15,14 +15,11 @@ use App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory;
 use App\Tests\Services\Asserter\ResponseAsserter\TextPlainBodyAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\TextPlainResponseAsserter;
 use App\Tests\Services\TestUserFactory;
-use Symfony\Component\HttpFoundation\Response;
 
 class ApiCreateVerifyTest extends AbstractBaseWebTestCase
 {
     private User $user;
     private ApiKey $apiKey;
-    private string $createUrl = '';
-    private string $verifyUrl = '';
 
     protected function setUp(): void
     {
@@ -37,21 +34,11 @@ class ApiCreateVerifyTest extends AbstractBaseWebTestCase
         $apiKeyFactory = self::getContainer()->get(ApiKeyFactory::class);
         \assert($apiKeyFactory instanceof ApiKeyFactory);
         $this->apiKey = $apiKeyFactory->create('api key label', $this->user);
-
-        $createUrl = self::getContainer()->getParameter('route-api-token-create');
-        if (is_string($createUrl)) {
-            $this->createUrl = $createUrl;
-        }
-
-        $verifyUrl = self::getContainer()->getParameter('route-api-token-verify');
-        if (is_string($verifyUrl)) {
-            $this->verifyUrl = $verifyUrl;
-        }
     }
 
     public function testCreateSuccess(): void
     {
-        $response = $this->makeCreateTokenRequest((string) $this->apiKey);
+        $response = $this->application->makeApiCreateTokenRequest((string) $this->apiKey);
 
         $jwtTokenBodyAsserterFactory = self::getContainer()->get(JwtTokenBodyAsserterFactory::class);
         \assert($jwtTokenBodyAsserterFactory instanceof JwtTokenBodyAsserterFactory);
@@ -76,7 +63,7 @@ class ApiCreateVerifyTest extends AbstractBaseWebTestCase
      */
     public function testVerifyUnauthorized(?string $jwt): void
     {
-        $response = $this->makeVerifyTokenRequest($jwt);
+        $response = $this->application->makeApiVerifyTokenRequest($jwt);
 
         self::assertSame(401, $response->getStatusCode());
     }
@@ -101,14 +88,14 @@ class ApiCreateVerifyTest extends AbstractBaseWebTestCase
 
     public function testVerifyValidJwt(): void
     {
-        $createTokenResponse = $this->makeCreateTokenRequest((string) $this->apiKey);
+        $createTokenResponse = $this->application->makeApiCreateTokenRequest((string) $this->apiKey);
         $userId = $this->user->getId();
 
         $this->removeAllUsers();
 
         $createTokenResponseData = json_decode((string) $createTokenResponse->getContent(), true);
 
-        $response = $this->makeVerifyTokenRequest($createTokenResponseData['token']);
+        $response = $this->application->makeApiVerifyTokenRequest($createTokenResponseData['token']);
 
         (new TextPlainResponseAsserter(200))
             ->addBodyAsserter(new TextPlainBodyAsserter($userId))
@@ -118,43 +105,8 @@ class ApiCreateVerifyTest extends AbstractBaseWebTestCase
 
     public function testCreateUserDoesNotExist(): void
     {
-        $response = $this->makeCreateTokenRequest('');
+        $response = $this->application->makeApiCreateTokenRequest('');
 
         self::assertSame(401, $response->getStatusCode());
-    }
-
-    private function makeCreateTokenRequest(string $token): Response
-    {
-        $headers = [
-            'HTTP_AUTHORIZATION' => $token,
-        ];
-
-        $this->client->request(
-            'POST',
-            $this->createUrl,
-            [],
-            [],
-            $headers,
-        );
-
-        return $this->client->getResponse();
-    }
-
-    private function makeVerifyTokenRequest(?string $jwt): Response
-    {
-        $headers = [];
-        if (is_string($jwt)) {
-            $headers['HTTP_AUTHORIZATION'] = 'Bearer ' . $jwt;
-        }
-
-        $this->client->request(
-            'GET',
-            $this->verifyUrl,
-            [],
-            [],
-            $headers,
-        );
-
-        return $this->client->getResponse();
     }
 }

@@ -6,7 +6,6 @@ namespace App\Tests\Functional\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Request\CreateUserRequest;
 use App\Tests\Functional\AbstractBaseWebTestCase;
 use App\Tests\Services\TestUserFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,7 +16,6 @@ class AdminControllerTest extends AbstractBaseWebTestCase
     private string $adminToken;
     private UserRepository $userRepository;
     private TestUserFactory $testUserFactory;
-    private string $createUserUrl = '';
 
     protected function setUp(): void
     {
@@ -33,11 +31,6 @@ class AdminControllerTest extends AbstractBaseWebTestCase
         $testUserFactory = self::getContainer()->get(TestUserFactory::class);
         \assert($testUserFactory instanceof TestUserFactory);
         $this->testUserFactory = $testUserFactory;
-
-        $createUserUrl = self::getContainer()->getParameter('route-admin-user-create');
-        if (is_string($createUserUrl)) {
-            $this->createUserUrl = $createUserUrl;
-        }
     }
 
     /**
@@ -45,7 +38,7 @@ class AdminControllerTest extends AbstractBaseWebTestCase
      */
     public function testCreateUserUnauthorized(?string $token): void
     {
-        $response = $this->makeCreateUserRequest('', '', $token);
+        $response = $this->application->makeAdminCreateUserRequest('', '', $token);
 
         self::assertSame(401, $response->getStatusCode());
     }
@@ -70,7 +63,11 @@ class AdminControllerTest extends AbstractBaseWebTestCase
         $this->removeAllUsers();
 
         $user = $this->testUserFactory->create();
-        $response = $this->makeCreateUserRequest($user->getUserIdentifier(), $user->getPassword(), $this->adminToken);
+        $response = $this->application->makeAdminCreateUserRequest(
+            $user->getUserIdentifier(),
+            'password',
+            $this->adminToken
+        );
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertInstanceOf(JsonResponse::class, $response);
@@ -90,7 +87,7 @@ class AdminControllerTest extends AbstractBaseWebTestCase
         $email = 'email';
         $password = 'password';
 
-        $response = $this->makeCreateUserRequest($email, $password, $this->adminToken);
+        $response = $this->application->makeAdminCreateUserRequest($email, $password, $this->adminToken);
 
         $expectedUser = $this->userRepository->findByEmail($email);
         self::assertInstanceOf(User::class, $expectedUser);
@@ -103,26 +100,5 @@ class AdminControllerTest extends AbstractBaseWebTestCase
             ],
             json_decode((string) $response->getContent(), true)
         );
-    }
-
-    private function makeCreateUserRequest(string $email, string $password, ?string $token): Response
-    {
-        $headers = [];
-        if (is_string($token)) {
-            $headers['HTTP_AUTHORIZATION'] = $token;
-        }
-
-        $this->client->request(
-            'POST',
-            $this->createUserUrl,
-            [
-                CreateUserRequest::KEY_EMAIL => $email,
-                CreateUserRequest::KEY_PASSWORD => $password,
-            ],
-            [],
-            $headers,
-        );
-
-        return $this->client->getResponse();
     }
 }

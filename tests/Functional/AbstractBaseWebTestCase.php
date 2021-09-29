@@ -4,16 +4,22 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use App\Tests\Services\Application;
 
 abstract class AbstractBaseWebTestCase extends AbstractBaseFunctionalTest
 {
-    protected KernelBrowser $client;
+    protected Application $application;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->client = static::createClient();
+        $client = static::createClient();
+
+        $application = self::getContainer()->get(Application::class);
+        \assert($application instanceof Application);
+        $application->setClient($client);
+
+        $this->application = $application;
     }
 }
