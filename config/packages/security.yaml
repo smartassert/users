@@ -30,7 +30,7 @@ security:
           pattern:  '%route-api-token-create%'
           stateless: true
           custom_authenticators:
-            - App\Security\Api\Authenticator
+            - App\Security\Api\CreateAuthenticator
           provider: api_user_provider
         api_token_verify:
             pattern: '%route-api-token-verify%'
@@ -52,7 +52,7 @@ security:
             stateless: true
             anonymous: false
             jwt:
-                authenticator: App\Security\Frontend\Authenticator
+                authenticator: App\Security\Frontend\VerifyAuthenticator
             provider: jwt
         admin:
             pattern:  !php/const App\Controller\AdminController::ROUTE_PREFIX

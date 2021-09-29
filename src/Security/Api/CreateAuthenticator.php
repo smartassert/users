@@ -19,7 +19,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
-class Authenticator extends AbstractAuthenticator
+class CreateAuthenticator extends AbstractAuthenticator
 {
     public function __construct(
         private TokenExtractorInterface $tokenExtractor,

@@ -51,10 +51,9 @@ services:
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created }
 
-    App\Security\Api\Authenticator:
+    App\Security\Api\CreateAuthenticator:
         arguments:
             $tokenExtractor: '@app.admin-authenticator-token-extractor'
 
-    App\Security\Frontend\Authenticator:
-        class: App\Security\Frontend\Authenticator
+    App\Security\Frontend\VerifyAuthenticator:
         parent: lexik_jwt_authentication.security.jwt_authenticator
