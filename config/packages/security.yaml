@@ -10,7 +10,7 @@ security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         # used to reload user from session & other features (e.g. switch_user)
-        app_user_provider:
+        frontend_user_provider:
             entity:
                 class: App\Entity\User
                 property: userIdentifier
@@ -47,7 +47,7 @@ security:
                 check_path: '%route-frontend-token-create%'
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-            provider: app_user_provider
+            provider: frontend_user_provider
         frontend_token_verify:
             pattern: '%route-frontend-token-verify%'
             stateless: true
@@ -63,7 +63,7 @@ security:
             provider: admin_user_provider
         main:
             lazy: true
-            provider: app_user_provider
+            provider: frontend_user_provider
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
