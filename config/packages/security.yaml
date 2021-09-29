@@ -51,7 +51,8 @@ security:
             pattern: '%route-frontend-token-verify%'
             stateless: true
             anonymous: false
-            jwt: ~
+            jwt:
+                authenticator: App\Security\Frontend\Authenticator
             provider: jwt
         admin:
             pattern:  !php/const App\Controller\AdminController::ROUTE_PREFIX

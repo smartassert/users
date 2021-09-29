@@ -54,3 +54,7 @@ services:
     App\Security\Api\Authenticator:
         arguments:
             $tokenExtractor: '@app.admin-authenticator-token-extractor'
+
+    App\Security\Frontend\Authenticator:
+        class: App\Security\Frontend\Authenticator
+        parent: lexik_jwt_authentication.security.jwt_authenticator
