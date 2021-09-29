@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Security\Admin;
 
 use App\Security\Admin\Authenticator;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\Functional\AbstractBaseFunctionalTest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
-class AuthenticatorTest extends WebTestCase
+class AuthenticatorTest extends AbstractBaseFunctionalTest
 {
     private Authenticator $authenticator;
     private string $primaryAdminToken;

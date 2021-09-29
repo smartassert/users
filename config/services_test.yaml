@@ -21,3 +21,12 @@ services:
 
     App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory:
         public: true
+
+    App\Tests\Services\Application:
+        public: true
+        arguments:
+            $apiCreateTokenUrl: '%route-api-token-create%'
+            $apiVerifyTokenUrl: '%route-api-token-verify%'
+            $frontendCreateTokenUrl: '%route-frontend-token-create%'
+            $frontendVerifyTokenUrl: '%route-frontend-token-verify%'
+            $adminCreateUserUrl: '%route-admin-user-create%'
