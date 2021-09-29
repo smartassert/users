@@ -9,14 +9,42 @@ use App\Security\TokenInterface;
 use App\Tests\Services\Asserter\ResponseAsserter\ArrayBodyAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory;
+use Doctrine\ORM\EntityManagerInterface;
+use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshTokenRepository;
+use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
 use Symfony\Component\HttpFoundation\Response;
 
 class FrontendCreateVerifyTest extends AbstractTokenTest
 {
+    private EntityManagerInterface $entityManager;
+    private RefreshTokenRepository $refreshTokenRepository;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $entityManager = self::getContainer()->get(EntityManagerInterface::class);
+        \assert($entityManager instanceof EntityManagerInterface);
+        $this->entityManager = $entityManager;
+
+        $refreshTokenRepository = $entityManager->getRepository(RefreshToken::class);
+        \assert($refreshTokenRepository instanceof RefreshTokenRepository);
+        $this->refreshTokenRepository = $refreshTokenRepository;
+
+        $this->removeAllRefreshTokens();
+    }
+
     public function testCreateSuccess(): void
     {
+        self::assertCount(0, $this->refreshTokenRepository->findAll());
+
         $user = $this->testUserFactory->create();
         $response = $this->makeCreateTokenRequest(...$this->testUserFactory->getCredentials());
+
+        $refreshTokens = $this->refreshTokenRepository->findAll();
+        self::assertCount(1, $refreshTokens);
+        $refreshToken = $refreshTokens[0];
+        self::assertInstanceOf(RefreshToken::class, $refreshToken);
 
         $jwtTokenBodyAsserterFactory = self::getContainer()->get(JwtTokenBodyAsserterFactory::class);
         \assert($jwtTokenBodyAsserterFactory instanceof JwtTokenBodyAsserterFactory);
@@ -32,6 +60,11 @@ class FrontendCreateVerifyTest extends AbstractTokenTest
                     ],
                 ]
             ))
+            ->addBodyAsserter(
+                new ArrayBodyAsserter([
+                    'refresh_token' => $refreshToken->getRefreshToken(),
+                ])
+            )
             ->assert($response)
         ;
     }
@@ -133,5 +166,15 @@ class FrontendCreateVerifyTest extends AbstractTokenTest
         );
 
         return $this->client->getResponse();
+    }
+
+    private function removeAllRefreshTokens(): void
+    {
+        $refreshTokens = $this->refreshTokenRepository->findAll();
+
+        foreach ($refreshTokens as $refreshToken) {
+            $this->entityManager->remove($refreshToken);
+            $this->entityManager->flush();
+        }
     }
 }

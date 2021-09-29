@@ -1,3 +1,6 @@
+gesdinet_jwt_refresh_token:
+  path: /api/token/refresh
+
 frontend_token_create:
   path: '%route-frontend-token-create%'
 
