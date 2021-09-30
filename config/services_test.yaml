@@ -35,3 +35,6 @@ services:
             $frontendRefreshTokenUrl: '%route-frontend-token-refresh%'
             $adminCreateUserUrl: '%route-admin-user-create%'
             $adminRevokeRefreshTokenUrl: '%route-admin-frontend-refresh-token-revoke%'
+
+    App\Tests\Services\RefreshTokenManager:
+        public: true

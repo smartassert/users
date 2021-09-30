@@ -7,16 +7,13 @@ namespace App\Tests\Functional\Services;
 use App\Entity\User;
 use App\Services\UserRefreshTokenManager;
 use App\Tests\Functional\AbstractBaseFunctionalTest;
+use App\Tests\Services\RefreshTokenManager;
 use App\Tests\Services\TestUserFactory;
-use Doctrine\ORM\EntityManagerInterface;
-use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
-use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshTokenRepository;
-use Gesdinet\JWTRefreshTokenBundle\Generator\RefreshTokenGeneratorInterface;
-use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
 
 class UserRefreshTokenManagerTest extends AbstractBaseFunctionalTest
 {
     private UserRefreshTokenManager $userRefreshTokenManager;
+    private RefreshTokenManager $refreshTokenManager;
     private User $user;
 
     protected function setUp(): void
@@ -26,6 +23,10 @@ class UserRefreshTokenManagerTest extends AbstractBaseFunctionalTest
         $userRefreshTokenManager = self::getContainer()->get(UserRefreshTokenManager::class);
         \assert($userRefreshTokenManager instanceof UserRefreshTokenManager);
         $this->userRefreshTokenManager = $userRefreshTokenManager;
+
+        $refreshTokenManager = self::getContainer()->get(RefreshTokenManager::class);
+        \assert($refreshTokenManager instanceof RefreshTokenManager);
+        $this->refreshTokenManager = $refreshTokenManager;
 
         $this->removeAllUsers();
         $this->removeAllRefreshTokens();
@@ -58,15 +59,7 @@ class UserRefreshTokenManagerTest extends AbstractBaseFunctionalTest
 
     public function testDeleteByUserIdUserHasRefreshToken(): void
     {
-        $refreshTokenGenerator = self::getContainer()->get(RefreshTokenGeneratorInterface::class);
-        \assert($refreshTokenGenerator instanceof RefreshTokenGeneratorInterface);
-
-        $refreshTokenManager = self::getContainer()->get(RefreshTokenManagerInterface::class);
-        \assert($refreshTokenManager instanceof RefreshTokenManagerInterface);
-
-        $refreshTokenManager->save(
-            $refreshTokenGenerator->createForUserWithTtl($this->user, 3600)
-        );
+        $this->refreshTokenManager->create($this->user);
 
         self::assertTrue(
             $this->userRefreshTokenManager->deleteByUserId($this->user->getId())
@@ -75,17 +68,6 @@ class UserRefreshTokenManagerTest extends AbstractBaseFunctionalTest
 
     private function removeAllRefreshTokens(): void
     {
-        $entityManager = self::getContainer()->get(EntityManagerInterface::class);
-        \assert($entityManager instanceof EntityManagerInterface);
-
-        $refreshTokenRepository = $entityManager->getRepository(RefreshToken::class);
-        \assert($refreshTokenRepository instanceof RefreshTokenRepository);
-
-        $refreshTokens = $refreshTokenRepository->findAll();
-
-        foreach ($refreshTokens as $refreshToken) {
-            $entityManager->remove($refreshToken);
-            $entityManager->flush();
-        }
+        $this->refreshTokenManager->removeAll();
     }
 }
