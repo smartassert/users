@@ -17,6 +17,7 @@ class Application
         private string $apiVerifyTokenUrl,
         private string $frontendCreateTokenUrl,
         private string $frontendVerifyTokenUrl,
+        private string $frontendRefreshTokenUrl,
         private string $adminCreateUserUrl,
     ) {
     }
@@ -48,24 +49,28 @@ class Application
 
     public function makeFrontendCreateTokenRequest(string $userIdentifier, string $password): Response
     {
-        $this->client->request(
-            'POST',
+        return $this->makeJsonPayloadRequest(
             $this->frontendCreateTokenUrl,
-            [],
-            [],
-            ['CONTENT_TYPE' => 'application/json'],
-            (string) json_encode([
+            [
                 'username' => $userIdentifier,
                 'password' => $password,
-            ])
+            ]
         );
-
-        return $this->client->getResponse();
     }
 
     public function makeFrontendVerifyTokenRequest(?string $jwt): Response
     {
         return $this->makeVerifyTokenRequest($this->frontendVerifyTokenUrl, $jwt);
+    }
+
+    public function makeFrontendRefreshTokenRequest(string $refreshToken): Response
+    {
+        return $this->makeJsonPayloadRequest(
+            $this->frontendRefreshTokenUrl,
+            [
+                'refresh_token' => $refreshToken
+            ]
+        );
     }
 
     public function makeAdminCreateUserRequest(string $email, string $password, ?string $adminToken): Response
@@ -127,5 +132,22 @@ class Application
         }
 
         return $headers;
+    }
+
+    /**
+     * @param array<mixed> $payload
+     */
+    private function makeJsonPayloadRequest(string $url, array $payload): Response
+    {
+        $this->client->request(
+            'POST',
+            $url,
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            (string) json_encode($payload)
+        );
+
+        return $this->client->getResponse();
     }
 }
