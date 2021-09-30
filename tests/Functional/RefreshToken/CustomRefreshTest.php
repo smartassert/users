@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Functional;
+namespace App\Tests\Functional\RefreshToken;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-final class VendorRefreshTest extends WebTestCase
+final class CustomRefreshTest extends WebTestCase
 {
     public function testLoginAndRefreshApiToken(): void
     {
