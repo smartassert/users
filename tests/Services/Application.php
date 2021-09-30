@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Services;
 
 use App\Request\CreateUserRequest;
+use App\Request\RevokeRefreshTokenRequest;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,6 +20,7 @@ class Application
         private string $frontendVerifyTokenUrl,
         private string $frontendRefreshTokenUrl,
         private string $adminCreateUserUrl,
+        private string $adminRevokeRefreshTokenUrl,
     ) {
     }
 
@@ -83,6 +85,23 @@ class Application
             [
                 CreateUserRequest::KEY_EMAIL => $email,
                 CreateUserRequest::KEY_PASSWORD => $password,
+            ],
+            [],
+            $headers,
+        );
+
+        return $this->client->getResponse();
+    }
+
+    public function makeAdminRevokeRefreshTokenRequest(string $userId, string $adminToken): Response
+    {
+        $headers = $this->addHttpAuthorizationHeader([], $adminToken);
+
+        $this->client->request(
+            'POST',
+            $this->adminRevokeRefreshTokenUrl,
+            [
+                RevokeRefreshTokenRequest::KEY_ID => $userId,
             ],
             [],
             $headers,
