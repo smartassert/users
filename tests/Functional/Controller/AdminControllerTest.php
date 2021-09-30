@@ -8,6 +8,11 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Tests\Functional\AbstractBaseWebTestCase;
 use App\Tests\Services\TestUserFactory;
+use Doctrine\ORM\EntityManagerInterface;
+use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
+use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshTokenRepository;
+use Gesdinet\JWTRefreshTokenBundle\Generator\RefreshTokenGeneratorInterface;
+use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -100,5 +105,52 @@ class AdminControllerTest extends AbstractBaseWebTestCase
             ],
             json_decode((string) $response->getContent(), true)
         );
+    }
+
+    public function testRevokeRefreshToken(): void
+    {
+        $this->removeAllUsers();
+        $this->removeAllRefreshTokens();
+
+        $user = $this->testUserFactory->create();
+
+        $entityManager = self::getContainer()->get(EntityManagerInterface::class);
+        \assert($entityManager instanceof EntityManagerInterface);
+
+        $refreshTokenRepository = $entityManager->getRepository(RefreshToken::class);
+        \assert($refreshTokenRepository instanceof RefreshTokenRepository);
+
+        $refreshTokenGenerator = self::getContainer()->get(RefreshTokenGeneratorInterface::class);
+        \assert($refreshTokenGenerator instanceof RefreshTokenGeneratorInterface);
+
+        $refreshTokenManager = self::getContainer()->get(RefreshTokenManagerInterface::class);
+        \assert($refreshTokenManager instanceof RefreshTokenManagerInterface);
+
+        self::assertSame(0, $refreshTokenRepository->count([]));
+
+        $refreshTokenManager->save($refreshTokenGenerator->createForUserWithTtl($user, 3600));
+
+        self::assertSame(1, $refreshTokenRepository->count([]));
+
+        $response = $this->application->makeAdminRevokeRefreshTokenRequest($user->getId(), $this->adminToken);
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame(0, $refreshTokenRepository->count([]));
+    }
+
+    private function removeAllRefreshTokens(): void
+    {
+        $entityManager = self::getContainer()->get(EntityManagerInterface::class);
+        \assert($entityManager instanceof EntityManagerInterface);
+
+        $refreshTokenRepository = $entityManager->getRepository(RefreshToken::class);
+        \assert($refreshTokenRepository instanceof RefreshTokenRepository);
+
+        $refreshTokens = $refreshTokenRepository->findAll();
+
+        foreach ($refreshTokens as $refreshToken) {
+            $entityManager->remove($refreshToken);
+            $entityManager->flush();
+        }
     }
 }
