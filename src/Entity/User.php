@@ -17,6 +17,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User extends AbstractUser implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSerializable
 {
+    public const ROLES = [
+        UserRoleInterface::ROLE_USER,
+    ];
+
     /**
      * @ORM\Id
      * @ORM\Column(type="string", length=UserPropertiesInterface::ID_LENGTH, unique=true)
@@ -34,6 +38,11 @@ class User extends AbstractUser implements UserInterface, PasswordAuthenticatedU
      */
     protected string $password;
 
+    /**
+     * @var array<UserRoleInterface::ROLE_*>
+     */
+    protected array $roles = self::ROLES;
+
     public function __construct(string $id, string $userIdentifier, string $password)
     {
         $this->id = $id;
@@ -43,9 +52,7 @@ class User extends AbstractUser implements UserInterface, PasswordAuthenticatedU
         parent::__construct(
             $id,
             $userIdentifier,
-            [
-                UserRoleInterface::ROLE_USER,
-            ]
+            self::ROLES
         );
     }
 
