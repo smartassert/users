@@ -3,8 +3,6 @@ security:
     enable_authenticator_manager: true
     # https://symfony.com/doc/current/security.html#c-hashing-passwords
     password_hashers:
-        Symfony\Component\Security\Core\User\InMemoryUser: plaintext
-
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
         App\Entity\User:
             algorithm: auto
@@ -12,11 +10,6 @@ security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         # used to reload user from session & other features (e.g. switch_user)
-        users_in_memory:
-            memory:
-                users:
-                    - { identifier: 'user1', password: 'password' }
-
         frontend_user_provider:
             entity:
                 class: App\Entity\User
@@ -33,29 +26,6 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
-
-        api_token_refresh:
-            pattern: ^/api/token/refresh
-            stateless: true
-            refresh_jwt:
-                provider: users_in_memory
-
-        custom_token_refresh:
-            pattern: ^/custom/token/refresh
-            stateless: true
-            refresh_jwt:
-                provider: frontend_user_provider
-
-        api_login:
-            pattern: ^/api/login
-            stateless: true
-            json_login:
-                check_path: /api/login
-                success_handler: lexik_jwt_authentication.handler.authentication_success
-                failure_handler: lexik_jwt_authentication.handler.authentication_failure
-            provider: users_in_memory
-
         frontend_token_refresh:
             pattern: '%route-frontend-token-refresh%'
             stateless: true
@@ -109,8 +79,6 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/api/(login|token/refresh), roles: PUBLIC_ACCESS }
-        - { path: ^/custom/token/refresh, roles: PUBLIC_ACCESS }
         - { path: '%route-frontend-token-refresh%', roles: PUBLIC_ACCESS }
         - { path: '%route-frontend-token-create%', roles: PUBLIC_ACCESS }
         - { path: '%route-frontend-token-verify%', roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
