@@ -10,6 +10,9 @@ services:
     App\Services\ApiKeyFactory:
         public: true
 
+    App\Services\UserRefreshTokenManager:
+        public: true
+
     App\Tests\Services\TestUserFactory:
         public: true
         arguments:
