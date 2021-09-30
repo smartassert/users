@@ -29,4 +29,5 @@ services:
             $apiVerifyTokenUrl: '%route-api-token-verify%'
             $frontendCreateTokenUrl: '%route-frontend-token-create%'
             $frontendVerifyTokenUrl: '%route-frontend-token-verify%'
+            $frontendRefreshTokenUrl: '%route-frontend-token-refresh%'
             $adminCreateUserUrl: '%route-admin-user-create%'
