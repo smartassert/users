@@ -2,13 +2,12 @@ security:
     # https://symfony.com/doc/current/security/experimental_authenticators.html
     enable_authenticator_manager: true
     # https://symfony.com/doc/current/security.html#c-hashing-passwords
-#    password_hashers:
-#        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-#        App\Entity\User:
-#            algorithm: auto
-
     password_hashers:
-        Symfony\Component\Security\Core\User\UserInterface: plaintext
+        Symfony\Component\Security\Core\User\InMemoryUser: plaintext
+
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+        App\Entity\User:
+            algorithm: auto
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
