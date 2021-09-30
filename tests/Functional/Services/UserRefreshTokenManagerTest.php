@@ -37,9 +37,9 @@ class UserRefreshTokenManagerTest extends AbstractBaseFunctionalTest
 
     protected function tearDown(): void
     {
-        parent::tearDown();
-
         $this->removeAllRefreshTokens();
+
+        parent::tearDown();
     }
 
     public function testDeleteByUserIdInvalidUserId(): void
