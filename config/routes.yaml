@@ -1,3 +1,13 @@
+api_login:
+  path: /api/login
+  methods: [POST]
+
+api_refresh_token:
+  path: /api/token/refresh
+  methods: [POST]
+
+
+
 gesdinet_jwt_refresh_token:
   path: '%route-frontend-token-refresh%'
 
