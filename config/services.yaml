@@ -8,10 +8,12 @@ parameters:
     secondary-admin-token: '%env(SECONDARY_ADMIN_TOKEN)%'
     route-frontend-token-create: '/frontend/token/create'
     route-frontend-token-verify: '/frontend/token/verify'
+    route-frontend-token-refresh: '/frontend/token/refresh'
     route-api-token-create: '/api/token/create'
     route-api-token-verify: '/api/token/verify'
     route-admin-prefix: '/admin'
     route-admin-user-create: '%route-admin-prefix%/user/create'
+    route-admin-frontend-refresh-token-revoke: '%route-admin-prefix%/frontend/refresh-token/revoke'
 
 services:
     # default configuration for services in *this* file

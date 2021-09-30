@@ -10,6 +10,9 @@ services:
     App\Services\ApiKeyFactory:
         public: true
 
+    App\Services\UserRefreshTokenManager:
+        public: true
+
     App\Tests\Services\TestUserFactory:
         public: true
         arguments:
@@ -29,4 +32,9 @@ services:
             $apiVerifyTokenUrl: '%route-api-token-verify%'
             $frontendCreateTokenUrl: '%route-frontend-token-create%'
             $frontendVerifyTokenUrl: '%route-frontend-token-verify%'
+            $frontendRefreshTokenUrl: '%route-frontend-token-refresh%'
             $adminCreateUserUrl: '%route-admin-user-create%'
+            $adminRevokeRefreshTokenUrl: '%route-admin-frontend-refresh-token-revoke%'
+
+    App\Tests\Services\RefreshTokenManager:
+        public: true

@@ -1,3 +1,7 @@
+frontend_token_refresh:
+  path: '%route-frontend-token-refresh%'
+  methods: [POST]
+
 frontend_token_create:
   path: '%route-frontend-token-create%'
 
@@ -13,3 +17,8 @@ api_token_verify:
 admin_user_create:
   path: '%route-admin-user-create%'
   controller: App\Controller\AdminController::createUser
+
+admin_frontend_refreshtoken_revoke:
+  path: '%route-admin-frontend-refresh-token-revoke%'
+  methods: [POST]
+  controller: App\Controller\AdminController::revokeRefreshToken

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\ArgumentResolver;
 
-use App\Request\CreateUserRequest;
 use App\Request\EncapsulatingRequestInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
@@ -12,13 +11,23 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
 class EncapsulatingRequestResolver implements ArgumentValueResolverInterface
 {
-    private const SUPPORTED_CLASSES = [
-        CreateUserRequest::class,
-    ];
-
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
-        return in_array($argument->getType(), self::SUPPORTED_CLASSES);
+        $type = $argument->getType();
+        if (null === $type) {
+            return false;
+        }
+
+        if (false === class_exists($type)) {
+            return false;
+        }
+
+        $implementedInterfaces = class_implements($type);
+        if (!is_array($implementedInterfaces)) {
+            return false;
+        }
+
+        return in_array(EncapsulatingRequestInterface::class, $implementedInterfaces);
     }
 
     /**
@@ -26,6 +35,9 @@ class EncapsulatingRequestResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument): \Generator
     {
-        yield new CreateUserRequest($request);
+        $type = $argument->getType();
+        if (is_string($type) && class_exists($type)) {
+            yield new $type($request);
+        }
     }
 }

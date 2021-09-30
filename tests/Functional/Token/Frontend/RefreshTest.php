@@ -15,7 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
 use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshTokenRepository;
 
-class CreateTest extends AbstractBaseWebTestCase
+class RefreshTest extends AbstractBaseWebTestCase
 {
     private EntityManagerInterface $entityManager;
     private RefreshTokenRepository $refreshTokenRepository;
@@ -42,7 +42,7 @@ class CreateTest extends AbstractBaseWebTestCase
         $this->removeAllRefreshTokens();
     }
 
-    public function testCreateSuccess(): void
+    public function testRefreshSuccess(): void
     {
         $testUserFactory = self::getContainer()->get(TestUserFactory::class);
         \assert($testUserFactory instanceof TestUserFactory);
@@ -50,12 +50,14 @@ class CreateTest extends AbstractBaseWebTestCase
         self::assertCount(0, $this->refreshTokenRepository->findAll());
 
         $user = $testUserFactory->create();
-        $response = $this->application->makeFrontendCreateTokenRequest(...$testUserFactory->getCredentials());
+        $createTokenResponse = $this->application->makeFrontendCreateTokenRequest(
+            ...$testUserFactory->getCredentials()
+        );
 
-        $refreshTokens = $this->refreshTokenRepository->findAll();
-        self::assertCount(1, $refreshTokens);
-        $refreshToken = $refreshTokens[0];
-        self::assertInstanceOf(RefreshToken::class, $refreshToken);
+        $responseData = json_decode((string) $createTokenResponse->getContent(), true);
+        $refreshToken = $responseData['refresh_token'];
+
+        $response = $this->application->makeFrontendRefreshTokenRequest($refreshToken);
 
         $jwtTokenBodyAsserterFactory = self::getContainer()->get(JwtTokenBodyAsserterFactory::class);
         \assert($jwtTokenBodyAsserterFactory instanceof JwtTokenBodyAsserterFactory);
@@ -73,18 +75,11 @@ class CreateTest extends AbstractBaseWebTestCase
             ))
             ->addBodyAsserter(
                 new ArrayBodyAsserter([
-                    'refresh_token' => $refreshToken->getRefreshToken(),
+                    'refresh_token' => $refreshToken,
                 ])
             )
             ->assert($response)
         ;
-    }
-
-    public function testCreateUserDoesNotExist(): void
-    {
-        $response = $this->application->makeFrontendCreateTokenRequest('', '');
-
-        self::assertSame(401, $response->getStatusCode());
     }
 
     private function removeAllRefreshTokens(): void
