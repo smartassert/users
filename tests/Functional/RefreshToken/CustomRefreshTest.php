@@ -69,7 +69,7 @@ final class CustomRefreshTest extends WebTestCase
 
         $this->client->request(
             method: 'POST',
-            uri: '/api/token/refresh',
+            uri: '/custom/token/refresh',
             server: [
                 'CONTENT_TYPE' => 'application/json',
                 'HTTP_ACCEPT' => 'application/json',

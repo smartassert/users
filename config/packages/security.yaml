@@ -41,6 +41,12 @@ security:
             refresh_jwt:
                 provider: users_in_memory
 
+        custom_token_refresh:
+            pattern: ^/custom/token/refresh
+            stateless: true
+            refresh_jwt:
+                provider: frontend_user_provider
+
         api_login:
             pattern: ^/api/login
             stateless: true
@@ -104,6 +110,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/api/(login|token/refresh), roles: PUBLIC_ACCESS }
+        - { path: ^/custom/token/refresh, roles: PUBLIC_ACCESS }
         - { path: '%route-frontend-token-refresh%', roles: PUBLIC_ACCESS }
         - { path: '%route-frontend-token-create%', roles: PUBLIC_ACCESS }
         - { path: '%route-frontend-token-verify%', roles: !php/const App\Security\UserRoleInterface::ROLE_USER }

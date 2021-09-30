@@ -6,7 +6,9 @@ api_refresh_token:
   path: /api/token/refresh
   methods: [POST]
 
-
+custom_refresh_token:
+  path: /custom/token/refresh
+  methods: [POST]
 
 gesdinet_jwt_refresh_token:
   path: '%route-frontend-token-refresh%'
