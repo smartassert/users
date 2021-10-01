@@ -4,6 +4,7 @@ frontend_token_refresh:
 
 frontend_token_create:
   path: '%route-frontend-token-create%'
+  methods: [POST]
 
 frontend_token_verify:
   path: '%route-frontend-token-verify%'
