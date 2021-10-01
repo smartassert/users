@@ -42,5 +42,10 @@ jobs:
 
       - name: Setup integration environment
         env:
-          DATABASE_URL: postgres://postgres:password!@127.0.0.1:5432/basil-worker-manager-db?charset=UTF-8
+          DATABASE_URL: postgres://postgres:password!@127.0.0.1:5432/users-db?charset=UTF-8
         run: composer integration-setup
+
+      - name: Run tests
+        env:
+          DATABASE_URL: postgres://postgres:password!@127.0.0.1:5432/users-db?charset=UTF-8
+        run: composer test-integration
