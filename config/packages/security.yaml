@@ -66,6 +66,7 @@ security:
             custom_authenticators:
                 - App\Security\Admin\Authenticator
             provider: admin_user_provider
+            entry_point: App\Security\Admin\AuthenticationEntryPoint
         main:
             lazy: true
             provider: frontend_user_provider
