@@ -2,7 +2,7 @@ version: "3"
 
 services:
   postgres:
-    env_file: .env
+    env_file: postgres.env
     image: postgres:12.5
     container_name: postgres
     ports:
@@ -19,6 +19,7 @@ services:
       - app:app
 
   app:
+    env_file: app.env
     build:
       context: ../..
       args:
