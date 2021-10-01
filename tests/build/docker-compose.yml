@@ -7,3 +7,22 @@ services:
     container_name: postgres
     ports:
       - 5432:5432
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: nginx
+    ports:
+      - 9090:80
+    links:
+      - app:app
+
+  app:
+    build:
+      context: ../..
+      args:
+        DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/users-db?serverVersion=12&charset=utf8
+    container_name: smartassert-users
+    depends_on:
+      - postgres
