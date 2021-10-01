@@ -43,7 +43,7 @@ class CreateTest extends AbstractBaseWebTestCase
                     ],
                 ]
             ))
-            ->assert($response)
+            ->assertFromSymfonyResponse($response)
         ;
     }
 

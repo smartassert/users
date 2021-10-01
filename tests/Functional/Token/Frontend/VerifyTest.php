@@ -59,7 +59,7 @@ class VerifyTest extends AbstractBaseWebTestCase
                 'id' => $user->getId(),
                 'user-identifier' => $user->getUserIdentifier(),
             ]))
-            ->assert($verifyResponse)
+            ->assertFromSymfonyResponse($verifyResponse)
         ;
     }
 }

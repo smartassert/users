@@ -61,7 +61,7 @@ class VerifyTest extends AbstractBaseWebTestCase
 
         (new TextPlainResponseAsserter(200))
             ->addBodyAsserter(new TextPlainBodyAsserter($userId))
-            ->assert($verifyResponse)
+            ->assertFromSymfonyResponse($verifyResponse)
         ;
     }
 }
