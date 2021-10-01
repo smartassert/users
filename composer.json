@@ -106,6 +106,7 @@
             "@functional-create-jwt-keys"
         ],
         "integration-build": "docker-compose -f tests/build/docker-compose.yml build app",
+        "integration-pull": "docker-compose -f tests/build/docker-compose.yml pull",
         "integration-up": "docker-compose -f tests/build/docker-compose.yml  up -d",
         "integration-status": "docker-compose -f tests/build/docker-compose.yml ps",
         "integration-teardown": "@functional-teardown",
