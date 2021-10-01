@@ -78,7 +78,7 @@ class RefreshTest extends AbstractBaseWebTestCase
                     'refresh_token' => $refreshToken,
                 ])
             )
-            ->assert($response)
+            ->assertFromSymfonyResponse($response)
         ;
     }
 

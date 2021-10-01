@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Services\Asserter\ResponseAsserter;
 
+use GuzzleHttp\Psr7\HttpFactory;
 use PHPUnit\Framework\Assert;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpFoundation\Response;
 
 class ResponseAsserter
@@ -20,12 +23,10 @@ class ResponseAsserter
     private array $bodyAsserters = [];
 
     /**
-     * @param int          $expectedStatusCode
-     * @param class-string $expectedClass
+     * @param int $expectedStatusCode
      */
     public function __construct(
-        private int $expectedStatusCode,
-        private string $expectedClass
+        private int $expectedStatusCode
     ) {
     }
 
@@ -43,21 +44,31 @@ class ResponseAsserter
         return $this;
     }
 
-    public function assert(Response $response): void
+    public function assert(ResponseInterface $response): void
     {
         Assert::assertSame($this->expectedStatusCode, $response->getStatusCode());
-        Assert::assertInstanceOf($this->expectedClass, $response);
 
         foreach ($this->headerAsserters as $headerAsserter) {
             if ($headerAsserter instanceof HeaderAsserterInterface) {
-                $headerAsserter->assert($response->headers);
+                $headerAsserter->assert($response->getHeaders());
             }
         }
 
+        $response->getBody()->rewind();
+        $body = $response->getBody()->getContents();
+
         foreach ($this->bodyAsserters as $bodyAsserter) {
             if ($bodyAsserter instanceof BodyAsserterInterface) {
-                $bodyAsserter->assert((string) $response->getContent());
+                $bodyAsserter->assert($body);
             }
         }
+    }
+
+    public function assertFromSymfonyResponse(Response $response): void
+    {
+        $psr17Factory = new HttpFactory();
+        $psrHttpFactory = new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
+
+        $this->assert($psrHttpFactory->createResponse($response));
     }
 }

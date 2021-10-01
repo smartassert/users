@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Services\Asserter\ResponseAsserter;
 
 use PHPUnit\Framework\Assert;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class HeaderAsserter implements HeaderAsserterInterface
 {
@@ -17,11 +16,11 @@ class HeaderAsserter implements HeaderAsserterInterface
     ) {
     }
 
-    public function assert(ResponseHeaderBag $headers): void
+    public function assert(array $headers): void
     {
         foreach ($this->expectedHeaders as $expectedKey => $expectedValue) {
-            Assert::assertTrue($headers->has($expectedKey));
-            Assert::assertSame($expectedValue, $headers->get($expectedKey));
+            Assert::assertArrayHasKey($expectedKey, $headers);
+            Assert::assertSame($expectedValue, $headers[$expectedKey][0]);
         }
     }
 }
