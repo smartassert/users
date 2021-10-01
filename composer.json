@@ -26,6 +26,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.1",
+        "guzzlehttp/guzzle": "^7.3",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^0.12.99",
         "phpstan/phpstan-doctrine": "^0.12.44",
@@ -89,6 +90,7 @@
         "static-analysis": "./vendor/bin/phpstan analyse --ansi",
         "test-unit": "./vendor/bin/phpunit --colors=always tests/Unit",
         "test-functional": "./vendor/bin/phpunit --colors=always tests/Functional",
+        "test-integration": "./vendor/bin/phpunit --colors=always tests/Integration",
         "test": [
             "@test-unit",
             "@test-functional"
