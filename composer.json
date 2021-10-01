@@ -112,12 +112,14 @@
         "integration-pull": "docker-compose -f tests/build/docker-compose.yml pull",
         "integration-up": "docker-compose -f tests/build/docker-compose.yml  up -d",
         "integration-status": "docker-compose -f tests/build/docker-compose.yml ps",
+        "integration-generate-jwt-keys": "docker-compose -f tests/build/docker-compose.yml exec -T app php bin/console lexik:jwt:generate-keypair --skip-if-exists",
         "integration-teardown": "@functional-teardown",
         "integration-setup": [
             "@integration-build",
             "@integration-up",
             "sleep 2",
-            "@db-setup"
+            "@db-setup",
+            "@integration-generate-jwt-keys"
         ]
     },
     "conflict": {
