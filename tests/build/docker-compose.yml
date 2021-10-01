@@ -19,6 +19,7 @@ services:
       - app:app
 
   app:
+    env_file: .env
     build:
       context: ../..
       args:
