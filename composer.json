@@ -113,13 +113,19 @@
         "integration-up": "docker-compose -f tests/build/docker-compose.yml  up -d",
         "integration-status": "docker-compose -f tests/build/docker-compose.yml ps",
         "integration-generate-jwt-keys": "docker-compose -f tests/build/docker-compose.yml exec -T app php bin/console lexik:jwt:generate-keypair --skip-if-exists",
+        "integration-copy-jwt-keys": [
+            "mkdir -p ./config/jwt",
+            "docker-compose -f tests/build/docker-compose.yml exec -T app cat /app/config/jwt/public.pem > ./config/jwt/public-test.pem",
+            "docker-compose -f tests/build/docker-compose.yml exec -T app cat /app/config/jwt/private.pem > ./config/jwt/private-test.pem"
+        ],
         "integration-teardown": "@functional-teardown",
         "integration-setup": [
             "@integration-build",
             "@integration-up",
             "sleep 2",
             "@db-setup",
-            "@integration-generate-jwt-keys"
+            "@integration-generate-jwt-keys",
+            "@integration-copy-jwt-keys"
         ]
     },
     "conflict": {
