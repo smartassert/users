@@ -4,18 +4,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Token\Frontend;
 
-use App\Security\AudienceClaimInterface;
-use App\Security\TokenInterface;
-use App\Tests\Functional\AbstractBaseWebTestCase;
-use App\Tests\Services\Asserter\ResponseAsserter\ArrayBodyAsserter;
-use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
+use App\Tests\Functional\Token\AbstractTokenTest;
 use App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory;
 use App\Tests\Services\TestUserFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
 use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshTokenRepository;
 
-class CreateTest extends AbstractBaseWebTestCase
+class CreateTest extends AbstractTokenTest
 {
     private EntityManagerInterface $entityManager;
     private RefreshTokenRepository $refreshTokenRepository;
@@ -60,24 +56,11 @@ class CreateTest extends AbstractBaseWebTestCase
         $jwtTokenBodyAsserterFactory = self::getContainer()->get(JwtTokenBodyAsserterFactory::class);
         \assert($jwtTokenBodyAsserterFactory instanceof JwtTokenBodyAsserterFactory);
 
-        (new JsonResponseAsserter(200))
-            ->addBodyAsserter($jwtTokenBodyAsserterFactory->create(
-                'token',
-                [
-                    TokenInterface::CLAIM_EMAIL => $user->getUserIdentifier(),
-                    TokenInterface::CLAIM_USER_ID => $user->getId(),
-                    TokenInterface::CLAIM_AUDIENCE => [
-                        AudienceClaimInterface::AUD_FRONTEND,
-                    ],
-                ]
-            ))
-            ->addBodyAsserter(
-                new ArrayBodyAsserter([
-                    'refresh_token' => $refreshToken->getRefreshToken(),
-                ])
-            )
-            ->assert($response)
-        ;
+        $this->applicationResponseAsserter->assertFrontendTokenCreateSuccessResponse(
+            $response,
+            $user,
+            (string) $refreshToken->getRefreshToken()
+        );
     }
 
     public function testCreateUserDoesNotExist(): void

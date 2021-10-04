@@ -4,15 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Token\Api;
 
-use App\Security\AudienceClaimInterface;
-use App\Security\TokenInterface;
 use App\Services\ApiKeyFactory;
-use App\Tests\Functional\AbstractBaseWebTestCase;
-use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
-use App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory;
+use App\Tests\Functional\Token\AbstractTokenTest;
 use App\Tests\Services\TestUserFactory;
 
-class CreateTest extends AbstractBaseWebTestCase
+class CreateTest extends AbstractTokenTest
 {
     public function testCreateSuccess(): void
     {
@@ -29,22 +25,7 @@ class CreateTest extends AbstractBaseWebTestCase
 
         $response = $this->application->makeApiCreateTokenRequest((string) $apiKey);
 
-        $jwtTokenBodyAsserterFactory = self::getContainer()->get(JwtTokenBodyAsserterFactory::class);
-        \assert($jwtTokenBodyAsserterFactory instanceof JwtTokenBodyAsserterFactory);
-
-        (new JsonResponseAsserter(200))
-            ->addBodyAsserter($jwtTokenBodyAsserterFactory->create(
-                'token',
-                [
-                    TokenInterface::CLAIM_EMAIL => $user->getUserIdentifier(),
-                    TokenInterface::CLAIM_USER_ID => $user->getId(),
-                    TokenInterface::CLAIM_AUDIENCE => [
-                        AudienceClaimInterface::AUD_API,
-                    ],
-                ]
-            ))
-            ->assert($response)
-        ;
+        $this->applicationResponseAsserter->assertApiTokenCreateSuccessResponse($response, $user);
     }
 
     public function testCreateUserDoesNotExist(): void

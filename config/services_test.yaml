@@ -39,6 +39,9 @@ services:
     App\Tests\Services\RefreshTokenManager:
         public: true
 
+    App\Tests\Services\ApplicationResponseAsserter:
+        public: true
+
     GuzzleHttp\Psr7\HttpFactory:
 
     Psr\Http\Message\RequestFactoryInterface:
