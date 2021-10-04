@@ -110,6 +110,6 @@ class ApplicationResponseAsserter
         Assert::assertSame(401, $response->getStatusCode());
 
         $response->getBody()->rewind();
-        Assert::assertSame("", $response->getBody()->getContents());
+        Assert::assertSame('', $response->getBody()->getContents());
     }
 }
