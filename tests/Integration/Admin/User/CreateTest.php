@@ -8,15 +8,10 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Routes;
 use App\Tests\Integration\AbstractIntegrationTest;
-use App\Tests\Services\UserRemover;
-use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\RequestInterface;
 
 class CreateTest extends AbstractIntegrationTest
 {
-    private const TEST_USER_EMAIL = 'user@example.com';
-    private const TEST_USER_PASSWORD = 'user-password';
-
     /**
      * @dataProvider createInvalidCredentialsDataProvider
      *
@@ -24,7 +19,7 @@ class CreateTest extends AbstractIntegrationTest
      */
     public function testCreateNoAuthorizationHeader(array $headers): void
     {
-        $request = $this->createRequest($headers);
+        $request = $this->createCreateUserRequest($headers);
         $response = $this->httpClient->sendRequest($request);
 
         self::assertSame(401, $response->getStatusCode());
@@ -59,7 +54,7 @@ class CreateTest extends AbstractIntegrationTest
         $adminToken = self::getContainer()->getParameter('primary-admin-token');
         \assert(is_string($adminToken));
 
-        $request = $this->createRequest(
+        $request = $this->createCreateUserRequest(
             [
                 'Content-Type' => 'application/x-www-form-urlencoded',
                 'Authorization' => $adminToken,
@@ -96,26 +91,9 @@ class CreateTest extends AbstractIntegrationTest
 
     public function testCreateSuccess(): void
     {
-        static::createClient();
-        $userRemover = self::getContainer()->get(UserRemover::class);
-        \assert($userRemover instanceof UserRemover);
-        $userRemover->removeAll();
+        $this->removeAllUsers();
 
-        $adminToken = self::getContainer()->getParameter('primary-admin-token');
-        \assert(is_string($adminToken));
-
-        $request = $this->createRequest(
-            [
-                'Content-Type' => 'application/x-www-form-urlencoded',
-                'Authorization' => $adminToken,
-            ],
-            http_build_query([
-                'email' => self::TEST_USER_EMAIL,
-                'password' => self::TEST_USER_PASSWORD,
-            ])
-        );
-
-        $response = $this->httpClient->sendRequest($request);
+        $response = $this->createTestUser();
 
         self::assertSame(200, $response->getStatusCode());
         self::assertSame('application/json', $response->getHeaderLine('content-type'));
@@ -140,18 +118,8 @@ class CreateTest extends AbstractIntegrationTest
     /**
      * @param array<string, string> $headers
      */
-    private function createRequest(array $headers = [], ?string $body = null): RequestInterface
+    private function createCreateUserRequest(array $headers = [], ?string $body = null): RequestInterface
     {
-        $request = $this->requestFactory->createRequest('POST', Routes::ROUTE_ADMIN_USER_CREATE);
-
-        foreach ($headers as $key => $value) {
-            $request = $request->withHeader($key, $value);
-        }
-
-        if (is_string($body)) {
-            $request = $request->withBody(Utils::streamFor($body));
-        }
-
-        return $request;
+        return parent::createRequest('POST', Routes::ROUTE_ADMIN_USER_CREATE, $headers, $body);
     }
 }
