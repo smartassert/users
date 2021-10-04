@@ -112,15 +112,13 @@ class IntegrationApplication
     {
         $headers = $this->addJwtAuthorizationHeader([], $jwt);
 
-        $this->client->request(
+        $request = $this->createRequest(
             'GET',
             $url,
-            [],
-            [],
-            $headers,
+            $headers
         );
 
-        return $this->createPsrResponse($this->client->getResponse());
+        return $this->client->sendRequest($request);
     }
 
     /**
@@ -145,7 +143,7 @@ class IntegrationApplication
                 $value = $prefix . ' ' . $value;
             }
 
-            $headers['HTTP_AUTHORIZATION'] = $value;
+            $headers['Authorization'] = $value;
         }
 
         return $headers;

@@ -4,13 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Api\Token;
 
-use App\Entity\User;
-use App\Repository\UserRepository;
-use App\Routes;
-use App\Services\ApiKeyFactory;
 use App\Tests\Integration\AbstractIntegrationTest;
-use App\Tests\Services\ApplicationResponseAsserter;
-use Psr\Http\Message\RequestInterface;
 
 class VerifyTest extends AbstractIntegrationTest
 {
@@ -19,9 +13,7 @@ class VerifyTest extends AbstractIntegrationTest
      */
     public function testVerifyUnauthorized(?string $jwt): void
     {
-        $request = $this->createVerifyTokenRequest($jwt);
-
-        $response = $this->httpClient->sendRequest($request);
+        $response = $this->application->makeApiVerifyTokenRequest($jwt);
 
         self::assertSame(401, $response->getStatusCode());
     }
@@ -50,53 +42,16 @@ class VerifyTest extends AbstractIntegrationTest
         $this->removeAllRefreshTokens();
         $this->createTestUser();
 
-        $userRepository = self::getContainer()->get(UserRepository::class);
-        \assert($userRepository instanceof UserRepository);
-        $apiKeyFactory = self::getContainer()->get(ApiKeyFactory::class);
-        \assert($apiKeyFactory instanceof ApiKeyFactory);
+        $user = $this->getTestUser();
+        $apiKey = $this->apiKeyFactory->create('api key label', $user);
 
-        $user = $userRepository->findByEmail(self::TEST_USER_EMAIL);
-        \assert($user instanceof User);
-        $apiKey = $apiKeyFactory->create('api key label', $user);
-
-        $createRequest = $this->createCreateTokenRequest((string) $apiKey);
-        $createResponse = $this->httpClient->sendRequest($createRequest);
+        $createResponse = $this->application->makeApiCreateTokenRequest((string) $apiKey);
+        $createResponseData = json_decode($createResponse->getBody()->getContents(), true);
 
         $this->removeAllUsers();
 
-        $createResponseData = json_decode($createResponse->getBody()->getContents(), true);
+        $response = $this->application->makeApiVerifyTokenRequest($createResponseData['token']);
 
-        $request = $this->createVerifyTokenRequest($createResponseData['token']);
-        $response = $this->httpClient->sendRequest($request);
-
-        $applicationResponseAsserter = self::getContainer()->get(ApplicationResponseAsserter::class);
-        \assert($applicationResponseAsserter instanceof ApplicationResponseAsserter);
-
-        $applicationResponseAsserter->assertApiTokenVerifySuccessResponse($response, $user);
-    }
-
-    private function createVerifyTokenRequest(?string $jwt): RequestInterface
-    {
-        $headers = [];
-        if (is_string($jwt)) {
-            $headers['Authorization'] = 'Bearer ' . $jwt;
-        }
-
-        return parent::createRequest(
-            'GET',
-            Routes::ROUTE_API_TOKEN_VERIFY,
-            $headers
-        );
-    }
-
-    private function createCreateTokenRequest(string $apiKey): RequestInterface
-    {
-        return parent::createRequest(
-            'POST',
-            Routes::ROUTE_API_TOKEN_CREATE,
-            [
-                'Authorization' => $apiKey,
-            ]
-        );
+        $this->applicationResponseAsserter->assertApiTokenVerifySuccessResponse($response, $user);
     }
 }

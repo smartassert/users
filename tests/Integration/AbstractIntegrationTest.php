@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration;
 
+use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Routes;
+use App\Services\ApiKeyFactory;
 use App\Tests\Services\ApplicationResponseAsserter;
 use App\Tests\Services\IntegrationApplication;
 use App\Tests\Services\UserRemover;
@@ -31,6 +34,8 @@ abstract class AbstractIntegrationTest extends WebTestCase
     protected KernelBrowser $applicationClient;
     protected IntegrationApplication $application;
     protected ApplicationResponseAsserter $applicationResponseAsserter;
+    private UserRepository $userRepository;
+    protected ApiKeyFactory $apiKeyFactory;
 
     protected function setUp(): void
     {
@@ -50,7 +55,25 @@ abstract class AbstractIntegrationTest extends WebTestCase
         \assert($applicationResponseAsserter instanceof ApplicationResponseAsserter);
         $this->applicationResponseAsserter = $applicationResponseAsserter;
 
+        $userRepository = self::getContainer()->get(UserRepository::class);
+        \assert($userRepository instanceof UserRepository);
+        $this->userRepository = $userRepository;
+
+        $apiKeyFactory = self::getContainer()->get(ApiKeyFactory::class);
+        \assert($apiKeyFactory instanceof ApiKeyFactory);
+        $this->apiKeyFactory = $apiKeyFactory;
+
         $this->requestFactory = new HttpFactory();
+    }
+
+    protected function getTestUser(): User
+    {
+        $this->createTestUser();
+
+        $user = $this->userRepository->findByEmail(self::TEST_USER_EMAIL);
+        \assert($user instanceof User);
+
+        return $user;
     }
 
     /**
