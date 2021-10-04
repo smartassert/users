@@ -6,6 +6,8 @@ namespace App\Tests\Services;
 
 use App\Request\CreateUserRequest;
 use App\Request\RevokeRefreshTokenRequest;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,6 +16,7 @@ class Application
     private KernelBrowser $client;
 
     public function __construct(
+        private HttpMessageFactoryInterface $httpMessageFactory,
         private string $apiCreateTokenUrl,
         private string $apiVerifyTokenUrl,
         private string $frontendCreateTokenUrl,
@@ -29,7 +32,7 @@ class Application
         $this->client = $client;
     }
 
-    public function makeApiCreateTokenRequest(string $token): Response
+    public function makeApiCreateTokenRequest(string $token): ResponseInterface
     {
         $headers = $this->addHttpAuthorizationHeader([], $token);
 
@@ -41,15 +44,15 @@ class Application
             $headers,
         );
 
-        return $this->client->getResponse();
+        return $this->createPsrResponse($this->client->getResponse());
     }
 
-    public function makeApiVerifyTokenRequest(?string $jwt): Response
+    public function makeApiVerifyTokenRequest(?string $jwt): ResponseInterface
     {
         return $this->makeVerifyTokenRequest($this->apiVerifyTokenUrl, $jwt);
     }
 
-    public function makeFrontendCreateTokenRequest(string $userIdentifier, string $password): Response
+    public function makeFrontendCreateTokenRequest(string $userIdentifier, string $password): ResponseInterface
     {
         return $this->makeJsonPayloadRequest(
             $this->frontendCreateTokenUrl,
@@ -60,12 +63,12 @@ class Application
         );
     }
 
-    public function makeFrontendVerifyTokenRequest(?string $jwt): Response
+    public function makeFrontendVerifyTokenRequest(?string $jwt): ResponseInterface
     {
         return $this->makeVerifyTokenRequest($this->frontendVerifyTokenUrl, $jwt);
     }
 
-    public function makeFrontendRefreshTokenRequest(string $refreshToken): Response
+    public function makeFrontendRefreshTokenRequest(string $refreshToken): ResponseInterface
     {
         return $this->makeJsonPayloadRequest(
             $this->frontendRefreshTokenUrl,
@@ -75,7 +78,7 @@ class Application
         );
     }
 
-    public function makeAdminCreateUserRequest(string $email, string $password, ?string $adminToken): Response
+    public function makeAdminCreateUserRequest(string $email, string $password, ?string $adminToken): ResponseInterface
     {
         $headers = $this->addHttpAuthorizationHeader([], $adminToken);
 
@@ -90,10 +93,10 @@ class Application
             $headers,
         );
 
-        return $this->client->getResponse();
+        return $this->createPsrResponse($this->client->getResponse());
     }
 
-    public function makeAdminRevokeRefreshTokenRequest(string $userId, string $adminToken): Response
+    public function makeAdminRevokeRefreshTokenRequest(string $userId, string $adminToken): ResponseInterface
     {
         $headers = $this->addHttpAuthorizationHeader([], $adminToken);
 
@@ -107,10 +110,10 @@ class Application
             $headers,
         );
 
-        return $this->client->getResponse();
+        return $this->createPsrResponse($this->client->getResponse());
     }
 
-    private function makeVerifyTokenRequest(string $url, ?string $jwt): Response
+    private function makeVerifyTokenRequest(string $url, ?string $jwt): ResponseInterface
     {
         $headers = $this->addJwtAuthorizationHeader([], $jwt);
 
@@ -122,7 +125,7 @@ class Application
             $headers,
         );
 
-        return $this->client->getResponse();
+        return $this->createPsrResponse($this->client->getResponse());
     }
 
     /**
@@ -156,7 +159,7 @@ class Application
     /**
      * @param array<mixed> $payload
      */
-    private function makeJsonPayloadRequest(string $url, array $payload): Response
+    private function makeJsonPayloadRequest(string $url, array $payload): ResponseInterface
     {
         $this->client->request(
             'POST',
@@ -167,6 +170,14 @@ class Application
             (string) json_encode($payload)
         );
 
-        return $this->client->getResponse();
+        return $this->createPsrResponse($this->client->getResponse());
+    }
+
+    private function createPsrResponse(Response $symfonyResponse): ResponseInterface
+    {
+        $response = $this->httpMessageFactory->createResponse($symfonyResponse);
+        $response->getBody()->rewind();
+
+        return $response;
     }
 }

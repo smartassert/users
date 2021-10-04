@@ -54,7 +54,7 @@ class RefreshTest extends AbstractBaseWebTestCase
             ...$testUserFactory->getCredentials()
         );
 
-        $responseData = json_decode((string) $createTokenResponse->getContent(), true);
+        $responseData = json_decode($createTokenResponse->getBody()->getContents(), true);
         $refreshToken = $responseData['refresh_token'];
 
         $response = $this->application->makeFrontendRefreshTokenRequest($refreshToken);
@@ -78,7 +78,7 @@ class RefreshTest extends AbstractBaseWebTestCase
                     'refresh_token' => $refreshToken,
                 ])
             )
-            ->assertFromSymfonyResponse($response)
+            ->assert($response)
         ;
     }
 
