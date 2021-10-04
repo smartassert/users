@@ -7,12 +7,8 @@ namespace App\Tests\Integration\Frontend\Token;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Routes;
-use App\Security\AudienceClaimInterface;
-use App\Security\TokenInterface;
 use App\Tests\Integration\AbstractIntegrationTest;
-use App\Tests\Services\Asserter\ResponseAsserter\ArrayBodyAsserter;
-use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
-use App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory;
+use App\Tests\Services\ApplicationResponseAsserter;
 use Doctrine\ORM\EntityManagerInterface;
 use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
 use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshTokenRepository;
@@ -34,12 +30,19 @@ class CreateTest extends AbstractIntegrationTest
 
     public function testCreateSuccess(): void
     {
+        $this->getApplicationClient();
+
         $this->removeAllUsers();
         $this->removeAllRefreshTokens();
         $this->createTestUser();
 
         $userRepository = self::getContainer()->get(UserRepository::class);
         \assert($userRepository instanceof UserRepository);
+        $entityManager = self::getContainer()->get(EntityManagerInterface::class);
+        \assert($entityManager instanceof EntityManagerInterface);
+        $refreshTokenRepository = $entityManager->getRepository(RefreshToken::class);
+        \assert($refreshTokenRepository instanceof RefreshTokenRepository);
+
         $user = $userRepository->findByEmail(self::TEST_USER_EMAIL);
         \assert($user instanceof User);
 
@@ -52,37 +55,19 @@ class CreateTest extends AbstractIntegrationTest
 
         self::assertSame(200, $response->getStatusCode());
 
-        $entityManager = self::getContainer()->get(EntityManagerInterface::class);
-        \assert($entityManager instanceof EntityManagerInterface);
-        $refreshTokenRepository = $entityManager->getRepository(RefreshToken::class);
-        \assert($refreshTokenRepository instanceof RefreshTokenRepository);
-
         $refreshTokens = $refreshTokenRepository->findAll();
         self::assertCount(1, $refreshTokens);
         $refreshToken = $refreshTokens[0];
         self::assertInstanceOf(RefreshToken::class, $refreshToken);
 
-        $jwtTokenBodyAsserterFactory = self::getContainer()->get(JwtTokenBodyAsserterFactory::class);
-        \assert($jwtTokenBodyAsserterFactory instanceof JwtTokenBodyAsserterFactory);
+        $applicationResponseAsserter = self::getContainer()->get(ApplicationResponseAsserter::class);
+        \assert($applicationResponseAsserter instanceof ApplicationResponseAsserter);
 
-        (new JsonResponseAsserter(200))
-            ->addBodyAsserter($jwtTokenBodyAsserterFactory->create(
-                'token',
-                [
-                    TokenInterface::CLAIM_EMAIL => $user->getUserIdentifier(),
-                    TokenInterface::CLAIM_USER_ID => $user->getId(),
-                    TokenInterface::CLAIM_AUDIENCE => [
-                        AudienceClaimInterface::AUD_FRONTEND,
-                    ],
-                ]
-            ))
-            ->addBodyAsserter(
-                new ArrayBodyAsserter([
-                    'refresh_token' => $refreshToken->getRefreshToken(),
-                ])
-            )
-            ->assert($response)
-        ;
+        $applicationResponseAsserter->assertFrontendTokenCreateSuccessResponse(
+            $response,
+            $user,
+            (string) $refreshToken->getRefreshToken()
+        );
     }
 
     /**

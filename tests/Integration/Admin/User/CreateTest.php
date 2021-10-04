@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Routes;
 use App\Tests\Integration\AbstractIntegrationTest;
+use App\Tests\Services\ApplicationResponseAsserter;
 use Psr\Http\Message\RequestInterface;
 
 class CreateTest extends AbstractIntegrationTest
@@ -49,7 +50,7 @@ class CreateTest extends AbstractIntegrationTest
      */
     public function testCreateBadRequest(array $data): void
     {
-        static::createClient();
+        $this->getApplicationClient();
 
         $adminToken = self::getContainer()->getParameter('primary-admin-token');
         \assert(is_string($adminToken));
@@ -91,6 +92,8 @@ class CreateTest extends AbstractIntegrationTest
 
     public function testCreateSuccess(): void
     {
+        $this->getApplicationClient();
+
         $this->removeAllUsers();
 
         $response = $this->createTestUser();
@@ -103,16 +106,10 @@ class CreateTest extends AbstractIntegrationTest
         $user = $userRepository->findByEmail('user@example.com');
         self::assertInstanceOf(User::class, $user);
 
-        $responseData = json_decode($response->getBody()->getContents(), true);
-        self::assertSame(
-            [
-                'user' => [
-                    'id' => $user->getId(),
-                    'user-identifier' => self::TEST_USER_EMAIL,
-                ],
-            ],
-            $responseData
-        );
+        $applicationResponseAsserter = self::getContainer()->get(ApplicationResponseAsserter::class);
+        \assert($applicationResponseAsserter instanceof ApplicationResponseAsserter);
+
+        $applicationResponseAsserter->assertCreateUserSuccessResponse($response, $user);
     }
 
     /**
