@@ -6,14 +6,14 @@
 parameters:
     primary-admin-token: '%env(PRIMARY_ADMIN_TOKEN)%'
     secondary-admin-token: '%env(SECONDARY_ADMIN_TOKEN)%'
-    route-frontend-token-create: !php/const App\Routes::ROUTE_FRONTEND_TOKEN_CREATE
-    route-frontend-token-verify: !php/const App\Routes::ROUTE_FRONTEND_TOKEN_VERIFY
-    route-frontend-token-refresh: !php/const App\Routes::ROUTE_FRONTEND_TOKEN_REFRESH
-    route-api-token-create: !php/const App\Routes::ROUTE_API_TOKEN_CREATE
-    route-api-token-verify: !php/const App\Routes::ROUTE_API_TOKEN_VERIFY
-    route-admin-prefix: !php/const App\Routes::PREFIX_ADMIN
-    route-admin-user-create: !php/const App\Routes::ROUTE_ADMIN_USER_CREATE
-    route-admin-frontend-refresh-token-revoke: !php/const App\Routes::ROUTE_ADMIN_FRONTEND_REFRESH_TOKEN_REVOKE
+    route-frontend-token-create: '/frontend/token/create'
+    route-frontend-token-verify: '/frontend/token/verify'
+    route-frontend-token-refresh: '/frontend/token/refresh'
+    route-api-token-create: '/api/token/create'
+    route-api-token-verify: '/api/token/verify'
+    route-admin-prefix: '/admin'
+    route-admin-user-create: '%route-admin-prefix%/user/create'
+    route-admin-frontend-refresh-token-revoke: '%route-admin-prefix%/frontend/refresh-token/revoke'
 
 services:
     # default configuration for services in *this* file

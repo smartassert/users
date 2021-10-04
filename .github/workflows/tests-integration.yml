@@ -1,0 +1,46 @@
+name: Integration Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  integration:
+    name: Integration tests - PHP ${{ matrix.php-versions }} ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest]
+        php-versions: ['8']
+    runs-on: ${{ matrix.operating-system }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: pgsql
+
+      - name: Download dependencies
+        uses: php-actions/composer@v2
+        with:
+          args: --ignore-platform-reqs --quiet
+
+      - name: Pull images
+        run: composer integration-pull
+
+      - name: Setup integration environment
+        env:
+          DATABASE_URL: postgres://postgres:password!@127.0.0.1:5432/users-db?charset=UTF-8
+        run: composer integration-setup
+
+      - name: Run tests
+        env:
+          DATABASE_URL: postgres://postgres:password!@127.0.0.1:5432/users-db?charset=UTF-8
+        run: composer test-integration

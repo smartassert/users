@@ -4,41 +4,32 @@ declare(strict_types=1);
 
 namespace App\Tests\Services;
 
-use App\Request\CreateUserRequest;
-use App\Request\RevokeRefreshTokenRequest;
+use GuzzleHttp\Psr7\Utils;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Component\HttpFoundation\Response;
 
-class Application
+class IntegrationApplication
 {
-    private KernelBrowser $client;
-
     public function __construct(
-        private HttpMessageFactoryInterface $httpMessageFactory,
+        private RequestFactoryInterface $requestFactory,
+        private ClientInterface $client,
         private ApplicationRoutes $routes,
     ) {
     }
 
-    public function setClient(KernelBrowser $client): void
-    {
-        $this->client = $client;
-    }
-
     public function makeApiCreateTokenRequest(string $token): ResponseInterface
     {
-        $headers = $this->addHttpAuthorizationHeader([], $token);
-
-        $this->client->request(
+        $request = $this->createRequest(
             'POST',
             $this->routes->getApiCreateTokenUrl(),
-            [],
-            [],
-            $headers,
+            [
+                'Authorization' => $token,
+            ]
         );
 
-        return $this->createPsrResponse($this->client->getResponse());
+        return $this->client->sendRequest($request);
     }
 
     public function makeApiVerifyTokenRequest(?string $jwt): ResponseInterface
@@ -72,64 +63,75 @@ class Application
         );
     }
 
-    public function makeAdminCreateUserRequest(string $email, string $password, ?string $adminToken): ResponseInterface
-    {
-        $headers = $this->addHttpAuthorizationHeader([], $adminToken);
+    public function makeAdminCreateUserRequest(
+        ?string $email,
+        ?string $password,
+        ?string $adminToken
+    ): ResponseInterface {
+        $headers = [
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        ];
 
-        $this->client->request(
+        $headers = $this->addHttpAuthorizationHeader($headers, $adminToken);
+
+        $payload = [];
+        if (is_string($email)) {
+            $payload['email'] = $email;
+        }
+
+        if (is_string($password)) {
+            $payload['password'] = $password;
+        }
+
+        $request = $this->createRequest(
             'POST',
             $this->routes->getAdminCreateUserUrl(),
-            [
-                CreateUserRequest::KEY_EMAIL => $email,
-                CreateUserRequest::KEY_PASSWORD => $password,
-            ],
-            [],
             $headers,
+            http_build_query($payload)
         );
 
-        return $this->createPsrResponse($this->client->getResponse());
+        return $this->client->sendRequest($request);
     }
 
     public function makeAdminRevokeRefreshTokenRequest(string $userId, string $adminToken): ResponseInterface
     {
-        $headers = $this->addHttpAuthorizationHeader([], $adminToken);
+        $headers = [
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        ];
 
-        $this->client->request(
+        $headers = $this->addHttpAuthorizationHeader($headers, $adminToken);
+
+        $request = $this->createRequest(
             'POST',
             $this->routes->getAdminRevokeRefreshTokenUrl(),
-            [
-                RevokeRefreshTokenRequest::KEY_ID => $userId,
-            ],
-            [],
             $headers,
+            http_build_query([
+                'id' => $userId,
+            ])
         );
 
-        return $this->createPsrResponse($this->client->getResponse());
+        return $this->client->sendRequest($request);
     }
 
     private function makeVerifyTokenRequest(string $url, ?string $jwt): ResponseInterface
     {
-        $headers = $this->addJwtAuthorizationHeader([], $jwt);
+        $headers = $this->createJwtAuthorizationHeader($jwt);
 
-        $this->client->request(
+        $request = $this->createRequest(
             'GET',
             $url,
-            [],
-            [],
-            $headers,
+            $headers
         );
 
-        return $this->createPsrResponse($this->client->getResponse());
+        return $this->client->sendRequest($request);
     }
 
     /**
-     * @param array<string, string> $headers
-     *
      * @return array<string, string>
      */
-    private function addJwtAuthorizationHeader(array $headers, ?string $jwt): array
+    private function createJwtAuthorizationHeader(?string $jwt): array
     {
-        return $this->addHttpAuthorizationHeader($headers, $jwt, 'Bearer');
+        return $this->addHttpAuthorizationHeader([], $jwt, 'Bearer');
     }
 
     /**
@@ -144,7 +146,7 @@ class Application
                 $value = $prefix . ' ' . $value;
             }
 
-            $headers['HTTP_AUTHORIZATION'] = $value;
+            $headers['Authorization'] = $value;
         }
 
         return $headers;
@@ -155,23 +157,37 @@ class Application
      */
     private function makeJsonPayloadRequest(string $url, array $payload): ResponseInterface
     {
-        $this->client->request(
+        $request = $this->createRequest(
             'POST',
             $url,
-            [],
-            [],
-            ['CONTENT_TYPE' => 'application/json'],
+            [
+                'Content-Type' => 'application/json'
+            ],
             (string) json_encode($payload)
         );
 
-        return $this->createPsrResponse($this->client->getResponse());
+        return $this->client->sendRequest($request);
     }
 
-    private function createPsrResponse(Response $symfonyResponse): ResponseInterface
-    {
-        $response = $this->httpMessageFactory->createResponse($symfonyResponse);
-        $response->getBody()->rewind();
+    /**
+     * @param array<string, string> $headers
+     */
+    private function createRequest(
+        string $method,
+        string $uri,
+        array $headers = [],
+        ?string $body = null
+    ): RequestInterface {
+        $request = $this->requestFactory->createRequest($method, $uri);
 
-        return $response;
+        foreach ($headers as $key => $value) {
+            $request = $request->withHeader($key, $value);
+        }
+
+        if (is_string($body)) {
+            $request = $request->withBody(Utils::streamFor($body));
+        }
+
+        return $request;
     }
 }
