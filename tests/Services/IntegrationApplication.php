@@ -6,7 +6,6 @@ namespace App\Tests\Services;
 
 use App\Request\CreateUserRequest;
 use App\Request\RevokeRefreshTokenRequest;
-use App\Routes;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -33,7 +32,7 @@ class IntegrationApplication
     {
         $request = $this->createRequest(
             'POST',
-            Routes::ROUTE_API_TOKEN_CREATE,
+            $this->apiCreateTokenUrl,
             [
                 'Authorization' => $token,
             ]
@@ -73,22 +72,34 @@ class IntegrationApplication
         );
     }
 
-    public function makeAdminCreateUserRequest(string $email, string $password, ?string $adminToken): ResponseInterface
-    {
-        $headers = $this->addHttpAuthorizationHeader([], $adminToken);
+    public function makeAdminCreateUserRequest(
+        ?string $email,
+        ?string $password,
+        ?string $adminToken
+    ): ResponseInterface {
+        $headers = [
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        ];
 
-        $this->client->request(
+        $headers = $this->addHttpAuthorizationHeader($headers, $adminToken);
+
+        $payload = [];
+        if (is_string($email)) {
+            $payload['email'] = $email;
+        }
+
+        if (is_string($password)) {
+            $payload['password'] = $password;
+        }
+
+        $request = $this->createRequest(
             'POST',
             $this->adminCreateUserUrl,
-            [
-                CreateUserRequest::KEY_EMAIL => $email,
-                CreateUserRequest::KEY_PASSWORD => $password,
-            ],
-            [],
             $headers,
+            http_build_query($payload)
         );
 
-        return $this->createPsrResponse($this->client->getResponse());
+        return $this->client->sendRequest($request);
     }
 
     public function makeAdminRevokeRefreshTokenRequest(string $userId, string $adminToken): ResponseInterface

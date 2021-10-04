@@ -100,20 +100,14 @@ abstract class AbstractIntegrationTest extends WebTestCase
 
     protected function createTestUser(): ResponseInterface
     {
-        $request = $this->createRequest(
-            'POST',
-            Routes::ROUTE_ADMIN_USER_CREATE,
-            [
-                'Content-Type' => 'application/x-www-form-urlencoded',
-                'Authorization' => $this->getAdminToken(),
-            ],
-            http_build_query([
-                'email' => self::TEST_USER_EMAIL,
-                'password' => self::TEST_USER_PASSWORD,
-            ])
-        );
+        $adminToken = self::getContainer()->getParameter('primary-admin-token');
+        \assert(is_string($adminToken));
 
-        return $this->httpClient->sendRequest($request);
+        return $this->application->makeAdminCreateUserRequest(
+            self::TEST_USER_EMAIL,
+            self::TEST_USER_PASSWORD,
+            $adminToken
+        );
     }
 
     protected function removeAllUsers(): void
