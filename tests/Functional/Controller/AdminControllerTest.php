@@ -81,7 +81,8 @@ class AdminControllerTest extends AbstractBaseWebTestCase
                 'message' => 'User already exists',
                 'user' => $user->jsonSerialize()
             ]))
-            ->assert($response);
+            ->assert($response)
+        ;
     }
 
     public function testCreateUserSuccess(): void
@@ -100,7 +101,8 @@ class AdminControllerTest extends AbstractBaseWebTestCase
             ->addBodyAsserter(new ArrayBodyAsserter([
                 'user' => $expectedUser->jsonSerialize(),
             ]))
-            ->assert($response);
+            ->assert($response)
+        ;
     }
 
     public function testRevokeRefreshToken(): void
