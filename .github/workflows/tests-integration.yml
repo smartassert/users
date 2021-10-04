@@ -36,10 +36,6 @@ jobs:
       - name: Pull images
         run: composer integration-pull
 
-      - name: Docker layer caching
-        uses: satackey/action-docker-layer-caching@v0.0.11
-        continue-on-error: true
-
       - name: Setup integration environment
         env:
           DATABASE_URL: postgres://postgres:password!@127.0.0.1:5432/users-db?charset=UTF-8
