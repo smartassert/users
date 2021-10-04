@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Routes;
 use App\Tests\Integration\AbstractIntegrationTest;
+use App\Tests\Services\ApplicationResponseAsserter;
 use App\Tests\Services\RefreshTokenManager;
 use Psr\Http\Message\RequestInterface;
 
@@ -15,10 +16,15 @@ class RevokeTest extends AbstractIntegrationTest
 {
     public function testRevokeUnauthorized(): void
     {
+        $this->getApplicationClient();
+
         $request = $this->createRevokeRefreshTokenRequest('invalid admin token', '');
         $response = $this->httpClient->sendRequest($request);
 
-        self::assertSame(401, $response->getStatusCode());
+        $applicationResponseAsserter = self::getContainer()->get(ApplicationResponseAsserter::class);
+        \assert($applicationResponseAsserter instanceof ApplicationResponseAsserter);
+
+        $applicationResponseAsserter->assertAdminUnauthorizedResponse($response);
     }
 
     public function testRevoke(): void

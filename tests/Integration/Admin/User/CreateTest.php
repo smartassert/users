@@ -20,10 +20,15 @@ class CreateTest extends AbstractIntegrationTest
      */
     public function testCreateNoAuthorizationHeader(array $headers): void
     {
+        $this->getApplicationClient();
+
         $request = $this->createCreateUserRequest($headers);
         $response = $this->httpClient->sendRequest($request);
 
-        self::assertSame(401, $response->getStatusCode());
+        $applicationResponseAsserter = self::getContainer()->get(ApplicationResponseAsserter::class);
+        \assert($applicationResponseAsserter instanceof ApplicationResponseAsserter);
+
+        $applicationResponseAsserter->assertAdminUnauthorizedResponse($response);
     }
 
     /**

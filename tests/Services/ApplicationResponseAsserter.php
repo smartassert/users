@@ -12,6 +12,7 @@ use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory;
 use App\Tests\Services\Asserter\ResponseAsserter\TextPlainBodyAsserter;
 use App\Tests\Services\Asserter\ResponseAsserter\TextPlainResponseAsserter;
+use PHPUnit\Framework\Assert;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -102,5 +103,13 @@ class ApplicationResponseAsserter
             ]))
             ->assert($response)
         ;
+    }
+
+    public function assertAdminUnauthorizedResponse(ResponseInterface $response): void
+    {
+        Assert::assertSame(401, $response->getStatusCode());
+
+        $response->getBody()->rewind();
+        Assert::assertSame("", $response->getBody()->getContents());
     }
 }
