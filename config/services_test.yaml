@@ -25,8 +25,7 @@ services:
     App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory:
         public: true
 
-    App\Tests\Services\Application:
-        public: true
+    App\Tests\Services\ApplicationRoutes:
         arguments:
             $apiCreateTokenUrl: '%route-api-token-create%'
             $apiVerifyTokenUrl: '%route-api-token-verify%'
@@ -35,6 +34,9 @@ services:
             $frontendRefreshTokenUrl: '%route-frontend-token-refresh%'
             $adminCreateUserUrl: '%route-admin-user-create%'
             $adminRevokeRefreshTokenUrl: '%route-admin-frontend-refresh-token-revoke%'
+
+    App\Tests\Services\Application:
+        public: true
 
     App\Tests\Services\RefreshTokenManager:
         public: true
@@ -54,14 +56,6 @@ services:
 
     App\Tests\Services\IntegrationApplication:
         public: true
-        arguments:
-            $apiCreateTokenUrl: '%route-api-token-create%'
-            $apiVerifyTokenUrl: '%route-api-token-verify%'
-            $frontendCreateTokenUrl: '%route-frontend-token-create%'
-            $frontendVerifyTokenUrl: '%route-frontend-token-verify%'
-            $frontendRefreshTokenUrl: '%route-frontend-token-refresh%'
-            $adminCreateUserUrl: '%route-admin-user-create%'
-            $adminRevokeRefreshTokenUrl: '%route-admin-frontend-refresh-token-revoke%'
 
     GuzzleHttp\Psr7\HttpFactory:
 
