@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Services;
 
-use App\Request\RevokeRefreshTokenRequest;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 class IntegrationApplication
 {
@@ -123,7 +121,7 @@ class IntegrationApplication
 
     private function makeVerifyTokenRequest(string $url, ?string $jwt): ResponseInterface
     {
-        $headers = $this->addJwtAuthorizationHeader([], $jwt);
+        $headers = $this->createJwtAuthorizationHeader($jwt);
 
         $request = $this->createRequest(
             'GET',
@@ -135,13 +133,11 @@ class IntegrationApplication
     }
 
     /**
-     * @param array<string, string> $headers
-     *
      * @return array<string, string>
      */
-    private function addJwtAuthorizationHeader(array $headers, ?string $jwt): array
+    private function createJwtAuthorizationHeader(?string $jwt): array
     {
-        return $this->addHttpAuthorizationHeader($headers, $jwt, 'Bearer');
+        return $this->addHttpAuthorizationHeader([], $jwt, 'Bearer');
     }
 
     /**
@@ -177,14 +173,6 @@ class IntegrationApplication
         );
 
         return $this->client->sendRequest($request);
-    }
-
-    private function createPsrResponse(Response $symfonyResponse): ResponseInterface
-    {
-        $response = $this->httpMessageFactory->createResponse($symfonyResponse);
-        $response->getBody()->rewind();
-
-        return $response;
     }
 
     /**
