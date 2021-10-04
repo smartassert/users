@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Services;
 
-use App\Request\CreateUserRequest;
 use App\Request\RevokeRefreshTokenRequest;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Client\ClientInterface;
@@ -104,19 +103,22 @@ class IntegrationApplication
 
     public function makeAdminRevokeRefreshTokenRequest(string $userId, string $adminToken): ResponseInterface
     {
-        $headers = $this->addHttpAuthorizationHeader([], $adminToken);
+        $headers = [
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        ];
 
-        $this->client->request(
+        $headers = $this->addHttpAuthorizationHeader($headers, $adminToken);
+
+        $request = $this->createRequest(
             'POST',
             $this->adminRevokeRefreshTokenUrl,
-            [
-                RevokeRefreshTokenRequest::KEY_ID => $userId,
-            ],
-            [],
             $headers,
+            http_build_query([
+                'id' => $userId,
+            ])
         );
 
-        return $this->createPsrResponse($this->client->getResponse());
+        return $this->client->sendRequest($request);
     }
 
     private function makeVerifyTokenRequest(string $url, ?string $jwt): ResponseInterface
