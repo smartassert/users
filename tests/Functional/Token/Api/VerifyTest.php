@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Token\Api;
 
 use App\Services\ApiKeyFactory;
-use App\Tests\Functional\AbstractBaseWebTestCase;
-use App\Tests\Services\Asserter\ResponseAsserter\TextPlainBodyAsserter;
-use App\Tests\Services\Asserter\ResponseAsserter\TextPlainResponseAsserter;
+use App\Tests\Functional\Token\AbstractTokenTest;
 use App\Tests\Services\TestUserFactory;
 
-class VerifyTest extends AbstractBaseWebTestCase
+class VerifyTest extends AbstractTokenTest
 {
     /**
      * @dataProvider verifyUnauthorizedDataProvider
@@ -58,9 +56,6 @@ class VerifyTest extends AbstractBaseWebTestCase
         $createResponseData = json_decode($createResponse->getBody()->getContents(), true);
         $verifyResponse = $this->application->makeApiVerifyTokenRequest($createResponseData['token']);
 
-        (new TextPlainResponseAsserter(200))
-            ->addBodyAsserter(new TextPlainBodyAsserter($userId))
-            ->assert($verifyResponse)
-        ;
+        $this->applicationResponseAsserter->assertApiTokenVerifySuccessResponse($verifyResponse, $user);
     }
 }

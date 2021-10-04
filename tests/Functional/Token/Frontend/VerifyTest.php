@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Token\Frontend;
 
-use App\Tests\Functional\AbstractBaseWebTestCase;
-use App\Tests\Services\Asserter\ResponseAsserter\ArrayBodyAsserter;
-use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
+use App\Tests\Functional\Token\AbstractTokenTest;
 use App\Tests\Services\TestUserFactory;
 
-class VerifyTest extends AbstractBaseWebTestCase
+class VerifyTest extends AbstractTokenTest
 {
     /**
      * @dataProvider verifyUnauthorizedDataProvider
@@ -54,12 +52,6 @@ class VerifyTest extends AbstractBaseWebTestCase
         $createResponseData = json_decode($createResponse->getBody()->getContents(), true);
         $verifyResponse = $this->application->makeFrontendVerifyTokenRequest($createResponseData['token']);
 
-        (new JsonResponseAsserter(200))
-            ->addBodyAsserter(new ArrayBodyAsserter([
-                'id' => $user->getId(),
-                'user-identifier' => $user->getUserIdentifier(),
-            ]))
-            ->assert($verifyResponse)
-        ;
+        $this->applicationResponseAsserter->assertFrontendTokenVerifySuccessResponse($verifyResponse, $user);
     }
 }

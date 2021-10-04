@@ -7,11 +7,9 @@ namespace App\Tests\Functional\Controller;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Tests\Functional\AbstractBaseWebTestCase;
-use App\Tests\Services\Asserter\ResponseAsserter\ArrayBodyAsserter;
-use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
+use App\Tests\Services\ApplicationResponseAsserter;
 use App\Tests\Services\RefreshTokenManager;
 use App\Tests\Services\TestUserFactory;
-use Symfony\Component\HttpFoundation\Response;
 
 class AdminControllerTest extends AbstractBaseWebTestCase
 {
@@ -19,6 +17,7 @@ class AdminControllerTest extends AbstractBaseWebTestCase
     private UserRepository $userRepository;
     private TestUserFactory $testUserFactory;
     private RefreshTokenManager $refreshTokenManager;
+    private ApplicationResponseAsserter $applicationResponseAsserter;
 
     protected function setUp(): void
     {
@@ -38,6 +37,10 @@ class AdminControllerTest extends AbstractBaseWebTestCase
         $refreshTokenManager = self::getContainer()->get(RefreshTokenManager::class);
         \assert($refreshTokenManager instanceof RefreshTokenManager);
         $this->refreshTokenManager = $refreshTokenManager;
+
+        $applicationResponseAsserter = self::getContainer()->get(ApplicationResponseAsserter::class);
+        \assert($applicationResponseAsserter instanceof ApplicationResponseAsserter);
+        $this->applicationResponseAsserter = $applicationResponseAsserter;
     }
 
     /**
@@ -76,13 +79,7 @@ class AdminControllerTest extends AbstractBaseWebTestCase
             $this->adminToken
         );
 
-        (new JsonResponseAsserter(Response::HTTP_BAD_REQUEST))
-            ->addBodyAsserter(new ArrayBodyAsserter([
-                'message' => 'User already exists',
-                'user' => $user->jsonSerialize()
-            ]))
-            ->assert($response)
-        ;
+        $this->applicationResponseAsserter->assertCreateUserUserAlreadyExistsResponse($response, $user);
     }
 
     public function testCreateUserSuccess(): void
@@ -97,12 +94,7 @@ class AdminControllerTest extends AbstractBaseWebTestCase
         $expectedUser = $this->userRepository->findByEmail($email);
         self::assertInstanceOf(User::class, $expectedUser);
 
-        (new JsonResponseAsserter(Response::HTTP_OK))
-            ->addBodyAsserter(new ArrayBodyAsserter([
-                'user' => $expectedUser->jsonSerialize(),
-            ]))
-            ->assert($response)
-        ;
+        $this->applicationResponseAsserter->assertCreateUserSuccessResponse($response, $expectedUser);
     }
 
     public function testRevokeRefreshToken(): void
