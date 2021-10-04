@@ -15,13 +15,7 @@ class IntegrationApplication
     public function __construct(
         private RequestFactoryInterface $requestFactory,
         private ClientInterface $client,
-        private string $apiCreateTokenUrl,
-        private string $apiVerifyTokenUrl,
-        private string $frontendCreateTokenUrl,
-        private string $frontendVerifyTokenUrl,
-        private string $frontendRefreshTokenUrl,
-        private string $adminCreateUserUrl,
-        private string $adminRevokeRefreshTokenUrl,
+        private ApplicationRoutes $routes,
     ) {
     }
 
@@ -29,7 +23,7 @@ class IntegrationApplication
     {
         $request = $this->createRequest(
             'POST',
-            $this->apiCreateTokenUrl,
+            $this->routes->getApiCreateTokenUrl(),
             [
                 'Authorization' => $token,
             ]
@@ -40,13 +34,13 @@ class IntegrationApplication
 
     public function makeApiVerifyTokenRequest(?string $jwt): ResponseInterface
     {
-        return $this->makeVerifyTokenRequest($this->apiVerifyTokenUrl, $jwt);
+        return $this->makeVerifyTokenRequest($this->routes->getApiVerifyTokenUrl(), $jwt);
     }
 
     public function makeFrontendCreateTokenRequest(string $userIdentifier, string $password): ResponseInterface
     {
         return $this->makeJsonPayloadRequest(
-            $this->frontendCreateTokenUrl,
+            $this->routes->getFrontendCreateTokenUrl(),
             [
                 'username' => $userIdentifier,
                 'password' => $password,
@@ -56,13 +50,13 @@ class IntegrationApplication
 
     public function makeFrontendVerifyTokenRequest(?string $jwt): ResponseInterface
     {
-        return $this->makeVerifyTokenRequest($this->frontendVerifyTokenUrl, $jwt);
+        return $this->makeVerifyTokenRequest($this->routes->getFrontendVerifyTokenUrl(), $jwt);
     }
 
     public function makeFrontendRefreshTokenRequest(string $refreshToken): ResponseInterface
     {
         return $this->makeJsonPayloadRequest(
-            $this->frontendRefreshTokenUrl,
+            $this->routes->getFrontendRefreshTokenUrl(),
             [
                 'refresh_token' => $refreshToken
             ]
@@ -91,7 +85,7 @@ class IntegrationApplication
 
         $request = $this->createRequest(
             'POST',
-            $this->adminCreateUserUrl,
+            $this->routes->getAdminCreateUserUrl(),
             $headers,
             http_build_query($payload)
         );
@@ -109,7 +103,7 @@ class IntegrationApplication
 
         $request = $this->createRequest(
             'POST',
-            $this->adminRevokeRefreshTokenUrl,
+            $this->routes->getAdminRevokeRefreshTokenUrl(),
             $headers,
             http_build_query([
                 'id' => $userId,

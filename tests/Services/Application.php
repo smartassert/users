@@ -17,13 +17,7 @@ class Application
 
     public function __construct(
         private HttpMessageFactoryInterface $httpMessageFactory,
-        private string $apiCreateTokenUrl,
-        private string $apiVerifyTokenUrl,
-        private string $frontendCreateTokenUrl,
-        private string $frontendVerifyTokenUrl,
-        private string $frontendRefreshTokenUrl,
-        private string $adminCreateUserUrl,
-        private string $adminRevokeRefreshTokenUrl,
+        private ApplicationRoutes $routes,
     ) {
     }
 
@@ -38,7 +32,7 @@ class Application
 
         $this->client->request(
             'POST',
-            $this->apiCreateTokenUrl,
+            $this->routes->getApiCreateTokenUrl(),
             [],
             [],
             $headers,
@@ -49,13 +43,13 @@ class Application
 
     public function makeApiVerifyTokenRequest(?string $jwt): ResponseInterface
     {
-        return $this->makeVerifyTokenRequest($this->apiVerifyTokenUrl, $jwt);
+        return $this->makeVerifyTokenRequest($this->routes->getApiVerifyTokenUrl(), $jwt);
     }
 
     public function makeFrontendCreateTokenRequest(string $userIdentifier, string $password): ResponseInterface
     {
         return $this->makeJsonPayloadRequest(
-            $this->frontendCreateTokenUrl,
+            $this->routes->getFrontendCreateTokenUrl(),
             [
                 'username' => $userIdentifier,
                 'password' => $password,
@@ -65,13 +59,13 @@ class Application
 
     public function makeFrontendVerifyTokenRequest(?string $jwt): ResponseInterface
     {
-        return $this->makeVerifyTokenRequest($this->frontendVerifyTokenUrl, $jwt);
+        return $this->makeVerifyTokenRequest($this->routes->getFrontendVerifyTokenUrl(), $jwt);
     }
 
     public function makeFrontendRefreshTokenRequest(string $refreshToken): ResponseInterface
     {
         return $this->makeJsonPayloadRequest(
-            $this->frontendRefreshTokenUrl,
+            $this->routes->getFrontendRefreshTokenUrl(),
             [
                 'refresh_token' => $refreshToken
             ]
@@ -84,7 +78,7 @@ class Application
 
         $this->client->request(
             'POST',
-            $this->adminCreateUserUrl,
+            $this->routes->getAdminCreateUserUrl(),
             [
                 CreateUserRequest::KEY_EMAIL => $email,
                 CreateUserRequest::KEY_PASSWORD => $password,
@@ -102,7 +96,7 @@ class Application
 
         $this->client->request(
             'POST',
-            $this->adminRevokeRefreshTokenUrl,
+            $this->routes->getAdminRevokeRefreshTokenUrl(),
             [
                 RevokeRefreshTokenRequest::KEY_ID => $userId,
             ],
