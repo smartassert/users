@@ -14,11 +14,25 @@ use Psr\Http\Message\RequestInterface;
 
 class CreateTest extends AbstractIntegrationTest
 {
+    private UserRepository $userRepository;
+    private ApiKeyFactory $apiKeyFactory;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $userRepository = self::getContainer()->get(UserRepository::class);
+        \assert($userRepository instanceof UserRepository);
+        $this->userRepository = $userRepository;
+
+        $apiKeyFactory = self::getContainer()->get(ApiKeyFactory::class);
+        \assert($apiKeyFactory instanceof ApiKeyFactory);
+        $this->apiKeyFactory = $apiKeyFactory;
+    }
+
     public function testCreateUserDoesNotExist(): void
     {
-        $request = $this->createCreateTokenRequest('');
-
-        $response = $this->httpClient->sendRequest($request);
+        $response = $this->application->makeApiCreateTokenRequest('');
 
         self::assertSame(401, $response->getStatusCode());
     }
@@ -28,32 +42,12 @@ class CreateTest extends AbstractIntegrationTest
         $this->removeAllUsers();
         $this->createTestUser();
 
-        $userRepository = self::getContainer()->get(UserRepository::class);
-        \assert($userRepository instanceof UserRepository);
-        $apiKeyFactory = self::getContainer()->get(ApiKeyFactory::class);
-        \assert($apiKeyFactory instanceof ApiKeyFactory);
-
-        $user = $userRepository->findByEmail(self::TEST_USER_EMAIL);
+        $user = $this->userRepository->findByEmail(self::TEST_USER_EMAIL);
         \assert($user instanceof User);
-        $apiKey = $apiKeyFactory->create('api key label', $user);
+        $apiKey = $this->apiKeyFactory->create('api key label', $user);
 
-        $request = $this->createCreateTokenRequest((string) $apiKey);
-        $response = $this->httpClient->sendRequest($request);
+        $response = $this->application->makeApiCreateTokenRequest((string) $apiKey);
 
-        $applicationResponseAsserter = self::getContainer()->get(ApplicationResponseAsserter::class);
-        \assert($applicationResponseAsserter instanceof ApplicationResponseAsserter);
-
-        $applicationResponseAsserter->assertApiTokenCreateSuccessResponse($response, $user);
-    }
-
-    private function createCreateTokenRequest(string $apiKey): RequestInterface
-    {
-        return parent::createRequest(
-            'POST',
-            Routes::ROUTE_API_TOKEN_CREATE,
-            [
-                'Authorization' => $apiKey,
-            ]
-        );
+        $this->applicationResponseAsserter->assertApiTokenCreateSuccessResponse($response, $user);
     }
 }

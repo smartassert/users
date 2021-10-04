@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Integration;
 
 use App\Routes;
+use App\Tests\Services\ApplicationResponseAsserter;
+use App\Tests\Services\IntegrationApplication;
 use App\Tests\Services\UserRemover;
 use Doctrine\ORM\EntityManagerInterface;
 use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
@@ -27,6 +29,8 @@ abstract class AbstractIntegrationTest extends WebTestCase
     protected ClientInterface $httpClient;
     protected RequestFactoryInterface $requestFactory;
     protected KernelBrowser $applicationClient;
+    protected IntegrationApplication $application;
+    protected ApplicationResponseAsserter $applicationResponseAsserter;
 
     protected function setUp(): void
     {
@@ -37,6 +41,14 @@ abstract class AbstractIntegrationTest extends WebTestCase
         $httpClient = self::getContainer()->get('app.tests.integration.http.client');
         \assert($httpClient instanceof ClientInterface);
         $this->httpClient = $httpClient;
+
+        $application = self::getContainer()->get(IntegrationApplication::class);
+        \assert($application instanceof IntegrationApplication);
+        $this->application = $application;
+
+        $applicationResponseAsserter = self::getContainer()->get(ApplicationResponseAsserter::class);
+        \assert($applicationResponseAsserter instanceof ApplicationResponseAsserter);
+        $this->applicationResponseAsserter = $applicationResponseAsserter;
 
         $this->requestFactory = new HttpFactory();
     }
