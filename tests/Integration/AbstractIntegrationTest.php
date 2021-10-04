@@ -4,19 +4,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration;
 
-use App\Routes;
+use App\Entity\User;
+use App\Repository\UserRepository;
+use App\Services\ApiKeyFactory;
+use App\Tests\Services\ApplicationResponseAsserter;
+use App\Tests\Services\IntegrationApplication;
 use App\Tests\Services\UserRemover;
 use Doctrine\ORM\EntityManagerInterface;
 use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
 use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshTokenRepository;
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\HttpFactory;
-use GuzzleHttp\Psr7\Utils;
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 abstract class AbstractIntegrationTest extends WebTestCase
@@ -24,65 +21,58 @@ abstract class AbstractIntegrationTest extends WebTestCase
     protected const TEST_USER_EMAIL = 'user@example.com';
     protected const TEST_USER_PASSWORD = 'user-password';
 
-    protected ClientInterface $httpClient;
-    protected RequestFactoryInterface $requestFactory;
-
-    private ?KernelBrowser $applicationClient = null;
+    protected IntegrationApplication $application;
+    protected ApplicationResponseAsserter $applicationResponseAsserter;
+    protected ApiKeyFactory $apiKeyFactory;
+    private UserRepository $userRepository;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->httpClient = new Client([
-            'base_uri' => 'http://localhost:9090/'
-        ]);
+        static::createClient();
 
-        $this->requestFactory = new HttpFactory();
+        $application = self::getContainer()->get(IntegrationApplication::class);
+        \assert($application instanceof IntegrationApplication);
+        $this->application = $application;
+
+        $applicationResponseAsserter = self::getContainer()->get(ApplicationResponseAsserter::class);
+        \assert($applicationResponseAsserter instanceof ApplicationResponseAsserter);
+        $this->applicationResponseAsserter = $applicationResponseAsserter;
+
+        $userRepository = self::getContainer()->get(UserRepository::class);
+        \assert($userRepository instanceof UserRepository);
+        $this->userRepository = $userRepository;
+
+        $apiKeyFactory = self::getContainer()->get(ApiKeyFactory::class);
+        \assert($apiKeyFactory instanceof ApiKeyFactory);
+        $this->apiKeyFactory = $apiKeyFactory;
     }
 
-    /**
-     * @param array<string, string> $headers
-     */
-    protected function createRequest(
-        string $method,
-        string $uri,
-        array $headers = [],
-        ?string $body = null
-    ): RequestInterface {
-        $request = $this->requestFactory->createRequest($method, $uri);
+    protected function getTestUser(): User
+    {
+        $this->createTestUser();
 
-        foreach ($headers as $key => $value) {
-            $request = $request->withHeader($key, $value);
-        }
+        $user = $this->userRepository->findByEmail(self::TEST_USER_EMAIL);
+        \assert($user instanceof User);
 
-        if (is_string($body)) {
-            $request = $request->withBody(Utils::streamFor($body));
-        }
-
-        return $request;
+        return $user;
     }
 
     protected function createTestUser(): ResponseInterface
     {
-        $request = $this->createRequest(
-            'POST',
-            Routes::ROUTE_ADMIN_USER_CREATE,
-            [
-                'Content-Type' => 'application/x-www-form-urlencoded',
-                'Authorization' => $this->getAdminToken(),
-            ],
-            http_build_query([
-                'email' => self::TEST_USER_EMAIL,
-                'password' => self::TEST_USER_PASSWORD,
-            ])
-        );
+        $adminToken = self::getContainer()->getParameter('primary-admin-token');
+        \assert(is_string($adminToken));
 
-        return $this->httpClient->sendRequest($request);
+        return $this->application->makeAdminCreateUserRequest(
+            self::TEST_USER_EMAIL,
+            self::TEST_USER_PASSWORD,
+            $adminToken
+        );
     }
 
     protected function removeAllUsers(): void
     {
-        $this->getApplicationClient();
         $userRemover = self::getContainer()->get(UserRemover::class);
         \assert($userRemover instanceof UserRemover);
         $userRemover->removeAll();
@@ -90,8 +80,6 @@ abstract class AbstractIntegrationTest extends WebTestCase
 
     protected function removeAllRefreshTokens(): void
     {
-        $this->getApplicationClient();
-
         $entityManager = self::getContainer()->get(EntityManagerInterface::class);
         \assert($entityManager instanceof EntityManagerInterface);
         $refreshTokenRepository = $entityManager->getRepository(RefreshToken::class);
@@ -107,20 +95,9 @@ abstract class AbstractIntegrationTest extends WebTestCase
 
     protected function getAdminToken(): string
     {
-        $this->getApplicationClient();
-
         $adminToken = self::getContainer()->getParameter('primary-admin-token');
         \assert(is_string($adminToken));
 
         return $adminToken;
-    }
-
-    protected function getApplicationClient(): KernelBrowser
-    {
-        if (null === $this->applicationClient) {
-            $this->applicationClient = static::createClient();
-        }
-
-        return $this->applicationClient;
     }
 }

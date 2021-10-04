@@ -42,6 +42,27 @@ services:
     App\Tests\Services\ApplicationResponseAsserter:
         public: true
 
+    app.tests.integration.http.client:
+        public: true
+        class: GuzzleHttp\Client
+        arguments:
+            $config:
+                base_uri: "http://localhost:9090/"
+
+    Psr\Http\Client\ClientInterface:
+        alias: app.tests.integration.http.client
+
+    App\Tests\Services\IntegrationApplication:
+        public: true
+        arguments:
+            $apiCreateTokenUrl: '%route-api-token-create%'
+            $apiVerifyTokenUrl: '%route-api-token-verify%'
+            $frontendCreateTokenUrl: '%route-frontend-token-create%'
+            $frontendVerifyTokenUrl: '%route-frontend-token-verify%'
+            $frontendRefreshTokenUrl: '%route-frontend-token-refresh%'
+            $adminCreateUserUrl: '%route-admin-user-create%'
+            $adminRevokeRefreshTokenUrl: '%route-admin-frontend-refresh-token-revoke%'
+
     GuzzleHttp\Psr7\HttpFactory:
 
     Psr\Http\Message\RequestFactoryInterface:
