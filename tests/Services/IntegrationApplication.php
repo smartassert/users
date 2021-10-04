@@ -165,16 +165,16 @@ class IntegrationApplication
      */
     private function makeJsonPayloadRequest(string $url, array $payload): ResponseInterface
     {
-        $this->client->request(
+        $request = $this->createRequest(
             'POST',
             $url,
-            [],
-            [],
-            ['CONTENT_TYPE' => 'application/json'],
+            [
+                'Content-Type' => 'application/json'
+            ],
             (string) json_encode($payload)
         );
 
-        return $this->createPsrResponse($this->client->getResponse());
+        return $this->client->sendRequest($request);
     }
 
     private function createPsrResponse(Response $symfonyResponse): ResponseInterface
