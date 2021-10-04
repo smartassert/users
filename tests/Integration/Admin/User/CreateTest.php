@@ -29,10 +29,10 @@ class CreateTest extends AbstractIntegrationTest
     {
         return [
             'no credentials' => [
-                'adminToken' =>  null,
+                'adminToken' => null,
             ],
             'invalid credentials' => [
-                'adminToken' =>  'invalid-token',
+                'adminToken' => 'invalid-token',
             ],
         ];
     }
