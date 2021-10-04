@@ -26,17 +26,16 @@ abstract class AbstractIntegrationTest extends WebTestCase
 
     protected ClientInterface $httpClient;
     protected RequestFactoryInterface $requestFactory;
-
-    private ?KernelBrowser $applicationClient = null;
+    protected KernelBrowser $applicationClient;
 
     protected function setUp(): void
     {
         parent::setUp();
 
+        $this->applicationClient = static::createClient();
         $this->httpClient = new Client([
             'base_uri' => 'http://localhost:9090/'
         ]);
-
         $this->requestFactory = new HttpFactory();
     }
 
@@ -82,7 +81,6 @@ abstract class AbstractIntegrationTest extends WebTestCase
 
     protected function removeAllUsers(): void
     {
-        $this->getApplicationClient();
         $userRemover = self::getContainer()->get(UserRemover::class);
         \assert($userRemover instanceof UserRemover);
         $userRemover->removeAll();
@@ -90,8 +88,6 @@ abstract class AbstractIntegrationTest extends WebTestCase
 
     protected function removeAllRefreshTokens(): void
     {
-        $this->getApplicationClient();
-
         $entityManager = self::getContainer()->get(EntityManagerInterface::class);
         \assert($entityManager instanceof EntityManagerInterface);
         $refreshTokenRepository = $entityManager->getRepository(RefreshToken::class);
@@ -107,20 +103,9 @@ abstract class AbstractIntegrationTest extends WebTestCase
 
     protected function getAdminToken(): string
     {
-        $this->getApplicationClient();
-
         $adminToken = self::getContainer()->getParameter('primary-admin-token');
         \assert(is_string($adminToken));
 
         return $adminToken;
-    }
-
-    protected function getApplicationClient(): KernelBrowser
-    {
-        if (null === $this->applicationClient) {
-            $this->applicationClient = static::createClient();
-        }
-
-        return $this->applicationClient;
     }
 }

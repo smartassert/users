@@ -15,8 +15,6 @@ class RefreshTest extends AbstractIntegrationTest
 {
     public function testRefreshSuccess(): void
     {
-        $this->getApplicationClient();
-
         $this->removeAllUsers();
         $this->removeAllRefreshTokens();
         $this->createTestUser();

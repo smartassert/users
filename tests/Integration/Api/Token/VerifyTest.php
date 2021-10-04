@@ -46,8 +46,6 @@ class VerifyTest extends AbstractIntegrationTest
 
     public function testVerifyValidJwt(): void
     {
-        $this->getApplicationClient();
-
         $this->removeAllUsers();
         $this->removeAllRefreshTokens();
         $this->createTestUser();

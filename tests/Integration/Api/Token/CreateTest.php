@@ -25,8 +25,6 @@ class CreateTest extends AbstractIntegrationTest
 
     public function testCreateSuccess(): void
     {
-        $this->getApplicationClient();
-
         $this->removeAllUsers();
         $this->createTestUser();
 

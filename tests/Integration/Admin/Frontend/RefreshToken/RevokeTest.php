@@ -16,8 +16,6 @@ class RevokeTest extends AbstractIntegrationTest
 {
     public function testRevokeUnauthorized(): void
     {
-        $this->getApplicationClient();
-
         $request = $this->createRevokeRefreshTokenRequest('invalid admin token', '');
         $response = $this->httpClient->sendRequest($request);
 

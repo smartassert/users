@@ -20,8 +20,6 @@ class CreateTest extends AbstractIntegrationTest
      */
     public function testCreateNoAuthorizationHeader(array $headers): void
     {
-        $this->getApplicationClient();
-
         $request = $this->createCreateUserRequest($headers);
         $response = $this->httpClient->sendRequest($request);
 
@@ -55,8 +53,6 @@ class CreateTest extends AbstractIntegrationTest
      */
     public function testCreateBadRequest(array $data): void
     {
-        $this->getApplicationClient();
-
         $adminToken = self::getContainer()->getParameter('primary-admin-token');
         \assert(is_string($adminToken));
 
@@ -97,8 +93,6 @@ class CreateTest extends AbstractIntegrationTest
 
     public function testCreateSuccess(): void
     {
-        $this->getApplicationClient();
-
         $this->removeAllUsers();
 
         $response = $this->createTestUser();
