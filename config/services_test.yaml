@@ -42,6 +42,13 @@ services:
     App\Tests\Services\ApplicationResponseAsserter:
         public: true
 
+    app.tests.integration.http.client:
+        public: true
+        class: GuzzleHttp\Client
+        arguments:
+            $config:
+                base_uri: "http://localhost:9090/"
+
     GuzzleHttp\Psr7\HttpFactory:
 
     Psr\Http\Message\RequestFactoryInterface:

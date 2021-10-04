@@ -33,9 +33,11 @@ abstract class AbstractIntegrationTest extends WebTestCase
         parent::setUp();
 
         $this->applicationClient = static::createClient();
-        $this->httpClient = new Client([
-            'base_uri' => 'http://localhost:9090/'
-        ]);
+
+        $httpClient = self::getContainer()->get('app.tests.integration.http.client');
+        \assert($httpClient instanceof ClientInterface);
+        $this->httpClient = $httpClient;
+
         $this->requestFactory = new HttpFactory();
     }
 
