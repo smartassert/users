@@ -25,12 +25,6 @@ class RefreshTokenManager
         if ($refreshTokenRepository instanceof RefreshTokenRepository) {
             $this->refreshTokenRepository = $refreshTokenRepository;
         }
-
-//        $refreshTokenGenerator = self::getContainer()->get(RefreshTokenGeneratorInterface::class);
-//        \assert($refreshTokenGenerator instanceof RefreshTokenGeneratorInterface);
-//
-//        $refreshTokenManager = self::getContainer()->get(RefreshTokenManagerInterface::class);
-//        \assert($refreshTokenManager instanceof RefreshTokenManagerInterface);
     }
 
     public function create(User $user): RefreshTokenInterface
