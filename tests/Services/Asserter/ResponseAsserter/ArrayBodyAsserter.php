@@ -12,7 +12,7 @@ class ArrayBodyAsserter implements BodyAsserterInterface
     private AssociativeArrayAsserter $arrayDataAsserter;
 
     /**
-     * @param array<int|string, null|bool|int|string> $expected
+     * @param array<int|string, mixed> $expected
      */
     public function __construct(array $expected)
     {

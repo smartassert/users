@@ -7,9 +7,10 @@ namespace App\Tests\Functional\Controller;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Tests\Functional\AbstractBaseWebTestCase;
+use App\Tests\Services\Asserter\ResponseAsserter\ArrayBodyAsserter;
+use App\Tests\Services\Asserter\ResponseAsserter\JsonResponseAsserter;
 use App\Tests\Services\RefreshTokenManager;
 use App\Tests\Services\TestUserFactory;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminControllerTest extends AbstractBaseWebTestCase
@@ -75,15 +76,12 @@ class AdminControllerTest extends AbstractBaseWebTestCase
             $this->adminToken
         );
 
-        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        self::assertInstanceOf(JsonResponse::class, $response);
-        self::assertSame(
-            [
+        (new JsonResponseAsserter(Response::HTTP_BAD_REQUEST))
+            ->addBodyAsserter(new ArrayBodyAsserter([
                 'message' => 'User already exists',
                 'user' => $user->jsonSerialize()
-            ],
-            json_decode((string) $response->getContent(), true)
-        );
+            ]))
+            ->assert($response);
     }
 
     public function testCreateUserSuccess(): void
@@ -98,14 +96,11 @@ class AdminControllerTest extends AbstractBaseWebTestCase
         $expectedUser = $this->userRepository->findByEmail($email);
         self::assertInstanceOf(User::class, $expectedUser);
 
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertInstanceOf(JsonResponse::class, $response);
-        self::assertSame(
-            [
+        (new JsonResponseAsserter(Response::HTTP_OK))
+            ->addBodyAsserter(new ArrayBodyAsserter([
                 'user' => $expectedUser->jsonSerialize(),
-            ],
-            json_decode((string) $response->getContent(), true)
-        );
+            ]))
+            ->assert($response);
     }
 
     public function testRevokeRefreshToken(): void

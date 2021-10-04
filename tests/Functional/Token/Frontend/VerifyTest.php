@@ -51,7 +51,7 @@ class VerifyTest extends AbstractBaseWebTestCase
 
         $this->removeAllUsers();
 
-        $createResponseData = json_decode((string) $createResponse->getContent(), true);
+        $createResponseData = json_decode($createResponse->getBody()->getContents(), true);
         $verifyResponse = $this->application->makeFrontendVerifyTokenRequest($createResponseData['token']);
 
         (new JsonResponseAsserter(200))
@@ -59,7 +59,7 @@ class VerifyTest extends AbstractBaseWebTestCase
                 'id' => $user->getId(),
                 'user-identifier' => $user->getUserIdentifier(),
             ]))
-            ->assertFromSymfonyResponse($verifyResponse)
+            ->assert($verifyResponse)
         ;
     }
 }
