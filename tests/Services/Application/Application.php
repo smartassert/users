@@ -58,10 +58,9 @@ class Application implements ApplicationInterface
     public function makeAdminCreateUserRequest(?string $email, ?string $password, string $adminToken): ResponseInterface
     {
         $headers = [
+            'Authorization' => $adminToken,
             'Content-Type' => 'application/x-www-form-urlencoded',
         ];
-
-        $headers = $this->addHttpAuthorizationHeader($headers, $adminToken);
 
         $payload = [];
         if (is_string($email)) {
@@ -83,10 +82,9 @@ class Application implements ApplicationInterface
     public function makeAdminRevokeRefreshTokenRequest(string $userId, string $adminToken): ResponseInterface
     {
         $headers = [
+            'Authorization' => $adminToken,
             'Content-Type' => 'application/x-www-form-urlencoded',
         ];
-
-        $headers = $this->addHttpAuthorizationHeader($headers, $adminToken);
 
         return $this->client->makeRequest(
             'POST',
@@ -100,35 +98,11 @@ class Application implements ApplicationInterface
 
     private function makeVerifyTokenRequest(string $url, ?string $jwt): ResponseInterface
     {
-        $headers = $this->createJwtAuthorizationHeader($jwt);
+        $headers = (is_string($jwt))
+            ? ['Authorization' => 'Bearer ' . $jwt]
+            : [];
 
         return $this->client->makeRequest('GET', $url, $headers);
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    private function createJwtAuthorizationHeader(?string $jwt): array
-    {
-        return $this->addHttpAuthorizationHeader([], $jwt, 'Bearer');
-    }
-
-    /**
-     * @param array<string, string> $headers
-     *
-     * @return array<string, string>
-     */
-    private function addHttpAuthorizationHeader(array $headers, ?string $value, ?string $prefix = null): array
-    {
-        if (is_string($value)) {
-            if (is_string($prefix)) {
-                $value = $prefix . ' ' . $value;
-            }
-
-            $headers['Authorization'] = $value;
-        }
-
-        return $headers;
     }
 
     /**
