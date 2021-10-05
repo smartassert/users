@@ -9,6 +9,7 @@ use App\Tests\Services\ApplicationRoutes;
 abstract class AbstractBaseApplication implements ApplicationInterface
 {
     public function __construct(
+        protected ClientInterface $client,
         protected ApplicationRoutes $routes,
     ) {
     }

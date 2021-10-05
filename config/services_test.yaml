@@ -35,16 +35,24 @@ services:
             $adminCreateUserUrl: '%route-admin-user-create%'
             $adminRevokeRefreshTokenUrl: '%route-admin-frontend-refresh-token-revoke%'
 
+    App\Tests\Services\Application\SymfonyClient:
+
+    App\Tests\Services\Application\HttpClient:
+
     App\Tests\Services\Application\AbstractBaseApplication:
         abstract: true
 
     App\Tests\Services\Application\FunctionalApplication:
         public: true
         parent: App\Tests\Services\Application\AbstractBaseApplication
+        arguments:
+            $client: '@App\Tests\Services\Application\SymfonyClient'
 
     App\Tests\Services\Application\IntegrationApplication:
         public: true
         parent: App\Tests\Services\Application\AbstractBaseApplication
+        arguments:
+            $client: '@App\Tests\Services\Application\HttpClient'
 
     App\Tests\Services\RefreshTokenManager:
         public: true

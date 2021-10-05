@@ -4,34 +4,17 @@ declare(strict_types=1);
 
 namespace App\Tests\Services\Application;
 
-use App\Tests\Services\ApplicationRoutes;
-use GuzzleHttp\Psr7\Utils;
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class IntegrationApplication extends AbstractBaseApplication
 {
-    public function __construct(
-        private RequestFactoryInterface $requestFactory,
-        private ClientInterface $client,
-        ApplicationRoutes $routes,
-    ) {
-        parent::__construct($routes);
-    }
-
     public function makeApiCreateTokenRequest(string $token): ResponseInterface
     {
-        $request = $this->createRequest(
-            'POST',
-            $this->routes->getApiCreateTokenUrl(),
-            [
-                'Authorization' => $token,
-            ]
-        );
+        $headers = [
+            'Authorization' => $token,
+        ];
 
-        return $this->client->sendRequest($request);
+        return $this->client->makeRequest('POST', $this->routes->getApiCreateTokenUrl(), $headers);
     }
 
     public function makeApiVerifyTokenRequest(?string $jwt): ResponseInterface
@@ -85,14 +68,12 @@ class IntegrationApplication extends AbstractBaseApplication
             $payload['password'] = $password;
         }
 
-        $request = $this->createRequest(
+        return $this->client->makeRequest(
             'POST',
             $this->routes->getAdminCreateUserUrl(),
             $headers,
             http_build_query($payload)
         );
-
-        return $this->client->sendRequest($request);
     }
 
     public function makeAdminRevokeRefreshTokenRequest(string $userId, string $adminToken): ResponseInterface
@@ -103,7 +84,7 @@ class IntegrationApplication extends AbstractBaseApplication
 
         $headers = $this->addHttpAuthorizationHeader($headers, $adminToken);
 
-        $request = $this->createRequest(
+        return $this->client->makeRequest(
             'POST',
             $this->routes->getAdminRevokeRefreshTokenUrl(),
             $headers,
@@ -111,21 +92,13 @@ class IntegrationApplication extends AbstractBaseApplication
                 'id' => $userId,
             ])
         );
-
-        return $this->client->sendRequest($request);
     }
 
     private function makeVerifyTokenRequest(string $url, ?string $jwt): ResponseInterface
     {
         $headers = $this->createJwtAuthorizationHeader($jwt);
 
-        $request = $this->createRequest(
-            'GET',
-            $url,
-            $headers
-        );
-
-        return $this->client->sendRequest($request);
+        return $this->client->makeRequest('GET', $url, $headers);
     }
 
     /**
@@ -159,7 +132,7 @@ class IntegrationApplication extends AbstractBaseApplication
      */
     private function makeJsonPayloadRequest(string $url, array $payload): ResponseInterface
     {
-        $request = $this->createRequest(
+        return $this->client->makeRequest(
             'POST',
             $url,
             [
@@ -167,29 +140,5 @@ class IntegrationApplication extends AbstractBaseApplication
             ],
             (string) json_encode($payload)
         );
-
-        return $this->client->sendRequest($request);
-    }
-
-    /**
-     * @param array<string, string> $headers
-     */
-    private function createRequest(
-        string $method,
-        string $uri,
-        array $headers = [],
-        ?string $body = null
-    ): RequestInterface {
-        $request = $this->requestFactory->createRequest($method, $uri);
-
-        foreach ($headers as $key => $value) {
-            $request = $request->withHeader($key, $value);
-        }
-
-        if (is_string($body)) {
-            $request = $request->withBody(Utils::streamFor($body));
-        }
-
-        return $request;
     }
 }

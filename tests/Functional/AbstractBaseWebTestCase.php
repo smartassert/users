@@ -6,6 +6,7 @@ namespace App\Tests\Functional;
 
 use App\Tests\Services\Application\ApplicationInterface;
 use App\Tests\Services\Application\FunctionalApplication;
+use App\Tests\Services\Application\SymfonyClient;
 
 abstract class AbstractBaseWebTestCase extends AbstractBaseFunctionalTest
 {
@@ -19,7 +20,10 @@ abstract class AbstractBaseWebTestCase extends AbstractBaseFunctionalTest
 
         $application = self::getContainer()->get(FunctionalApplication::class);
         \assert($application instanceof FunctionalApplication);
-        $application->setClient($client);
+
+        $symfonyClient = self::getContainer()->get(SymfonyClient::class);
+        \assert($symfonyClient instanceof SymfonyClient);
+        $symfonyClient->setKernelBrowser($client);
 
         $this->application = $application;
     }
