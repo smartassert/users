@@ -31,12 +31,14 @@ class Application implements ApplicationInterface
 
     public function makeFrontendCreateTokenRequest(string $userIdentifier, string $password): ResponseInterface
     {
-        return $this->makeJsonPayloadRequest(
+        return $this->client->makeRequest(
+            'POST',
             $this->routes->getFrontendCreateTokenUrl(),
-            [
+            ['Content-Type' => 'application/json'],
+            (string) json_encode([
                 'username' => $userIdentifier,
                 'password' => $password,
-            ]
+            ])
         );
     }
 
@@ -47,11 +49,13 @@ class Application implements ApplicationInterface
 
     public function makeFrontendRefreshTokenRequest(string $refreshToken): ResponseInterface
     {
-        return $this->makeJsonPayloadRequest(
+        return $this->client->makeRequest(
+            'POST',
             $this->routes->getFrontendRefreshTokenUrl(),
-            [
+            ['Content-Type' => 'application/json'],
+            (string) json_encode([
                 'refresh_token' => $refreshToken
-            ]
+            ])
         );
     }
 
