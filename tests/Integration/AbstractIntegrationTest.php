@@ -7,6 +7,7 @@ namespace App\Tests\Integration;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Services\ApiKeyFactory;
+use App\Tests\Services\ApplicationInterface;
 use App\Tests\Services\ApplicationResponseAsserter;
 use App\Tests\Services\IntegrationApplication;
 use App\Tests\Services\UserRemover;
@@ -21,7 +22,7 @@ abstract class AbstractIntegrationTest extends WebTestCase
     protected const TEST_USER_EMAIL = 'user@example.com';
     protected const TEST_USER_PASSWORD = 'user-password';
 
-    protected IntegrationApplication $application;
+    protected ApplicationInterface $application;
     protected ApplicationResponseAsserter $applicationResponseAsserter;
     protected ApiKeyFactory $apiKeyFactory;
     private UserRepository $userRepository;

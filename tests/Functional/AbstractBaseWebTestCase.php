@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Tests\Functional;
 
 use App\Tests\Services\Application;
+use App\Tests\Services\ApplicationInterface;
 
 abstract class AbstractBaseWebTestCase extends AbstractBaseFunctionalTest
 {
-    protected Application $application;
+    protected ApplicationInterface $application;
 
     protected function setUp(): void
     {

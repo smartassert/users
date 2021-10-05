@@ -17,7 +17,7 @@ class IntegrationApplication extends AbstractBaseApplication
         private ClientInterface $client,
         ApplicationRoutes $routes,
     ) {
-        parent::__construct($this->routes);
+        parent::__construct($routes);
     }
 
     public function makeApiCreateTokenRequest(string $token): ResponseInterface
