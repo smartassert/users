@@ -35,8 +35,16 @@ services:
             $adminCreateUserUrl: '%route-admin-user-create%'
             $adminRevokeRefreshTokenUrl: '%route-admin-frontend-refresh-token-revoke%'
 
+    App\Tests\Services\AbstractBaseApplication:
+        abstract: true
+
     App\Tests\Services\Application:
         public: true
+        parent: App\Tests\Services\AbstractBaseApplication
+
+    App\Tests\Services\IntegrationApplication:
+        public: true
+        parent: App\Tests\Services\AbstractBaseApplication
 
     App\Tests\Services\RefreshTokenManager:
         public: true
@@ -53,9 +61,6 @@ services:
 
     Psr\Http\Client\ClientInterface:
         alias: app.tests.integration.http.client
-
-    App\Tests\Services\IntegrationApplication:
-        public: true
 
     GuzzleHttp\Psr7\HttpFactory:
 

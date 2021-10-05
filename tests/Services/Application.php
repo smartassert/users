@@ -11,14 +11,15 @@ use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 
-class Application
+class Application extends AbstractBaseApplication
 {
     private KernelBrowser $client;
 
     public function __construct(
         private HttpMessageFactoryInterface $httpMessageFactory,
-        private ApplicationRoutes $routes,
+        ApplicationRoutes $routes,
     ) {
+        parent::__construct($routes);
     }
 
     public function setClient(KernelBrowser $client): void

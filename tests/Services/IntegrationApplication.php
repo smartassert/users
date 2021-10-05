@@ -10,13 +10,14 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class IntegrationApplication
+class IntegrationApplication extends AbstractBaseApplication
 {
     public function __construct(
         private RequestFactoryInterface $requestFactory,
         private ClientInterface $client,
-        private ApplicationRoutes $routes,
+        ApplicationRoutes $routes,
     ) {
+        parent::__construct($this->routes);
     }
 
     public function makeApiCreateTokenRequest(string $token): ResponseInterface
