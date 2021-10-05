@@ -36,21 +36,17 @@ services:
             $adminRevokeRefreshTokenUrl: '%route-admin-frontend-refresh-token-revoke%'
 
     App\Tests\Services\Application\SymfonyClient:
-
     App\Tests\Services\Application\HttpClient:
 
-    App\Tests\Services\Application\AbstractBaseApplication:
-        abstract: true
-
-    App\Tests\Services\Application\FunctionalApplication:
+    app.tests.services.application.functional:
         public: true
-        parent: App\Tests\Services\Application\AbstractBaseApplication
+        class: App\Tests\Services\Application\Application
         arguments:
             $client: '@App\Tests\Services\Application\SymfonyClient'
 
-    App\Tests\Services\Application\IntegrationApplication:
+    app.tests.services.application.integration:
         public: true
-        parent: App\Tests\Services\Application\AbstractBaseApplication
+        class: App\Tests\Services\Application\Application
         arguments:
             $client: '@App\Tests\Services\Application\HttpClient'
 

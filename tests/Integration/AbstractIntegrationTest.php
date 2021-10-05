@@ -8,7 +8,6 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Services\ApiKeyFactory;
 use App\Tests\Services\Application\ApplicationInterface;
-use App\Tests\Services\Application\IntegrationApplication;
 use App\Tests\Services\ApplicationResponseAsserter;
 use App\Tests\Services\UserRemover;
 use Doctrine\ORM\EntityManagerInterface;
@@ -33,8 +32,8 @@ abstract class AbstractIntegrationTest extends WebTestCase
 
         static::createClient();
 
-        $application = self::getContainer()->get(IntegrationApplication::class);
-        \assert($application instanceof IntegrationApplication);
+        $application = self::getContainer()->get('app.tests.services.application.integration');
+        \assert($application instanceof ApplicationInterface);
         $this->application = $application;
 
         $applicationResponseAsserter = self::getContainer()->get(ApplicationResponseAsserter::class);

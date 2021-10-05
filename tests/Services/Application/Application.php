@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace App\Tests\Services\Application;
 
+use App\Tests\Services\ApplicationRoutes;
 use Psr\Http\Message\ResponseInterface;
 
-class IntegrationApplication extends AbstractBaseApplication
+class Application implements ApplicationInterface
 {
+    public function __construct(
+        private ClientInterface $client,
+        private ApplicationRoutes $routes,
+    ) {
+    }
+
     public function makeApiCreateTokenRequest(string $token): ResponseInterface
     {
         $headers = [
