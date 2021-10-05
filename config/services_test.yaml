@@ -25,7 +25,7 @@ services:
     App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory:
         public: true
 
-    App\Tests\Services\ApplicationRoutes:
+    App\Tests\Services\Application\Routes:
         arguments:
             $apiCreateTokenUrl: '%route-api-token-create%'
             $apiVerifyTokenUrl: '%route-api-token-verify%'
@@ -35,8 +35,20 @@ services:
             $adminCreateUserUrl: '%route-admin-user-create%'
             $adminRevokeRefreshTokenUrl: '%route-admin-frontend-refresh-token-revoke%'
 
-    App\Tests\Services\Application:
+    App\Tests\Services\Application\SymfonyClient:
+    App\Tests\Services\Application\HttpClient:
+
+    app.tests.services.application.functional:
         public: true
+        class: App\Tests\Services\Application\Application
+        arguments:
+            $client: '@App\Tests\Services\Application\SymfonyClient'
+
+    app.tests.services.application.integration:
+        public: true
+        class: App\Tests\Services\Application\Application
+        arguments:
+            $client: '@App\Tests\Services\Application\HttpClient'
 
     App\Tests\Services\RefreshTokenManager:
         public: true
@@ -53,9 +65,6 @@ services:
 
     Psr\Http\Client\ClientInterface:
         alias: app.tests.integration.http.client
-
-    App\Tests\Services\IntegrationApplication:
-        public: true
 
     GuzzleHttp\Psr7\HttpFactory:
 

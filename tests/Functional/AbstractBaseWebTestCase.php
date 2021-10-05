@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\Tests\Services\Application;
+use App\Tests\Services\Application\ApplicationInterface;
+use App\Tests\Services\Application\SymfonyClient;
 
 abstract class AbstractBaseWebTestCase extends AbstractBaseFunctionalTest
 {
-    protected Application $application;
+    protected ApplicationInterface $application;
 
     protected function setUp(): void
     {
@@ -16,9 +17,12 @@ abstract class AbstractBaseWebTestCase extends AbstractBaseFunctionalTest
 
         $client = static::createClient();
 
-        $application = self::getContainer()->get(Application::class);
-        \assert($application instanceof Application);
-        $application->setClient($client);
+        $application = self::getContainer()->get('app.tests.services.application.functional');
+        \assert($application instanceof ApplicationInterface);
+
+        $symfonyClient = self::getContainer()->get(SymfonyClient::class);
+        \assert($symfonyClient instanceof SymfonyClient);
+        $symfonyClient->setKernelBrowser($client);
 
         $this->application = $application;
     }

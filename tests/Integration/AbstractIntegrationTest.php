@@ -7,8 +7,8 @@ namespace App\Tests\Integration;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Services\ApiKeyFactory;
+use App\Tests\Services\Application\ApplicationInterface;
 use App\Tests\Services\ApplicationResponseAsserter;
-use App\Tests\Services\IntegrationApplication;
 use App\Tests\Services\UserRemover;
 use Doctrine\ORM\EntityManagerInterface;
 use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
@@ -21,7 +21,7 @@ abstract class AbstractIntegrationTest extends WebTestCase
     protected const TEST_USER_EMAIL = 'user@example.com';
     protected const TEST_USER_PASSWORD = 'user-password';
 
-    protected IntegrationApplication $application;
+    protected ApplicationInterface $application;
     protected ApplicationResponseAsserter $applicationResponseAsserter;
     protected ApiKeyFactory $apiKeyFactory;
     private UserRepository $userRepository;
@@ -32,8 +32,8 @@ abstract class AbstractIntegrationTest extends WebTestCase
 
         static::createClient();
 
-        $application = self::getContainer()->get(IntegrationApplication::class);
-        \assert($application instanceof IntegrationApplication);
+        $application = self::getContainer()->get('app.tests.services.application.integration');
+        \assert($application instanceof ApplicationInterface);
         $this->application = $application;
 
         $applicationResponseAsserter = self::getContainer()->get(ApplicationResponseAsserter::class);

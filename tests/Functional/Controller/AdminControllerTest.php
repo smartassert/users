@@ -43,29 +43,15 @@ class AdminControllerTest extends AbstractBaseWebTestCase
         $this->applicationResponseAsserter = $applicationResponseAsserter;
     }
 
-    /**
-     * @dataProvider createUserUnauthorizedDataProvider
-     */
-    public function testCreateUserUnauthorized(?string $token): void
+    public function testCreateUserUnauthorized(): void
     {
-        $response = $this->application->makeAdminCreateUserRequest('', '', $token);
+        $response = $this->application->makeAdminCreateUserRequest(
+            'user-email',
+            'user-password',
+            'invalid-token'
+        );
 
         self::assertSame(401, $response->getStatusCode());
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    public function createUserUnauthorizedDataProvider(): array
-    {
-        return [
-            'no token' => [
-                'token' => null,
-            ],
-            'invalid token' => [
-                'token' => 'invalid-admin-token',
-            ],
-        ];
     }
 
     public function testCreateUserUserAlreadyExists(): void
