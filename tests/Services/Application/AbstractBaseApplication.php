@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Services;
+namespace App\Tests\Services\Application;
+
+use App\Tests\Services\ApplicationRoutes;
 
 abstract class AbstractBaseApplication implements ApplicationInterface
 {

@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Services;
+namespace App\Tests\Services\Application;
 
 use App\Request\CreateUserRequest;
 use App\Request\RevokeRefreshTokenRequest;
+use App\Tests\Services\ApplicationRoutes;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 
-class Application extends AbstractBaseApplication
+class FunctionalApplication extends AbstractBaseApplication
 {
     private KernelBrowser $client;
 
