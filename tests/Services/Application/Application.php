@@ -55,11 +55,8 @@ class Application implements ApplicationInterface
         );
     }
 
-    public function makeAdminCreateUserRequest(
-        ?string $email,
-        ?string $password,
-        ?string $adminToken
-    ): ResponseInterface {
+    public function makeAdminCreateUserRequest(?string $email, ?string $password, string $adminToken): ResponseInterface
+    {
         $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded',
         ];

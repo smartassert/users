@@ -8,33 +8,15 @@ use App\Tests\Integration\AbstractIntegrationTest;
 
 class CreateTest extends AbstractIntegrationTest
 {
-    /**
-     * @dataProvider createUnauthorizedDataProvider
-     */
-    public function testCreateUnauthorized(?string $adminToken): void
+    public function testCreateUnauthorized(): void
     {
         $response = $this->application->makeAdminCreateUserRequest(
             self::TEST_USER_EMAIL,
             self::TEST_USER_EMAIL,
-            $adminToken
+            'invalid-token'
         );
 
         $this->applicationResponseAsserter->assertAdminUnauthorizedResponse($response);
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    public function createUnauthorizedDataProvider(): array
-    {
-        return [
-            'no credentials' => [
-                'adminToken' => null,
-            ],
-            'invalid credentials' => [
-                'adminToken' => 'invalid-token',
-            ],
-        ];
     }
 
     /**

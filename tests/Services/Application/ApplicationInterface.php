@@ -21,7 +21,7 @@ interface ApplicationInterface
     public function makeAdminCreateUserRequest(
         ?string $email,
         ?string $password,
-        ?string $adminToken
+        string $adminToken
     ): ResponseInterface;
 
     public function makeAdminRevokeRefreshTokenRequest(string $userId, string $adminToken): ResponseInterface;
