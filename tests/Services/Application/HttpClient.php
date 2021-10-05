@@ -24,9 +24,9 @@ class HttpClient implements ClientInterface
         array $headers = [],
         ?string $body = null
     ): ResponseInterface {
-        $request = $this->createRequest($method, $uri, $headers, $body);
-
-        return $this->httpClient->sendRequest($request);
+        return $this->httpClient->sendRequest(
+            $this->createRequest($method, $uri, $headers, $body)
+        );
     }
 
     /**

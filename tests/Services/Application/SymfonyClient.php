@@ -29,18 +29,10 @@ class SymfonyClient implements ClientInterface
         ?string $body = null
     ): ResponseInterface {
         $headers = $this->prepareHeaders($headers);
-
         $parameters = $this->prepareParameters($method, $headers, $body);
         $body = $this->prepareBody($method, $headers, $body);
 
-        $this->kernelBrowser->request(
-            $method,
-            $uri,
-            $parameters,
-            [],
-            $headers,
-            $body
-        );
+        $this->kernelBrowser->request($method, $uri, $parameters, [], $headers, $body);
 
         $symfonyResponse = $this->kernelBrowser->getResponse();
 
