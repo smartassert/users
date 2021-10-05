@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Services\Application;
 
-use App\Tests\Services\ApplicationRoutes;
 use Psr\Http\Message\ResponseInterface;
 
 class Application implements ApplicationInterface
 {
     public function __construct(
         private ClientInterface $client,
-        private ApplicationRoutes $routes,
+        private Routes $routes,
     ) {
     }
 
@@ -21,19 +20,19 @@ class Application implements ApplicationInterface
             'Authorization' => $token,
         ];
 
-        return $this->client->makeRequest('POST', $this->routes->getApiCreateTokenUrl(), $headers);
+        return $this->client->makeRequest('POST', $this->routes->apiCreateTokenUrl, $headers);
     }
 
     public function makeApiVerifyTokenRequest(?string $jwt): ResponseInterface
     {
-        return $this->makeVerifyTokenRequest($this->routes->getApiVerifyTokenUrl(), $jwt);
+        return $this->makeVerifyTokenRequest($this->routes->apiVerifyTokenUrl, $jwt);
     }
 
     public function makeFrontendCreateTokenRequest(string $userIdentifier, string $password): ResponseInterface
     {
         return $this->client->makeRequest(
             'POST',
-            $this->routes->getFrontendCreateTokenUrl(),
+            $this->routes->frontendCreateTokenUrl,
             ['Content-Type' => 'application/json'],
             (string) json_encode([
                 'username' => $userIdentifier,
@@ -44,14 +43,14 @@ class Application implements ApplicationInterface
 
     public function makeFrontendVerifyTokenRequest(?string $jwt): ResponseInterface
     {
-        return $this->makeVerifyTokenRequest($this->routes->getFrontendVerifyTokenUrl(), $jwt);
+        return $this->makeVerifyTokenRequest($this->routes->frontendVerifyTokenUrl, $jwt);
     }
 
     public function makeFrontendRefreshTokenRequest(string $refreshToken): ResponseInterface
     {
         return $this->client->makeRequest(
             'POST',
-            $this->routes->getFrontendRefreshTokenUrl(),
+            $this->routes->frontendRefreshTokenUrl,
             ['Content-Type' => 'application/json'],
             (string) json_encode([
                 'refresh_token' => $refreshToken
@@ -77,7 +76,7 @@ class Application implements ApplicationInterface
 
         return $this->client->makeRequest(
             'POST',
-            $this->routes->getAdminCreateUserUrl(),
+            $this->routes->adminCreateUserUrl,
             $headers,
             http_build_query($payload)
         );
@@ -92,7 +91,7 @@ class Application implements ApplicationInterface
 
         return $this->client->makeRequest(
             'POST',
-            $this->routes->getAdminRevokeRefreshTokenUrl(),
+            $this->routes->adminRevokeRefreshTokenUrl,
             $headers,
             http_build_query([
                 'id' => $userId,
@@ -107,20 +106,5 @@ class Application implements ApplicationInterface
             : [];
 
         return $this->client->makeRequest('GET', $url, $headers);
-    }
-
-    /**
-     * @param array<mixed> $payload
-     */
-    private function makeJsonPayloadRequest(string $url, array $payload): ResponseInterface
-    {
-        return $this->client->makeRequest(
-            'POST',
-            $url,
-            [
-                'Content-Type' => 'application/json'
-            ],
-            (string) json_encode($payload)
-        );
     }
 }
