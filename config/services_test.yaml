@@ -93,3 +93,10 @@ services:
 
     App\Services\ServiceStatusInspector\JwtConfigurationInspector:
         public: true
+
+    App\Security\Service\Authenticator:
+        public: true
+        arguments:
+            $tokenExtractor: '@app.admin-authenticator-token-extractor'
+            $validTokens:
+                - '%service-token%'
