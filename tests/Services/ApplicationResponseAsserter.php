@@ -118,8 +118,11 @@ class ApplicationResponseAsserter
      */
     public function assertHealthCheckResponse(ResponseInterface $response, array $expectedData): void
     {
+        $healthCheckArrayBodyAsserter = new ArrayBodyAsserter($expectedData);
+        $healthCheckArrayBodyAsserter = $healthCheckArrayBodyAsserter->errorOnAdditionalActualKeys();
+
         (new JsonResponseAsserter(200))
-            ->addBodyAsserter(new ArrayBodyAsserter($expectedData))
+            ->addBodyAsserter($healthCheckArrayBodyAsserter)
             ->assert($response)
         ;
     }
