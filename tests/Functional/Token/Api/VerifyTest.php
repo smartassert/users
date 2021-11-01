@@ -30,7 +30,6 @@ class VerifyTest extends AbstractVerifyTest
         \assert($apiKeyFactory instanceof ApiKeyFactory);
 
         $user = $testUserFactory->create();
-        $userId = $user->getId();
         $apiKey = $apiKeyFactory->create('api key label', $user);
         $createResponse = $this->application->makeApiCreateTokenRequest((string) $apiKey);
 
