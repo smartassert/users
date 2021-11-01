@@ -40,7 +40,7 @@ class ServiceStatusInspectorTest extends AbstractBaseFunctionalTest
     }
 
     /**
-     * @return array[]
+     * @return array<mixed>
      */
     public function getDataProvider(): array
     {
@@ -90,6 +90,7 @@ class ServiceStatusInspectorTest extends AbstractBaseFunctionalTest
             'componentInspectors',
             ServiceStatusInspector::class
         );
+        \assert(is_array($componentInspectors));
 
         if (array_key_exists($name, $componentInspectors)) {
             $componentInspectors[$name] = $componentInspector;
