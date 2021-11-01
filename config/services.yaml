@@ -88,3 +88,6 @@ services:
                 database_entities: '@SmartAssert\DoctrineInspectors\EntityMappingInspector'
             $exceptionHandlers:
                 - '@SmartAssert\InvokableLogger\ExceptionLogger'
+
+    Lexik\Bundle\JWTAuthenticationBundle\Services\KeyLoader\KeyLoaderInterface:
+        alias: lexik_jwt_authentication.key_loader.raw

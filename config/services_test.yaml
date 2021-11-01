@@ -89,3 +89,6 @@ services:
 
     Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface:
         class: Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory
+
+    App\Services\ServiceStatusInspector\JwtConfigurationInspector:
+        public: true
