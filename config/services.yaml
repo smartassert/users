@@ -6,6 +6,7 @@
 parameters:
     primary-admin-token: '%env(PRIMARY_ADMIN_TOKEN)%'
     secondary-admin-token: '%env(SECONDARY_ADMIN_TOKEN)%'
+    service-token: '%env(SERVICE_TOKEN)%'
     route-frontend-token-create: '/frontend/token/create'
     route-frontend-token-verify: '/frontend/token/verify'
     route-frontend-token-refresh: '/frontend/token/refresh'
@@ -93,3 +94,9 @@ services:
 
     Lexik\Bundle\JWTAuthenticationBundle\Services\KeyLoader\KeyLoaderInterface:
         alias: lexik_jwt_authentication.key_loader.raw
+
+    App\Security\Service\Authenticator:
+        arguments:
+            $tokenExtractor: '@app.admin-authenticator-token-extractor'
+            $validTokens:
+                - '%service-token%'
