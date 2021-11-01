@@ -50,6 +50,7 @@ class ServiceStatusInspectorTest extends AbstractBaseFunctionalTest
                 'expectedServiceStatus' => [
                     'database_connection' => true,
                     'database_entities' => true,
+                    'jwt_configuration' => true,
                 ],
             ],
             'database connection unavailable' => [
@@ -59,6 +60,7 @@ class ServiceStatusInspectorTest extends AbstractBaseFunctionalTest
                 'expectedServiceStatus' => [
                     'database_connection' => false,
                     'database_entities' => true,
+                    'jwt_configuration' => true,
                 ],
             ],
             'database entities unavailable' => [
@@ -68,16 +70,29 @@ class ServiceStatusInspectorTest extends AbstractBaseFunctionalTest
                 'expectedServiceStatus' => [
                     'database_connection' => true,
                     'database_entities' => false,
+                    'jwt_configuration' => true,
+                ],
+            ],
+            'jwt configuration unavailable' => [
+                'modifiedComponentInspectors' => [
+                    'jwt_configuration' => $this->createComponentInspectorThrowingException(),
+                ],
+                'expectedServiceStatus' => [
+                    'database_connection' => true,
+                    'database_entities' => true,
+                    'jwt_configuration' => false,
                 ],
             ],
             'all services unavailable' => [
                 'modifiedComponentInspectors' => [
                     'database_connection' => $this->createComponentInspectorThrowingException(),
                     'database_entities' => $this->createComponentInspectorThrowingException(),
+                    'jwt_configuration' => $this->createComponentInspectorThrowingException(),
                 ],
                 'expectedServiceStatus' => [
                     'database_connection' => false,
                     'database_entities' => false,
+                    'jwt_configuration' => false,
                 ],
             ],
         ];

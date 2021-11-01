@@ -29,6 +29,7 @@ class HealthCheckControllerTest extends AbstractBaseWebTestCase
             [
                 'database_connection' => true,
                 'database_entities' => true,
+                'jwt_configuration' => true,
             ]
         );
     }
