@@ -15,6 +15,7 @@ parameters:
     route-admin-user-create: '%route-admin-prefix%/user/create'
     route-admin-frontend-refresh-token-revoke: '%route-admin-prefix%/frontend/refresh-token/revoke'
     route-health-check: '/health-check'
+    route-status: '/'
 
 services:
     # default configuration for services in *this* file
