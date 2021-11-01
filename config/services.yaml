@@ -14,6 +14,7 @@ parameters:
     route-admin-prefix: '/admin'
     route-admin-user-create: '%route-admin-prefix%/user/create'
     route-admin-frontend-refresh-token-revoke: '%route-admin-prefix%/frontend/refresh-token/revoke'
+    route-health-check: '/health-check'
 
 services:
     # default configuration for services in *this* file
@@ -33,6 +34,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments']
+
     App\ArgumentResolver\EncapsulatingRequestResolver:
         tags:
             - { name: controller.argument_value_resolver, priority: 50 }
@@ -64,3 +69,22 @@ services:
 
     App\Security\Frontend\VerifyAuthenticator:
         parent: lexik_jwt_authentication.security.jwt_authenticator
+
+    SmartAssert\DoctrineInspectors\EntityMappingInspector:
+        arguments:
+            $entityClassNames:
+                - 'App\Entity\ApiKey'
+                - 'App\Entity\User'
+
+    SmartAssert\InvokableLogger\ExceptionLogger:
+
+    SmartAssert\DoctrineInspectors\QueryInspector:
+
+    SmartAssert\ServiceStatusInspector\ServiceStatusInspectorInterface:
+        class: SmartAssert\ServiceStatusInspector\ServiceStatusInspector
+        arguments:
+            $componentInspectors:
+                database_connection: '@SmartAssert\DoctrineInspectors\QueryInspector'
+                database_entities: '@SmartAssert\DoctrineInspectors\EntityMappingInspector'
+            $exceptionHandlers:
+                - '@SmartAssert\InvokableLogger\ExceptionLogger'

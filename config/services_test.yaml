@@ -34,6 +34,7 @@ services:
             $frontendRefreshTokenUrl: '%route-frontend-token-refresh%'
             $adminCreateUserUrl: '%route-admin-user-create%'
             $adminRevokeRefreshTokenUrl: '%route-admin-frontend-refresh-token-revoke%'
+            $healthCheckUrl: '%route-health-check%'
 
     App\Tests\Services\Application\SymfonyClient:
     App\Tests\Services\Application\HttpClient:

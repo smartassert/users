@@ -14,6 +14,7 @@ class Routes
         public string $frontendRefreshTokenUrl,
         public string $adminCreateUserUrl,
         public string $adminRevokeRefreshTokenUrl,
+        public string $healthCheckUrl,
     ) {
     }
 }

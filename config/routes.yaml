@@ -23,3 +23,8 @@ admin_frontend_refreshtoken_revoke:
   path: '%route-admin-frontend-refresh-token-revoke%'
   methods: [POST]
   controller: App\Controller\AdminController::revokeRefreshToken
+
+health_check:
+  path: '%route-health-check%'
+  methods: [GET]
+  controller: App\Controller\HealthCheckController::get

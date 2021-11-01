@@ -25,4 +25,6 @@ interface ApplicationInterface
     ): ResponseInterface;
 
     public function makeAdminRevokeRefreshTokenRequest(string $userId, string $adminToken): ResponseInterface;
+
+    public function makeHealthCheckRequest(): ResponseInterface;
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aa554dd46298f2bfbdd6225a15e7f5f0",
+    "content-hash": "66c6c9bdb045ed1cfb7709f55336dd15",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -2276,6 +2276,156 @@
                 "source": "https://github.com/php-fig/log/tree/2.0.0"
             },
             "time": "2021-07-14T16:41:46+00:00"
+        },
+        {
+            "name": "smartassert/doctrine-inspectors",
+            "version": "0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/smartassert/doctrine-inspectors.git",
+                "reference": "8f3e10a1e20c6ed2a40a8e316ec898e1e0c52f8f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/smartassert/doctrine-inspectors/zipball/8f3e10a1e20c6ed2a40a8e316ec898e1e0c52f8f",
+                "reference": "8f3e10a1e20c6ed2a40a8e316ec898e1e0c52f8f",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "*",
+                "doctrine/orm": "*",
+                "php": ">=8"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.2",
+                "mockery/mockery": "^1.4",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan": "^0.12.99",
+                "phpstan/phpstan-mockery": "^0.12.14",
+                "phpunit/phpunit": "^9.5",
+                "squizlabs/php_codesniffer": "^3.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SmartAssert\\DoctrineInspectors\\": "src/",
+                    "SmartAssert\\Tests\\DoctrineInspectors\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jon Cram",
+                    "email": "webignition@gmail.com"
+                }
+            ],
+            "homepage": "https://github.com/smartassert/doctrine-inspectors",
+            "support": {
+                "issues": "https://github.com/smartassert/doctrine-inspectors/issues",
+                "source": "https://github.com/smartassert/doctrine-inspectors/tree/0.1"
+            },
+            "time": "2021-10-29T10:27:39+00:00"
+        },
+        {
+            "name": "smartassert/invokable-exception-logger",
+            "version": "0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/smartassert/invokable-exception-logger.git",
+                "reference": "5363ff7cc81e7e8d91fedff86ba9afbf68578704"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/smartassert/invokable-exception-logger/zipball/5363ff7cc81e7e8d91fedff86ba9afbf68578704",
+                "reference": "5363ff7cc81e7e8d91fedff86ba9afbf68578704",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8",
+                "psr/log": "*"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.2",
+                "mockery/mockery": "^1.4",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan": "^0.12.99",
+                "phpstan/phpstan-mockery": "^0.12.14",
+                "phpunit/phpunit": "^9.5",
+                "squizlabs/php_codesniffer": "^3.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SmartAssert\\InvokableLogger\\": "src/",
+                    "SmartAssert\\Tests\\InvokableLogger\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jon Cram",
+                    "email": "webignition@gmail.com"
+                }
+            ],
+            "homepage": "https://github.com/smartassert/invokable-exception-logger",
+            "support": {
+                "issues": "https://github.com/smartassert/invokable-exception-logger/issues",
+                "source": "https://github.com/smartassert/invokable-exception-logger/tree/0.2"
+            },
+            "time": "2021-11-01T09:03:23+00:00"
+        },
+        {
+            "name": "smartassert/service-status-inspector",
+            "version": "0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/smartassert/service-status-inspector.git",
+                "reference": "e6ccc95fa9cf38283c7ea55f0df0a5862e6c14c5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/smartassert/service-status-inspector/zipball/e6ccc95fa9cf38283c7ea55f0df0a5862e6c14c5",
+                "reference": "e6ccc95fa9cf38283c7ea55f0df0a5862e6c14c5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.2",
+                "phpstan/phpstan": "^0.12.99",
+                "phpunit/phpunit": "^9.5",
+                "squizlabs/php_codesniffer": "^3.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SmartAssert\\ServiceStatusInspector\\": "src/",
+                    "SmartAssert\\Tests\\ServiceStatusInspector\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jon Cram",
+                    "email": "webignition@gmail.com"
+                }
+            ],
+            "homepage": "https://github.com/smartassert/service-status-inspector",
+            "support": {
+                "issues": "https://github.com/smartassert/service-status-inspector/issues",
+                "source": "https://github.com/smartassert/service-status-inspector/tree/0.1"
+            },
+            "time": "2021-10-28T16:17:26+00:00"
         },
         {
             "name": "symfony/cache",
@@ -9610,6 +9760,52 @@
                 }
             ],
             "time": "2021-07-28T10:34:58+00:00"
+        },
+        {
+            "name": "webignition/object-reflector",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webignition/object-reflector.git",
+                "reference": "c8a679dd2fcf65e8450c59c05caa3a39ecded1a4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webignition/object-reflector/zipball/c8a679dd2fcf65e8450c59c05caa3a39ecded1a4",
+                "reference": "c8a679dd2fcf65e8450c59c05caa3a39ecded1a4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4|^8"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^0.12.77",
+                "phpunit/phpunit": "^9.5",
+                "squizlabs/php_codesniffer": "^3.5",
+                "symplify/easy-coding-standard": "^9.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "webignition\\ObjectReflector\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jon Cram",
+                    "email": "webignition@gmail.com"
+                }
+            ],
+            "homepage": "https://github.com/webignition/object-reflector",
+            "support": {
+                "issues": "https://github.com/webignition/object-reflector/issues",
+                "source": "https://github.com/webignition/object-reflector/tree/1.0"
+            },
+            "time": "2021-02-18T10:13:47+00:00"
         },
         {
             "name": "webmozart/assert",
