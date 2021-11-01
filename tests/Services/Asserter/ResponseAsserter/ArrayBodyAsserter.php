@@ -21,6 +21,14 @@ class ArrayBodyAsserter implements BodyAsserterInterface
         ;
     }
 
+    public function errorOnAdditionalActualKeys(): self
+    {
+        $new = clone $this;
+        $new->arrayDataAsserter = $new->arrayDataAsserter->errorOnAdditionalActualKeys();
+
+        return $new;
+    }
+
     /**
      * @return array<mixed>
      */

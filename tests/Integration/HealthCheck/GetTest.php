@@ -12,13 +12,6 @@ class GetTest extends AbstractIntegrationTest
     {
         $response = $this->application->makeHealthCheckRequest();
 
-        $this->applicationResponseAsserter->assertHealthCheckResponse(
-            $response,
-            [
-                'database_connection' => true,
-                'database_entities' => true,
-                'jwt_configuration' => true,
-            ]
-        );
+        $this->applicationResponseAsserter->assertHealthCheckResponse($response);
     }
 }
