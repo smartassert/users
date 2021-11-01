@@ -11,11 +11,10 @@ use App\Response\BadRequestResponse;
 use App\Response\BadRequestValueMissingResponse;
 use App\Services\UserFactory;
 use App\Services\UserRefreshTokenManager;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminController extends AbstractController
+class AdminController
 {
     public function createUser(
         CreateUserRequest $createUserRequest,
