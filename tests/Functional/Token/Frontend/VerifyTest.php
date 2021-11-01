@@ -33,6 +33,9 @@ class VerifyTest extends AbstractVerifyTest
         $this->removeAllUsers();
 
         $createResponseData = json_decode($createResponse->getBody()->getContents(), true);
+        self::assertIsArray($createResponseData);
+        self::assertArrayHasKey('token', $createResponseData);
+
         $verifyResponse = $this->application->makeFrontendVerifyTokenRequest($createResponseData['token']);
 
         $this->applicationResponseAsserter->assertFrontendTokenVerifySuccessResponse($verifyResponse, $user);

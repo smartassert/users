@@ -47,6 +47,8 @@ class VerifyTest extends AbstractIntegrationTest
 
         $createResponse = $this->application->makeApiCreateTokenRequest((string) $apiKey);
         $createResponseData = json_decode($createResponse->getBody()->getContents(), true);
+        self::assertIsArray($createResponseData);
+        self::assertArrayHasKey('token', $createResponseData);
 
         $this->removeAllUsers();
 

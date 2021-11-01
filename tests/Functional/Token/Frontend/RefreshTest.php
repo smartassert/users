@@ -51,6 +51,9 @@ class RefreshTest extends AbstractTokenTest
         );
 
         $responseData = json_decode($createTokenResponse->getBody()->getContents(), true);
+        self::assertIsArray($responseData);
+        self::assertArrayHasKey('refresh_token', $responseData);
+
         $refreshToken = $responseData['refresh_token'];
 
         $response = $this->application->makeFrontendRefreshTokenRequest($refreshToken);

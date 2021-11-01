@@ -38,6 +38,7 @@ class JwtTokenBodyAsserter extends ArrayBodyAsserter implements BodyAsserterInte
     {
         $data = parent::assert($body);
         $token = $data[$this->expectedTokenKey];
+        Assert::assertIsString($token);
 
         $payload = $this->JWTTokenManager->parse($token);
         Assert::assertIsArray($payload);

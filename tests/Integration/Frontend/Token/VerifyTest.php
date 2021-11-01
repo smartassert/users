@@ -49,6 +49,8 @@ class VerifyTest extends AbstractIntegrationTest
             self::TEST_USER_PASSWORD
         );
         $createResponseData = json_decode($createResponse->getBody()->getContents(), true);
+        self::assertIsArray($createResponseData);
+        self::assertArrayHasKey('token', $createResponseData);
 
         $this->removeAllUsers();
 

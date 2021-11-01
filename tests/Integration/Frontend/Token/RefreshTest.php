@@ -22,6 +22,8 @@ class RefreshTest extends AbstractIntegrationTest
         );
 
         $createResponseData = json_decode($createResponse->getBody()->getContents(), true);
+        self::assertIsArray($createResponseData);
+        self::assertArrayHasKey('refresh_token', $createResponseData);
         $refreshToken = $createResponseData['refresh_token'] ?? '';
 
         $response = $this->application->makeFrontendRefreshTokenRequest($refreshToken);
