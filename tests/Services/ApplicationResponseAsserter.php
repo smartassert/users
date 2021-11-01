@@ -112,4 +112,15 @@ class ApplicationResponseAsserter
         $response->getBody()->rewind();
         Assert::assertSame('', $response->getBody()->getContents());
     }
+
+    /**
+     * @param array<string, bool> $expectedData
+     */
+    public function assertHealthCheckResponse(ResponseInterface $response, array $expectedData): void
+    {
+        (new JsonResponseAsserter(200))
+            ->addBodyAsserter(new ArrayBodyAsserter($expectedData))
+            ->assert($response)
+        ;
+    }
 }

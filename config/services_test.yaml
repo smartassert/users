@@ -34,6 +34,7 @@ services:
             $frontendRefreshTokenUrl: '%route-frontend-token-refresh%'
             $adminCreateUserUrl: '%route-admin-user-create%'
             $adminRevokeRefreshTokenUrl: '%route-admin-frontend-refresh-token-revoke%'
+            $healthCheckUrl: '%route-health-check%'
 
     App\Tests\Services\Application\SymfonyClient:
     App\Tests\Services\Application\HttpClient:
@@ -88,13 +89,3 @@ services:
 
     Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface:
         class: Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory
-
-    SmartAssert\ServiceStatusInspector\ServiceStatusInspectorInterface:
-        public: true
-        class: SmartAssert\ServiceStatusInspector\ServiceStatusInspector
-        arguments:
-            $componentInspectors:
-                database_connection: '@SmartAssert\DoctrineInspectors\QueryInspector'
-                database_entities: '@SmartAssert\DoctrineInspectors\EntityMappingInspector'
-            $exceptionHandlers:
-                - '@SmartAssert\InvokableLogger\ExceptionLogger'
