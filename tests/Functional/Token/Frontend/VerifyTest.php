@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Token\Frontend;
 
-use App\Tests\Functional\Token\AbstractTokenTest;
+use App\Tests\Functional\Token\AbstractVerifyTest;
 use App\Tests\Services\TestUserFactory;
+use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 
-class VerifyTest extends AbstractTokenTest
+class VerifyTest extends AbstractVerifyTest
 {
     /**
      * @dataProvider verifyUnauthorizedDataProvider
@@ -17,24 +18,6 @@ class VerifyTest extends AbstractTokenTest
         $response = $this->application->makeFrontendVerifyTokenRequest($jwt);
 
         self::assertSame(401, $response->getStatusCode());
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    public function verifyUnauthorizedDataProvider(): array
-    {
-        return [
-            'no jwt' => [
-                'token' => null,
-            ],
-            'malformed jwt' => [
-                'token' => 'malformed.jwt.token',
-            ],
-            'invalid jwt' => [
-                'token' => 'eyJhbGciOiJIUzI1NiJ9.e30.ZRrHA1JJJW8opsbCGfG_HACGpVUMN_a9IV7pAx_Zmeo',
-            ],
-        ];
     }
 
     public function testVerifyValidJwt(): void
@@ -53,5 +36,24 @@ class VerifyTest extends AbstractTokenTest
         $verifyResponse = $this->application->makeFrontendVerifyTokenRequest($createResponseData['token']);
 
         $this->applicationResponseAsserter->assertFrontendTokenVerifySuccessResponse($verifyResponse, $user);
+    }
+
+    /**
+     * @dataProvider verifyInvalidUserDataDataProvider
+     *
+     * @param array<mixed> $tokenData
+     */
+    public function testVerifyInvalidUserData(
+        array $tokenData,
+        int $expectedResponseStatusCode,
+        string $expectedResponseBodyContains,
+    ): void {
+        $encoder = self::getContainer()->get('lexik_jwt_authentication.encoder');
+        \assert($encoder instanceof JWTEncoderInterface);
+
+        $verifyResponse = $this->application->makeFrontendVerifyTokenRequest($encoder->encode($tokenData));
+
+        self::assertSame($expectedResponseStatusCode, $verifyResponse->getStatusCode());
+        self::assertStringContainsString($expectedResponseBodyContains, $verifyResponse->getBody()->getContents());
     }
 }
