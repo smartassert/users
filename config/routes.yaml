@@ -28,3 +28,8 @@ health_check:
   path: '%route-health-check%'
   methods: [GET]
   controller: App\Controller\HealthCheckController::get
+
+status:
+  path: '%route-status%'
+  methods: [GET]
+  controller: App\Controller\StatusController::get

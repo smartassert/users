@@ -104,6 +104,11 @@ class Application implements ApplicationInterface
         return $this->client->makeRequest('GET', $this->routes->healthCheckUrl);
     }
 
+    public function makeStatusRequest(): ResponseInterface
+    {
+        return $this->client->makeRequest('GET', $this->routes->statusUrl);
+    }
+
     private function makeVerifyTokenRequest(string $url, ?string $jwt): ResponseInterface
     {
         $headers = (is_string($jwt))
