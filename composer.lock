@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f3a043de303e0bc001c6bc612a835f44",
+    "content-hash": "66c6c9bdb045ed1cfb7709f55336dd15",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -9760,6 +9760,52 @@
                 }
             ],
             "time": "2021-07-28T10:34:58+00:00"
+        },
+        {
+            "name": "webignition/object-reflector",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webignition/object-reflector.git",
+                "reference": "c8a679dd2fcf65e8450c59c05caa3a39ecded1a4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webignition/object-reflector/zipball/c8a679dd2fcf65e8450c59c05caa3a39ecded1a4",
+                "reference": "c8a679dd2fcf65e8450c59c05caa3a39ecded1a4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4|^8"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^0.12.77",
+                "phpunit/phpunit": "^9.5",
+                "squizlabs/php_codesniffer": "^3.5",
+                "symplify/easy-coding-standard": "^9.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "webignition\\ObjectReflector\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jon Cram",
+                    "email": "webignition@gmail.com"
+                }
+            ],
+            "homepage": "https://github.com/webignition/object-reflector",
+            "support": {
+                "issues": "https://github.com/webignition/object-reflector/issues",
+                "source": "https://github.com/webignition/object-reflector/tree/1.0"
+            },
+            "time": "2021-02-18T10:13:47+00:00"
         },
         {
             "name": "webmozart/assert",

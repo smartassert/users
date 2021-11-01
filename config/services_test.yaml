@@ -88,3 +88,13 @@ services:
 
     Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface:
         class: Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory
+
+    SmartAssert\ServiceStatusInspector\ServiceStatusInspectorInterface:
+        public: true
+        class: SmartAssert\ServiceStatusInspector\ServiceStatusInspector
+        arguments:
+            $componentInspectors:
+                database_connection: '@SmartAssert\DoctrineInspectors\QueryInspector'
+                database_entities: '@SmartAssert\DoctrineInspectors\EntityMappingInspector'
+            $exceptionHandlers:
+                - '@SmartAssert\InvokableLogger\ExceptionLogger'

@@ -41,7 +41,8 @@
         "symfony/css-selector": "5.3.*",
         "symfony/maker-bundle": "^1.33",
         "symfony/phpunit-bridge": "^5.3",
-        "symfony/psr-http-message-bridge": "^2.1"
+        "symfony/psr-http-message-bridge": "^2.1",
+        "webignition/object-reflector": "^1.0"
     },
     "config": {
         "optimize-autoloader": true,
