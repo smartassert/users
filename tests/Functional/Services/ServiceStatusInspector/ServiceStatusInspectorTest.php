@@ -40,7 +40,7 @@ class ServiceStatusInspectorTest extends AbstractBaseFunctionalTest
     }
 
     /**
-     * @return array[]
+     * @return array<mixed>
      */
     public function getDataProvider(): array
     {
