@@ -86,6 +86,7 @@ services:
             $componentInspectors:
                 database_connection: '@SmartAssert\DoctrineInspectors\QueryInspector'
                 database_entities: '@SmartAssert\DoctrineInspectors\EntityMappingInspector'
+                jwt_configuration: '@App\Services\ServiceStatusInspector\JwtConfigurationInspector'
             $exceptionHandlers:
                 - '@SmartAssert\InvokableLogger\ExceptionLogger'
 
