@@ -113,11 +113,14 @@ class ApplicationResponseAsserter
         Assert::assertSame('', $response->getBody()->getContents());
     }
 
-    /**
-     * @param array<string, bool> $expectedData
-     */
-    public function assertHealthCheckResponse(ResponseInterface $response, array $expectedData): void
+    public function assertHealthCheckResponse(ResponseInterface $response): void
     {
+        $expectedData = [
+            'database_connection' => true,
+            'database_entities' => true,
+            'jwt_configuration' => true,
+        ];
+
         $healthCheckArrayBodyAsserter = new ArrayBodyAsserter($expectedData);
         $healthCheckArrayBodyAsserter = $healthCheckArrayBodyAsserter->errorOnAdditionalActualKeys();
 
