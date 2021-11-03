@@ -20,10 +20,31 @@ class StatusControllerTest extends AbstractBaseWebTestCase
         $this->applicationResponseAsserter = $applicationResponseAsserter;
     }
 
-    public function testGet(): void
+    /**
+     * @dataProvider getDataProvider
+     */
+    public function testGet(int $envReady, bool $expectedReady): void
     {
-        $response = $this->application->makeStatusRequest();
+        $_ENV['IS_READY'] = $envReady;
 
-        $this->applicationResponseAsserter->assertStatusResponse($response);
+        $response = $this->application->makeStatusRequest();
+        $this->applicationResponseAsserter->assertStatusResponse($response, $expectedReady);
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function getDataProvider(): array
+    {
+        return [
+            'ENV READY=0' => [
+                'envReady' => 0,
+                'expectedReady' => false,
+            ],
+            'ENV READY=1' => [
+                'envReady' => 1,
+                'expectedReady' => true,
+            ],
+        ];
     }
 }

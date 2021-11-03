@@ -39,6 +39,11 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
+    App\Controller\StatusController:
+        tags: ['controller.service_arguments']
+        arguments:
+            $isReady: '%env(bool:IS_READY)%'
+
     App\ArgumentResolver\EncapsulatingRequestResolver:
         tags:
             - { name: controller.argument_value_resolver, priority: 50 }

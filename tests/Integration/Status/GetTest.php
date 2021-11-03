@@ -12,6 +12,6 @@ class GetTest extends AbstractIntegrationTest
     {
         $response = $this->application->makeStatusRequest();
 
-        $this->applicationResponseAsserter->assertStatusResponse($response);
+        $this->applicationResponseAsserter->assertStatusResponse($response, true);
     }
 }
