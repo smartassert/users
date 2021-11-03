@@ -130,11 +130,12 @@ class ApplicationResponseAsserter
         ;
     }
 
-    public function assertStatusResponse(ResponseInterface $response): void
+    public function assertStatusResponse(ResponseInterface $response, bool $expectedReady): void
     {
         (new JsonResponseAsserter(200))
             ->addBodyAsserter(new ArrayBodyAsserter([
                 'idle' => true,
+                'ready' => $expectedReady,
             ]))
             ->assert($response)
         ;

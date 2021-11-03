@@ -20,6 +20,8 @@ services:
 
   app:
     env_file: .env
+    environment:
+      IS_READY: ${IS_READY}
     build:
       context: ../..
       args:

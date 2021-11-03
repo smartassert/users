@@ -8,10 +8,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class StatusController
 {
+    public function __construct(
+        private bool $isReady,
+    ) {
+    }
+
     public function get(): JsonResponse
     {
         return new JsonResponse([
             'idle' => true,
+            'ready' => $this->isReady,
         ]);
     }
 }
