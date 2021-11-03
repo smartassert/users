@@ -30,18 +30,6 @@ jobs:
         run: |
           jq '.' <<< "$INPUTS"
 
-      - name: Verify manual run version is valid
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        run: |
-          TAG_EXISTENCE_COUNT=$(git tag | grep "${{ github.event.inputs.version }}" -c | cat)
-
-          if [ "0" = "$TAG_EXISTENCE_COUNT" ]; then
-            echo "Version \"${{ github.event.inputs.version }}\" does not exist
-            echo "Current versions:"
-            git tag | sort -Vr
-            exit 1
-          fi
-
       - name: Checkout code for manual run
         if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: actions/checkout@v2
