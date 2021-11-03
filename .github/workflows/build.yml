@@ -1,0 +1,40 @@
+name: build
+
+on:
+  push:
+    branches:
+      - main
+  release:
+    types:
+      - published
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Existing version to build from
+        required: true
+
+jobs:
+  build:
+    name: Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code for push or pull request
+        if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' }}
+        uses: actions/checkout@v2
+
+      - name: Checkout code for manual run
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.version }}
+
+      - name: Set version
+        id: version
+        env:
+          RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
+        run: |
+          [[ -n "$RELEASE_TAG_NAME" ]] && echo "::set-output name=value::$RELEASE_TAG_NAME" || echo "::set-output name=value::master"
+
+      - name: Examine build config
+        run: |
+          echo VERSION ${{ steps.version.outputs.value }}
