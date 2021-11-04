@@ -6,7 +6,7 @@ namespace App\Tests\Services\Application;
 
 use Psr\Http\Message\ResponseInterface;
 
-class Application implements ApplicationInterface
+class Application
 {
     public function __construct(
         private ClientInterface $client,
