@@ -47,6 +47,7 @@ COPY config/bundles.php config/services.yaml /app/config/
 COPY config/packages/*.yaml /app/config/packages/
 COPY config/packages/prod /app/config/packages/prod
 COPY config/routes.yaml /app/config/
+COPY migrations /app/migrations
 
 RUN chown -R www-data:www-data /app/var/log \
   && composer check-platform-reqs --ansi \
