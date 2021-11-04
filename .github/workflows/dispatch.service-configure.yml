@@ -2,6 +2,10 @@ name: dispatch.service-configure
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: Release version
+        required: true
 
 jobs:
   deploy:
@@ -17,7 +21,7 @@ jobs:
           client-payload: |
             {
               "service_id": "users",
-              "build_configuration": "{}"
+              "build_configuration": "{\"version\": \"${{ github.event.inputs.version }}\"}"
             }
 
       - name: Dispatch service-configure event to instance manager
