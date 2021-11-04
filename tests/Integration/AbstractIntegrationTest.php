@@ -7,7 +7,7 @@ namespace App\Tests\Integration;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Services\ApiKeyFactory;
-use App\Tests\Services\Application\ApplicationInterface;
+use App\Tests\Services\Application\Application;
 use App\Tests\Services\ApplicationResponseAsserter;
 use App\Tests\Services\UserRemover;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,7 +21,7 @@ abstract class AbstractIntegrationTest extends WebTestCase
     protected const TEST_USER_EMAIL = 'user@example.com';
     protected const TEST_USER_PASSWORD = 'user-password';
 
-    protected ApplicationInterface $application;
+    protected Application $application;
     protected ApplicationResponseAsserter $applicationResponseAsserter;
     protected ApiKeyFactory $apiKeyFactory;
     private UserRepository $userRepository;
@@ -33,7 +33,7 @@ abstract class AbstractIntegrationTest extends WebTestCase
         static::createClient();
 
         $application = self::getContainer()->get('app.tests.services.application.integration');
-        \assert($application instanceof ApplicationInterface);
+        \assert($application instanceof Application);
         $this->application = $application;
 
         $applicationResponseAsserter = self::getContainer()->get(ApplicationResponseAsserter::class);
