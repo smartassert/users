@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout code for push or pull request
-        if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' }}
+        if: ${{ github.event_name == 'push' || github.event_name == 'release' }}
         uses: actions/checkout@v2
 
       - name: Output inputs for manual run
