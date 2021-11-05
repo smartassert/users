@@ -116,7 +116,7 @@
         ],
         "integration-build": "docker-compose -f tests/build/docker-compose.yml build app",
         "integration-pull": "docker-compose -f tests/build/docker-compose.yml pull",
-        "integration-up": "docker-compose -f tests/build/docker-compose.yml  up -d",
+        "integration-up": "docker-compose -f tests/build/docker-compose.yml  up -d --build",
         "integration-status": "docker-compose -f tests/build/docker-compose.yml ps",
         "integration-generate-jwt-keys": "docker-compose -f tests/build/docker-compose.yml exec -T app php bin/console lexik:jwt:generate-keypair --skip-if-exists",
         "integration-copy-jwt-keys": [

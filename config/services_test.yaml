@@ -63,7 +63,8 @@ services:
         class: GuzzleHttp\Client
         arguments:
             $config:
-                base_uri: "http://localhost:9090/"
+                base_uri: "https://localhost/"
+                verify: false
 
     Psr\Http\Client\ClientInterface:
         alias: app.tests.integration.http.client

@@ -8,15 +8,18 @@ services:
     ports:
       - 5432:5432
 
-  nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-    container_name: nginx
+  caddy:
+    image: caddy:2.4.5
+    container_name: caddy
+    restart: unless-stopped
     ports:
-      - 9090:80
+      - "80:80"
+      - "443:443"
     links:
       - app:app
+    volumes:
+      - ./caddy/index.php:/app/public/index.php
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
 
   app:
     env_file: .env
