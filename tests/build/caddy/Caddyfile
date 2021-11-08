@@ -1,8 +1,8 @@
-https://* {
+https://{$DOMAIN} {
     root * /app/public
     php_fastcgi * app:9000
 
-    tls internal
+    tls {$TLS_INTERNAL}
 
     log {
         output file /dev/stdout
