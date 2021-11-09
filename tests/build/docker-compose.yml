@@ -12,6 +12,9 @@ services:
     image: caddy:2.4.5
     container_name: caddy
     restart: unless-stopped
+    environment:
+      DOMAIN: ${CADDY_DOMAIN:-localhost}
+      TLS_INTERNAL: ${CADDY_TLS_INTERNAL:-internal}
     ports:
       - "443:443"
     links:
