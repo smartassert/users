@@ -3,13 +3,13 @@ version: "3"
 services:
   postgres:
     env_file: .env
-    image: postgres:12.5
+    image: postgres:12.5-alpine
     container_name: postgres
     ports:
       - 5432:5432
 
   caddy:
-    image: caddy:2.4.5
+    image: caddy:2.4.5-alpine
     container_name: caddy
     restart: unless-stopped
     environment:
