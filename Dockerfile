@@ -26,18 +26,12 @@ RUN apt-get -qq update && apt-get -qq -y install  \
   git \
   libpq-dev \
   libzip-dev \
-  supervisor \
   zip \
   && docker-php-ext-install \
   pdo_pgsql \
   zip \
   && apt-get autoremove -y \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-RUN mkdir -p var/log/supervisor
-
-COPY build/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
-COPY build/supervisor/conf.d/app.conf /etc/supervisor/conf.d/supervisord.conf
 
 COPY composer.json composer.lock /app/
 COPY bin/console /app/bin/console
@@ -49,7 +43,8 @@ COPY config/packages/prod /app/config/packages/prod
 COPY config/routes.yaml /app/config/
 COPY migrations /app/migrations
 
-RUN chown -R www-data:www-data /app/var/log \
+RUN mkdir -p /app/var/log \
+  && chown -R www-data:www-data /app/var/log \
   && composer check-platform-reqs --ansi \
   && echo "APP_SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)" > .env \
   && composer install --no-dev --no-scripts \
