@@ -8,22 +8,12 @@ on:
 
 jobs:
   php-cs-fixer:
-    name: PHP CS Fixer Dry Run - PHP ${{ matrix.php-versions }} ${{ matrix.operating-system }}
-    strategy:
-      matrix:
-        operating-system: [ubuntu-latest]
-        php-versions: ['8.0']
-    runs-on: ${{ matrix.operating-system }}
+    name: PHP CS Fixer Dry Run
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Download dependencies
-        uses: php-actions/composer@v6
-        with:
-          php_version: ${{ matrix.php-versions }}
-          args: --ignore-platform-reqs --quiet
 
       - name: Run
         run: composer cs-fixer-dry-run
