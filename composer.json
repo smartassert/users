@@ -12,7 +12,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.10",
         "gesdinet/jwt-refresh-token-bundle": "^1",
-        "lexik/jwt-authentication-bundle": "^2.13",
+        "lexik/jwt-authentication-bundle": "^2.14",
         "smartassert/doctrine-inspectors": "^0.1.0",
         "smartassert/invokable-exception-logger": "^0.2.0",
         "smartassert/service-status-inspector": "^0.1.0",
