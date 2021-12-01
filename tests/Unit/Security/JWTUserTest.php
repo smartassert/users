@@ -14,8 +14,7 @@ class JWTUserTest extends TestCase
     /**
      * @dataProvider createFromPayloadThrowsExceptionDataProvider
      *
-     * @param array<mixed>                                                   $payload
-     * @param InvalidJwtUserPayloadException|InvalidJwtUserUsernameException $expectedException
+     * @param array<mixed> $payload
      */
     public function testCreateFromPayloadThrowsException(
         mixed $username,
