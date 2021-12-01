@@ -36,3 +36,14 @@ jobs:
               "state_url": "http://{{ host }}/",
               "health_check_url": "http://{{ host }}/health-check"
             }
+
+      - name: Dispatch service-set-env event to instance manager
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.INSTANCE_MANAGER_TOKEN }}
+          repository: smartassert/instance-manager
+          event-type: service-set-env
+          client-payload: |
+            {
+              "IS_READY": "1"
+            }
