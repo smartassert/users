@@ -7,12 +7,12 @@ on:
   pull_request:
 
 jobs:
-  ecs:
+  php-cs-fixer:
     name: PHP CS Fixer Dry Run - PHP ${{ matrix.php-versions }} ${{ matrix.operating-system }}
     strategy:
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ['8']
+        php-versions: ['8.0']
     runs-on: ${{ matrix.operating-system }}
 
     steps:
@@ -25,8 +25,9 @@ jobs:
           php-version: ${{ matrix.php-versions }}
 
       - name: Download dependencies
-        uses: php-actions/composer@v2
+        uses: php-actions/composer@v6
         with:
+          php_version: ${{ matrix.php-versions }}
           args: --ignore-platform-reqs --quiet
 
       - name: Run
@@ -37,7 +38,7 @@ jobs:
     strategy:
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ['8']
+        php-versions: ['8.0']
     runs-on: ${{ matrix.operating-system }}
 
     steps:
@@ -50,8 +51,9 @@ jobs:
           php-version: ${{ matrix.php-versions }}
 
       - name: Download dependencies
-        uses: php-actions/composer@v2
+        uses: php-actions/composer@v6
         with:
+          php_version: ${{ matrix.php-versions }}
           args: --ignore-platform-reqs --quiet
 
       - name: Run

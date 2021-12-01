@@ -1,4 +1,4 @@
-FROM php:8-fpm-buster
+FROM php:8.0-fpm-buster
 
 WORKDIR /app
 
