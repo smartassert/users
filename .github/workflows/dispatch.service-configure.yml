@@ -33,6 +33,6 @@ jobs:
           client-payload: |
             {
               "service_id": "users",
-              "state_url": "/",
-              "health_check_url": "/health-check"
+              "state_url": "http://{{ host }}/",
+              "health_check_url": "http://{{ host }}/health-check"
             }
