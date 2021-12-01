@@ -31,12 +31,12 @@ abstract class AbstractUser implements IdentifiableUserInterface, UserInterface,
         return $this->roles;
     }
 
-    public function getPassword()
+    public function getPassword(): ?string
     {
         return null;
     }
 
-    public function getSalt()
+    public function getSalt(): ?string
     {
         return null;
     }
