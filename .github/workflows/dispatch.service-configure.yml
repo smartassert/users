@@ -45,6 +45,7 @@ jobs:
           event-type: service-set-env
           client-payload: |
             {
+              "service_id": "users",
               "IS_READY": "1",
               "JWT_SECRET_KEY": "{{ secrets.USERS_JWT_SECRET_KEY }}",
               "JWT_PUBLIC_KEY": "{{ secrets.USERS_JWT_PUBLIC_KEY }}",
