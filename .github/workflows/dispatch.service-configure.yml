@@ -46,5 +46,5 @@ jobs:
           client-payload: |
             {
               "service_id": "users",
-              "env_vars": "{\"IS_READY\": \"1\",\"JWT_SECRET_KEY_BASE64_PART1\": \"{{ secrets.USERS_JWT_SECRET_KEY_BASE64_PART1 }}\",\"JWT_SECRET_KEY_BASE64_PART2\": \"{{ secrets.USERS_JWT_SECRET_KEY_BASE64_PART2 }}\",\"JWT_SECRET_KEY_BASE64_PART3\": \"{{ secrets.USERS_JWT_SECRET_KEY_BASE64_PART3 }}\",\"JWT_PUBLIC_KEY_BASE64\": \"{{ secrets.USERS_JWT_PUBLIC_KEY_BASE64 }}\",\"JWT_PASSPHRASE\": \"{{ secrets.USERS_JWT_PASSPHRASE }}\"}"
+              "env_vars": "{\"IS_READY\": \"1\",\"JWT_SECRET_KEY_BASE64_PART1\": \"{{ secrets.USERS_JWT_SECRET_KEY_BASE64_PART1 }}\",\"JWT_SECRET_KEY_BASE64_PART2\": \"{{ secrets.USERS_JWT_SECRET_KEY_BASE64_PART2 }}\",\"JWT_SECRET_KEY_BASE64_PART3\": \"{{ secrets.USERS_JWT_SECRET_KEY_BASE64_PART3 }}\",\"JWT_PUBLIC_KEY_BASE64\": \"{{ secrets.USERS_JWT_PUBLIC_KEY_BASE64 }}\",\"JWT_PASSPHRASE\": \"{{ secrets.USERS_JWT_PASSPHRASE }}\",\"PRIMARY_ADMIN_TOKEN\": \"{{ secrets.USERS_PRIMARY_ADMIN_TOKEN }}\",\"SECONDARY_ADMIN_TOKEN\": \"{{ secrets.USERS_SECONDARY_ADMIN_TOKEN }}\"}"
             }
