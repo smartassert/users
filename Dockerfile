@@ -4,8 +4,8 @@ WORKDIR /app
 
 ARG APP_ENV=prod
 ARG DATABASE_URL=postgresql://database_user:database_password@0.0.0.0:5432/database_name?serverVersion=12&charset=utf8
-ARG JWT_SECRET_KEY=jwt_secret_key
-ARG JWT_PUBLIC_KEY=jwt_public_key
+ARG JWT_SECRET_KEY="%kernel.project_dir%/config/jwt/private.pem"
+ARG JWT_PUBLIC_KEY="%kernel.project_dir%/config/jwt/public.pem"
 ARG JWT_PASSPHRASE=jwt_passphrase
 ARG PRIMARY_ADMIN_TOKEN=primary-admin-token
 ARG SECONDARY_ADMIN_TOKEN=secondary-admin-token
