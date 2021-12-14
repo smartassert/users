@@ -11,91 +11,66 @@ use Symfony\Component\HttpFoundation\Request;
 class CreateUserRequestTest extends TestCase
 {
     /**
-     * @dataProvider getEmailDataProvider
+     * @dataProvider createDataProvider
      */
-    public function testGetEmail(CreateUserRequest $request, string $expectedEmail): void
+    public function testCreate(Request $request, CreateUserRequest $expected): void
     {
-        self::assertSame($expectedEmail, $request->getEmail());
+        self::assertEquals($expected, CreateUserRequest::create($request));
     }
 
     /**
      * @return array<mixed>
      */
-    public function getEmailDataProvider(): array
+    public function createDataProvider(): array
     {
         return [
-            'no email present' => [
-                'request' => new CreateUserRequest(
-                    new Request()
+            'empty' => [
+                'request' => new Request(
+                    [],
+                    [
+                        CreateUserRequest::KEY_EMAIL => '',
+                    ],
                 ),
-                'expectedEmail' => '',
+                'expected' => new CreateUserRequest('', ''),
             ],
-            'empty email present' => [
-                'request' => new CreateUserRequest(
-                    new Request(
-                        [],
-                        [
-                            CreateUserRequest::KEY_EMAIL => '',
-                        ],
-                    )
+            'email empty, password missing' => [
+                'request' => new Request(
+                    [],
+                    [
+                        CreateUserRequest::KEY_EMAIL => '',
+                    ],
                 ),
-                'expectedEmail' => '',
+                'expected' => new CreateUserRequest('', ''),
             ],
-            'email present' => [
-                'request' => new CreateUserRequest(
-                    new Request(
-                        [],
-                        [
-                            CreateUserRequest::KEY_EMAIL => 'user@example.com',
-                        ],
-                    )
+            'email empty, password empty' => [
+                'request' => new Request(
+                    [],
+                    [
+                        CreateUserRequest::KEY_EMAIL => '',
+                        CreateUserRequest::KEY_PASSWORD => '',
+                    ],
                 ),
-                'expectedEmail' => 'user@example.com',
+                'expected' => new CreateUserRequest('', ''),
             ],
-        ];
-    }
-
-    /**
-     * @dataProvider getPasswordDataProvider
-     */
-    public function testGetPassword(CreateUserRequest $request, string $expectedPassword): void
-    {
-        self::assertSame($expectedPassword, $request->getPassword());
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    public function getPasswordDataProvider(): array
-    {
-        return [
-            'no password present' => [
-                'request' => new CreateUserRequest(
-                    new Request()
+            'email non-empty, password empty' => [
+                'request' => new Request(
+                    [],
+                    [
+                        CreateUserRequest::KEY_EMAIL => 'user@example.com',
+                        CreateUserRequest::KEY_PASSWORD => '',
+                    ],
                 ),
-                'expectedEmail' => '',
+                'expected' => new CreateUserRequest('user@example.com', ''),
             ],
-            'empty password present' => [
-                'request' => new CreateUserRequest(
-                    new Request(
-                        [],
-                        [
-                            CreateUserRequest::KEY_PASSWORD => '',
-                        ],
-                    )
+            'email non-empty, password non-empty' => [
+                'request' => new Request(
+                    [],
+                    [
+                        CreateUserRequest::KEY_EMAIL => 'user@example.com',
+                        CreateUserRequest::KEY_PASSWORD => 'password!',
+                    ],
                 ),
-                'expectedEmail' => '',
-            ],
-            'password present' => [
-                'request' => new CreateUserRequest(
-                    new Request(
-                        [],
-                        [
-                            CreateUserRequest::KEY_PASSWORD => 'password',
-                        ],
-                    )
-                ),
-                'expectedEmail' => 'password',
+                'expected' => new CreateUserRequest('user@example.com', 'password!'),
             ],
         ];
     }
