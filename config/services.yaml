@@ -44,10 +44,6 @@ services:
         arguments:
             $isReady: '%env(bool:IS_READY)%'
 
-    App\ArgumentResolver\EncapsulatingRequestResolver:
-        tags:
-            - { name: controller.argument_value_resolver, priority: 50 }
-
     app.admin-authenticator-token-extractor:
         class: Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\AuthorizationHeaderTokenExtractor
         arguments:

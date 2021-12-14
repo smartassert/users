@@ -5,18 +5,22 @@ declare(strict_types=1);
 namespace App\Request;
 
 use Symfony\Component\HttpFoundation\Request;
+use webignition\EncapsulatingRequestResolverBundle\Model\EncapsulatingRequestInterface;
 
-class RevokeRefreshTokenRequest extends AbstractEncapsulatingRequest
+class RevokeRefreshTokenRequest implements EncapsulatingRequestInterface
 {
     public const KEY_ID = 'id';
 
-    private string $id = '';
+    public function __construct(
+        private string $id,
+    ) {
+    }
 
-    public function processRequest(Request $request): void
+    public static function create(Request $request): RevokeRefreshTokenRequest
     {
-        $requestData = $request->request;
-
-        $this->id = (string) $requestData->get(self::KEY_ID);
+        return new RevokeRefreshTokenRequest(
+            (string) $request->request->get(self::KEY_ID)
+        );
     }
 
     public function getId(): string
