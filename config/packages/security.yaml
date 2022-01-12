@@ -39,7 +39,6 @@ security:
         api_token_verify:
             pattern: '%route-api-token-verify%'
             stateless: true
-            anonymous: false
             jwt:
                 authenticator: App\Security\Api\VerifyAuthenticator
             provider: jwt
@@ -55,7 +54,6 @@ security:
         frontend_token_verify:
             pattern: '%route-frontend-token-verify%'
             stateless: true
-            anonymous: false
             jwt:
                 authenticator: App\Security\Frontend\VerifyAuthenticator
             provider: jwt
