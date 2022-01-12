@@ -11,7 +11,7 @@
         "doctrine/doctrine-bundle": "^2.5",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.10",
-        "gesdinet/jwt-refresh-token-bundle": "^1",
+        "gesdinet/jwt-refresh-token-bundle": "dev-master#e963f736079214627afb2a0c36386ccd0b56338a",
         "lexik/jwt-authentication-bundle": "^2.14",
         "smartassert/doctrine-inspectors": "^0.1.0",
         "smartassert/invokable-exception-logger": "^0.2.0",
@@ -51,7 +51,13 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "phpstan/extension-installer": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        }
     },
     "autoload": {
         "psr-4": {
