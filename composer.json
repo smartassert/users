@@ -14,7 +14,7 @@
         "lexik/jwt-authentication-bundle": "^2.14",
         "smartassert/doctrine-inspectors": "^0.2.0",
         "smartassert/invokable-exception-logger": "^0.3.0",
-        "smartassert/service-status-inspector": "^0.1.0",
+        "smartassert/service-status-inspector": "^0.2.0",
         "symfony/console": "6.0.*",
         "symfony/dotenv": "6.0.*",
         "symfony/flex": "^2.0",

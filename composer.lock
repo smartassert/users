@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ed78867c38f4ea237843c8341af6667f",
+    "content-hash": "a992d99dd2d9ab5d9cc245b661ac5c34",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2316,24 +2316,23 @@
         },
         {
             "name": "smartassert/service-status-inspector",
-            "version": "0.1",
+            "version": "0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/smartassert/service-status-inspector.git",
-                "reference": "e6ccc95fa9cf38283c7ea55f0df0a5862e6c14c5"
+                "reference": "5a3a7e9007cc7ce51860d84152df6cf8e1533b95"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smartassert/service-status-inspector/zipball/e6ccc95fa9cf38283c7ea55f0df0a5862e6c14c5",
-                "reference": "e6ccc95fa9cf38283c7ea55f0df0a5862e6c14c5",
+                "url": "https://api.github.com/repos/smartassert/service-status-inspector/zipball/5a3a7e9007cc7ce51860d84152df6cf8e1533b95",
+                "reference": "5a3a7e9007cc7ce51860d84152df6cf8e1533b95",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8"
+                "php": "^8.0|^8.1"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.2",
-                "phpstan/phpstan": "^0.12.99",
+                "phpstan/phpstan": "^1.4",
                 "phpunit/phpunit": "^9.5",
                 "squizlabs/php_codesniffer": "^3.6"
             },
@@ -2357,9 +2356,9 @@
             "homepage": "https://github.com/smartassert/service-status-inspector",
             "support": {
                 "issues": "https://github.com/smartassert/service-status-inspector/issues",
-                "source": "https://github.com/smartassert/service-status-inspector/tree/0.1"
+                "source": "https://github.com/smartassert/service-status-inspector/tree/0.2"
             },
-            "time": "2021-10-28T16:17:26+00:00"
+            "time": "2022-01-27T11:14:24+00:00"
         },
         {
             "name": "symfony/cache",
