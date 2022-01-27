@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b2ccc24e1e2ee785e0893232a7113c72",
+    "content-hash": "316578aca75128e6ca1d521bf6865c00",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1447,16 +1447,16 @@
         },
         {
             "name": "gesdinet/jwt-refresh-token-bundle",
-            "version": "dev-master",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/markitosgv/JWTRefreshTokenBundle.git",
-                "reference": "e963f736079214627afb2a0c36386ccd0b56338a"
+                "reference": "1167006f2973064a81f1671e89c3c495969c6a50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/markitosgv/JWTRefreshTokenBundle/zipball/e963f736079214627afb2a0c36386ccd0b56338a",
-                "reference": "e963f736079214627afb2a0c36386ccd0b56338a",
+                "url": "https://api.github.com/repos/markitosgv/JWTRefreshTokenBundle/zipball/1167006f2973064a81f1671e89c3c495969c6a50",
+                "reference": "1167006f2973064a81f1671e89c3c495969c6a50",
                 "shasum": ""
             },
             "require": {
@@ -1465,7 +1465,7 @@
                 "symfony/config": "^4.4|^5.4|^6.0",
                 "symfony/console": "^4.4|^5.4|^6.0",
                 "symfony/dependency-injection": "^4.4|^5.4|^6.0",
-                "symfony/deprecation-contracts": "^2.1",
+                "symfony/deprecation-contracts": "^2.1|^3.0",
                 "symfony/event-dispatcher": "^4.4|^5.4|^6.0",
                 "symfony/http-foundation": "^4.4|^5.4|^6.0",
                 "symfony/http-kernel": "^4.4|^5.4|^6.0",
@@ -1491,7 +1491,6 @@
                 "symfony/cache": "^4.4|^5.4|^6.0",
                 "symfony/security-guard": "^4.4|^5.4"
             },
-            "default-branch": true,
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
@@ -1522,9 +1521,9 @@
             ],
             "support": {
                 "issues": "https://github.com/markitosgv/JWTRefreshTokenBundle/issues",
-                "source": "https://github.com/markitosgv/JWTRefreshTokenBundle/tree/master"
+                "source": "https://github.com/markitosgv/JWTRefreshTokenBundle/tree/v1.0.1"
             },
-            "time": "2022-01-11T19:50:56+00:00"
+            "time": "2022-01-25T11:32:28+00:00"
         },
         {
             "name": "laminas/laminas-code",
@@ -2215,29 +2214,28 @@
         },
         {
             "name": "smartassert/doctrine-inspectors",
-            "version": "0.1",
+            "version": "0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/smartassert/doctrine-inspectors.git",
-                "reference": "8f3e10a1e20c6ed2a40a8e316ec898e1e0c52f8f"
+                "reference": "a1fa04428a881d75e40c91235c2561d6aeff69ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smartassert/doctrine-inspectors/zipball/8f3e10a1e20c6ed2a40a8e316ec898e1e0c52f8f",
-                "reference": "8f3e10a1e20c6ed2a40a8e316ec898e1e0c52f8f",
+                "url": "https://api.github.com/repos/smartassert/doctrine-inspectors/zipball/a1fa04428a881d75e40c91235c2561d6aeff69ed",
+                "reference": "a1fa04428a881d75e40c91235c2561d6aeff69ed",
                 "shasum": ""
             },
             "require": {
                 "doctrine/dbal": "*",
                 "doctrine/orm": "*",
-                "php": ">=8"
+                "php": "^8.0|^8.1"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.2",
                 "mockery/mockery": "^1.4",
                 "phpstan/extension-installer": "^1.1",
-                "phpstan/phpstan": "^0.12.99",
-                "phpstan/phpstan-mockery": "^0.12.14",
+                "phpstan/phpstan": "^1.4",
+                "phpstan/phpstan-mockery": "^1.0",
                 "phpunit/phpunit": "^9.5",
                 "squizlabs/php_codesniffer": "^3.6"
             },
@@ -2261,34 +2259,34 @@
             "homepage": "https://github.com/smartassert/doctrine-inspectors",
             "support": {
                 "issues": "https://github.com/smartassert/doctrine-inspectors/issues",
-                "source": "https://github.com/smartassert/doctrine-inspectors/tree/0.1"
+                "source": "https://github.com/smartassert/doctrine-inspectors/tree/0.2"
             },
-            "time": "2021-10-29T10:27:39+00:00"
+            "time": "2022-01-27T10:25:49+00:00"
         },
         {
             "name": "smartassert/invokable-exception-logger",
-            "version": "0.2",
+            "version": "0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/smartassert/invokable-exception-logger.git",
-                "reference": "5363ff7cc81e7e8d91fedff86ba9afbf68578704"
+                "reference": "116d3e7685cb5c0896e9bc6dfdfafc7d4d24bb0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smartassert/invokable-exception-logger/zipball/5363ff7cc81e7e8d91fedff86ba9afbf68578704",
-                "reference": "5363ff7cc81e7e8d91fedff86ba9afbf68578704",
+                "url": "https://api.github.com/repos/smartassert/invokable-exception-logger/zipball/116d3e7685cb5c0896e9bc6dfdfafc7d4d24bb0e",
+                "reference": "116d3e7685cb5c0896e9bc6dfdfafc7d4d24bb0e",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8",
-                "psr/log": "*"
+                "php": "^8.0|^8.1",
+                "psr/log": "^1.0|^2.0|^3.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.2",
                 "mockery/mockery": "^1.4",
                 "phpstan/extension-installer": "^1.1",
-                "phpstan/phpstan": "^0.12.99",
-                "phpstan/phpstan-mockery": "^0.12.14",
+                "phpstan/phpstan": "^1.4",
+                "phpstan/phpstan-mockery": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^9.5",
                 "squizlabs/php_codesniffer": "^3.6"
             },
@@ -2312,30 +2310,29 @@
             "homepage": "https://github.com/smartassert/invokable-exception-logger",
             "support": {
                 "issues": "https://github.com/smartassert/invokable-exception-logger/issues",
-                "source": "https://github.com/smartassert/invokable-exception-logger/tree/0.2"
+                "source": "https://github.com/smartassert/invokable-exception-logger/tree/0.3"
             },
-            "time": "2021-11-01T09:03:23+00:00"
+            "time": "2022-01-27T11:02:27+00:00"
         },
         {
             "name": "smartassert/service-status-inspector",
-            "version": "0.1",
+            "version": "0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/smartassert/service-status-inspector.git",
-                "reference": "e6ccc95fa9cf38283c7ea55f0df0a5862e6c14c5"
+                "reference": "5a3a7e9007cc7ce51860d84152df6cf8e1533b95"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smartassert/service-status-inspector/zipball/e6ccc95fa9cf38283c7ea55f0df0a5862e6c14c5",
-                "reference": "e6ccc95fa9cf38283c7ea55f0df0a5862e6c14c5",
+                "url": "https://api.github.com/repos/smartassert/service-status-inspector/zipball/5a3a7e9007cc7ce51860d84152df6cf8e1533b95",
+                "reference": "5a3a7e9007cc7ce51860d84152df6cf8e1533b95",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8"
+                "php": "^8.0|^8.1"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.2",
-                "phpstan/phpstan": "^0.12.99",
+                "phpstan/phpstan": "^1.4",
                 "phpunit/phpunit": "^9.5",
                 "squizlabs/php_codesniffer": "^3.6"
             },
@@ -2359,9 +2356,9 @@
             "homepage": "https://github.com/smartassert/service-status-inspector",
             "support": {
                 "issues": "https://github.com/smartassert/service-status-inspector/issues",
-                "source": "https://github.com/smartassert/service-status-inspector/tree/0.1"
+                "source": "https://github.com/smartassert/service-status-inspector/tree/0.2"
             },
-            "time": "2021-10-28T16:17:26+00:00"
+            "time": "2022-01-27T11:14:24+00:00"
         },
         {
             "name": "symfony/cache",
@@ -5879,29 +5876,29 @@
         },
         {
             "name": "webignition/encapsulating-request-resolver-bundle",
-            "version": "0.2",
+            "version": "1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webignition/EncapsulatingRequestResolverBundle.git",
-                "reference": "489a1e636dddb174d3a4c3c9396c96c438ead374"
+                "reference": "850feea0ebe1ef5977ebecbccbd870631f96e0ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webignition/EncapsulatingRequestResolverBundle/zipball/489a1e636dddb174d3a4c3c9396c96c438ead374",
-                "reference": "489a1e636dddb174d3a4c3c9396c96c438ead374",
+                "url": "https://api.github.com/repos/webignition/EncapsulatingRequestResolverBundle/zipball/850feea0ebe1ef5977ebecbccbd870631f96e0ae",
+                "reference": "850feea0ebe1ef5977ebecbccbd870631f96e0ae",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": ">=8.0.2",
-                "symfony/config": "5.4.* || 6.0.*",
-                "symfony/dependency-injection": "5.4.* || 6.0.*",
-                "symfony/http-kernel": "5.4.* || 6.0.*",
-                "symfony/yaml": "5.4.* || 6.0.*"
+                "php": "^8.0|^8.1",
+                "symfony/config": "6.0.*",
+                "symfony/dependency-injection": "6.0.*",
+                "symfony/http-kernel": "6.0.*",
+                "symfony/yaml": "6.0.*"
             },
             "require-dev": {
                 "phpstan/extension-installer": "^1.1",
-                "phpstan/phpstan": "^1.2",
+                "phpstan/phpstan": "^1.4",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^9.5",
                 "squizlabs/php_codesniffer": "^3.6"
@@ -5929,9 +5926,9 @@
             "homepage": "https://github.com/webignition/encapsulating-request-resolver-bundle",
             "support": {
                 "issues": "https://github.com/webignition/EncapsulatingRequestResolverBundle/issues",
-                "source": "https://github.com/webignition/EncapsulatingRequestResolverBundle/tree/0.2"
+                "source": "https://github.com/webignition/EncapsulatingRequestResolverBundle/tree/1.1"
             },
-            "time": "2021-12-14T16:02:26+00:00"
+            "time": "2022-01-20T18:23:08+00:00"
         }
     ],
     "packages-dev": [
@@ -9460,9 +9457,7 @@
     ],
     "aliases": [],
     "minimum-stability": "beta",
-    "stability-flags": {
-        "gesdinet/jwt-refresh-token-bundle": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
