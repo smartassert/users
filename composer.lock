@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ff462b0ab8dcf5b60516faf7b85e0a4b",
+    "content-hash": "747cbea52e5419115333f43645cb86c1",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2214,29 +2214,28 @@
         },
         {
             "name": "smartassert/doctrine-inspectors",
-            "version": "0.1",
+            "version": "0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/smartassert/doctrine-inspectors.git",
-                "reference": "8f3e10a1e20c6ed2a40a8e316ec898e1e0c52f8f"
+                "reference": "a1fa04428a881d75e40c91235c2561d6aeff69ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smartassert/doctrine-inspectors/zipball/8f3e10a1e20c6ed2a40a8e316ec898e1e0c52f8f",
-                "reference": "8f3e10a1e20c6ed2a40a8e316ec898e1e0c52f8f",
+                "url": "https://api.github.com/repos/smartassert/doctrine-inspectors/zipball/a1fa04428a881d75e40c91235c2561d6aeff69ed",
+                "reference": "a1fa04428a881d75e40c91235c2561d6aeff69ed",
                 "shasum": ""
             },
             "require": {
                 "doctrine/dbal": "*",
                 "doctrine/orm": "*",
-                "php": ">=8"
+                "php": "^8.0|^8.1"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.2",
                 "mockery/mockery": "^1.4",
                 "phpstan/extension-installer": "^1.1",
-                "phpstan/phpstan": "^0.12.99",
-                "phpstan/phpstan-mockery": "^0.12.14",
+                "phpstan/phpstan": "^1.4",
+                "phpstan/phpstan-mockery": "^1.0",
                 "phpunit/phpunit": "^9.5",
                 "squizlabs/php_codesniffer": "^3.6"
             },
@@ -2260,9 +2259,9 @@
             "homepage": "https://github.com/smartassert/doctrine-inspectors",
             "support": {
                 "issues": "https://github.com/smartassert/doctrine-inspectors/issues",
-                "source": "https://github.com/smartassert/doctrine-inspectors/tree/0.1"
+                "source": "https://github.com/smartassert/doctrine-inspectors/tree/0.2"
             },
-            "time": "2021-10-29T10:27:39+00:00"
+            "time": "2022-01-27T10:25:49+00:00"
         },
         {
             "name": "smartassert/invokable-exception-logger",
