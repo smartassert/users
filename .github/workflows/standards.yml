@@ -3,7 +3,7 @@ name: Coding Standards
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
 
 jobs:
@@ -25,7 +25,7 @@ jobs:
     strategy:
       matrix:
         operating-system: [ubuntu-latest]
-        php: ['8.0']
+        php: ['8.0', '8.1']
     runs-on: ${{ matrix.operating-system }}
 
     steps:
