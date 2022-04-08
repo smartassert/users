@@ -94,3 +94,5 @@ services:
 
     App\Services\ServiceStatusInspector\JwtConfigurationInspector:
         public: true
+        tags:
+            - { name: 'health_check_bundle.component_inspector', key: 'jwt_configuration' }
