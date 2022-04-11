@@ -271,13 +271,16 @@
         "version": "3.0.2"
     },
     "smartassert/doctrine-inspectors": {
-        "version": "0.1"
+        "version": "1.2"
     },
-    "smartassert/invokable-exception-logger": {
+    "smartassert/health-check-bundle": {
         "version": "0.2"
     },
+    "smartassert/invokable-logger": {
+        "version": "0.3"
+    },
     "smartassert/service-status-inspector": {
-        "version": "0.1"
+        "version": "3.0"
     },
     "squizlabs/php_codesniffer": {
         "version": "3.6",
