@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "71c7d5c8f29ad9f5fcb9308596587cf4",
+    "content-hash": "33d435c02a4ec819d1e57e923c33ba52",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2265,16 +2265,16 @@
         },
         {
             "name": "smartassert/health-check-bundle",
-            "version": "0.2",
+            "version": "2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/smartassert/HealthCheckBundle.git",
-                "reference": "42b68bab02e206442e10129669d3d96d1a13b4b2"
+                "reference": "f2ce7c8a218c1894ced4a079f049492e265c4949"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smartassert/HealthCheckBundle/zipball/42b68bab02e206442e10129669d3d96d1a13b4b2",
-                "reference": "42b68bab02e206442e10129669d3d96d1a13b4b2",
+                "url": "https://api.github.com/repos/smartassert/HealthCheckBundle/zipball/f2ce7c8a218c1894ced4a079f049492e265c4949",
+                "reference": "f2ce7c8a218c1894ced4a079f049492e265c4949",
                 "shasum": ""
             },
             "require": {
@@ -2283,7 +2283,7 @@
                 "php": "^8.1",
                 "smartassert/doctrine-inspectors": "^1.2",
                 "smartassert/invokable-logger": "^0.3.0",
-                "smartassert/service-status-inspector": "^3.0",
+                "smartassert/service-status-inspector": "^5.0",
                 "symfony/config": "^6.0",
                 "symfony/dependency-injection": "^6.0",
                 "symfony/http-foundation": "^6.0",
@@ -2326,9 +2326,9 @@
             "homepage": "https://github.com/smartassert/HealthCheckBundle",
             "support": {
                 "issues": "https://github.com/smartassert/HealthCheckBundle/issues",
-                "source": "https://github.com/smartassert/HealthCheckBundle/tree/0.2"
+                "source": "https://github.com/smartassert/HealthCheckBundle/tree/2.0"
             },
-            "time": "2022-04-08T13:26:52+00:00"
+            "time": "2022-04-22T10:51:19+00:00"
         },
         {
             "name": "smartassert/invokable-logger",
@@ -2383,16 +2383,16 @@
         },
         {
             "name": "smartassert/service-status-inspector",
-            "version": "3.0",
+            "version": "5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/smartassert/service-status-inspector.git",
-                "reference": "cce871440c44cc11140fd4f1db97f4582fb31cf0"
+                "reference": "2d5130add71d50b7ca341a1f30557266868c2b34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smartassert/service-status-inspector/zipball/cce871440c44cc11140fd4f1db97f4582fb31cf0",
-                "reference": "cce871440c44cc11140fd4f1db97f4582fb31cf0",
+                "url": "https://api.github.com/repos/smartassert/service-status-inspector/zipball/2d5130add71d50b7ca341a1f30557266868c2b34",
+                "reference": "2d5130add71d50b7ca341a1f30557266868c2b34",
                 "shasum": ""
             },
             "require": {
@@ -2423,9 +2423,9 @@
             "homepage": "https://github.com/smartassert/service-status-inspector",
             "support": {
                 "issues": "https://github.com/smartassert/service-status-inspector/issues",
-                "source": "https://github.com/smartassert/service-status-inspector/tree/3.0"
+                "source": "https://github.com/smartassert/service-status-inspector/tree/5.0"
             },
-            "time": "2022-04-07T16:56:44+00:00"
+            "time": "2022-04-22T10:01:11+00:00"
         },
         {
             "name": "symfony/cache",
@@ -9528,7 +9528,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.0|^8.1",
+        "php": "^8.1",
         "ext-ctype": "*",
         "ext-iconv": "*"
     },
