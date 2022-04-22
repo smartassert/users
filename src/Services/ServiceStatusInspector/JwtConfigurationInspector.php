@@ -8,12 +8,16 @@ use App\Exception\InvalidJwtKeyException;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\KeyLoader\KeyLoaderInterface;
+use SmartAssert\ServiceStatusInspector\ComponentStatusInspectorInterface;
 
-class JwtConfigurationInspector
+class JwtConfigurationInspector implements ComponentStatusInspectorInterface
 {
+    public const DEFAULT_IDENTIFIER = 'jwt_configuration';
+
     public function __construct(
         private JWTEncoderInterface $jwtEncoder,
         private KeyLoaderInterface $keyLoader,
+        private readonly string $identifier = self::DEFAULT_IDENTIFIER,
     ) {
     }
 
@@ -21,7 +25,7 @@ class JwtConfigurationInspector
      * @throws InvalidJwtKeyException
      * @throws JWTEncodeFailureException
      */
-    public function __invoke(): void
+    public function getStatus(): bool
     {
         $this->verifyKeyContent(
             'public',
@@ -37,6 +41,13 @@ class JwtConfigurationInspector
         );
 
         $this->jwtEncoder->encode([]);
+
+        return true;
+    }
+
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
     }
 
     /**

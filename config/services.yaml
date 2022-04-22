@@ -14,7 +14,9 @@ parameters:
     route-admin-prefix: '/admin'
     route-admin-user-create: '%route-admin-prefix%/user/create'
     route-admin-frontend-refresh-token-revoke: '%route-admin-prefix%/frontend/refresh-token/revoke'
-    route-status: '/'
+    health_check_bundle_status_path: '/'
+    health_check_bundle_enable_status_readiness_inspector: true
+    health_check_bundle_status_is_ready: '%env(bool:IS_READY)%'
 
 services:
     # default configuration for services in *this* file
@@ -37,11 +39,6 @@ services:
     App\Controller\:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
-
-    App\Controller\StatusController:
-        tags: ['controller.service_arguments']
-        arguments:
-            $isReady: '%env(bool:IS_READY)%'
 
     app.admin-authenticator-token-extractor:
         class: Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\AuthorizationHeaderTokenExtractor
@@ -73,7 +70,7 @@ services:
 
     App\Services\ServiceStatusInspector\JwtConfigurationInspector:
         tags:
-            - { name: 'health_check_bundle.component_inspector', key: 'jwt_configuration' }
+            - { name: 'health_check_bundle.component_inspector.health_check' }
 
     Lexik\Bundle\JWTAuthenticationBundle\Services\KeyLoader\KeyLoaderInterface:
         alias: lexik_jwt_authentication.key_loader.raw

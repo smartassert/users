@@ -34,8 +34,8 @@ services:
             $frontendRefreshTokenUrl: '%route-frontend-token-refresh%'
             $adminCreateUserUrl: '%route-admin-user-create%'
             $adminRevokeRefreshTokenUrl: '%route-admin-frontend-refresh-token-revoke%'
-            $healthCheckUrl: '%health_check_bundle_route_path%'
-            $statusUrl: '%route-status%'
+            $healthCheckUrl: '%health_check_bundle_health_check_path%'
+            $statusUrl: '%health_check_bundle_status_path%'
 
     App\Tests\Services\Application\SymfonyClient:
     App\Tests\Services\Application\HttpClient:
@@ -91,8 +91,3 @@ services:
 
     Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface:
         class: Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory
-
-    App\Services\ServiceStatusInspector\JwtConfigurationInspector:
-        public: true
-        tags:
-            - { name: 'health_check_bundle.component_inspector', key: 'jwt_configuration' }

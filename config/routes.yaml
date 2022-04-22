@@ -24,10 +24,5 @@ admin_frontend_refreshtoken_revoke:
   methods: [POST]
   controller: App\Controller\AdminController::revokeRefreshToken
 
-status:
-  path: '%route-status%'
-  methods: [GET]
-  controller: App\Controller\StatusController::get
-
 _health_check_bundle_routes:
   resource: '@HealthCheckBundle/Resources/config/routes.yaml'

@@ -134,7 +134,6 @@ class ApplicationResponseAsserter
     {
         (new JsonResponseAsserter(200))
             ->addBodyAsserter(new ArrayBodyAsserter([
-                'idle' => true,
                 'ready' => $expectedReady,
             ]))
             ->assert($response)
