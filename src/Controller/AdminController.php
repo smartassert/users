@@ -21,12 +21,12 @@ class AdminController
         UserFactory $userFactory,
     ): Response {
         $email = $createUserRequest->getEmail();
-        if ('' === $email) {
+        if (null === $email) {
             return new BadRequestValueMissingResponse('email');
         }
 
         $password = $createUserRequest->getPassword();
-        if ('' === $password) {
+        if (null === $password) {
             return new BadRequestValueMissingResponse('password');
         }
 
