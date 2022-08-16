@@ -26,9 +26,9 @@ class ListTest extends AbstractBaseWebTestCase
         $this->applicationResponseAsserter = $applicationResponseAsserter;
     }
 
-    public function testListUnauthorized(): void
+    public function testListInvalidCredentials(): void
     {
-        $response = $this->application->makeFrontendListApiKeysRequest(...$this->testUserFactory->getCredentials());
+        $response = $this->application->makeFrontendListApiKeysRequest('invalid@example.com', 'password');
 
         $this->applicationResponseAsserter->assertFrontendUnauthorizedResponse($response);
     }
