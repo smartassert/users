@@ -25,6 +25,14 @@ class ApiKeyRepository extends ServiceEntityRepository implements UserLoaderInte
         parent::__construct($registry, ApiKey::class);
     }
 
+    public function add(ApiKey $entity): ApiKey
+    {
+        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()->flush();
+
+        return $entity;
+    }
+
     public function loadUserByIdentifier(string $identifier): ?UserInterface
     {
         $apiKey = $this->find($identifier);
