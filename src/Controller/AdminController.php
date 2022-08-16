@@ -20,8 +20,7 @@ class AdminController
         CreateUserRequest $createUserRequest,
         UserFactory $userFactory,
     ): Response {
-        $email = $createUserRequest->getEmail();
-        if (null === $email) {
+        if (null === $createUserRequest->email) {
             return new BadRequestValueMissingResponse('email');
         }
 
@@ -31,7 +30,7 @@ class AdminController
         }
 
         try {
-            $user = $userFactory->create($email, $password);
+            $user = $userFactory->create($createUserRequest->email, $password);
         } catch (UserAlreadyExistsException $userAlreadyExistsException) {
             return new BadRequestResponse(
                 'User already exists',

@@ -37,14 +37,6 @@ class CreateUserRequest
     /**
      * @return non-empty-string|null
      */
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    /**
-     * @return non-empty-string|null
-     */
     public function getPassword(): ?string
     {
         return $this->password;
