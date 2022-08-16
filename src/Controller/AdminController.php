@@ -16,22 +16,18 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AdminController
 {
-    public function createUser(
-        CreateUserRequest $createUserRequest,
-        UserFactory $userFactory,
-    ): Response {
-        $email = $createUserRequest->getEmail();
-        if ('' === $email) {
+    public function createUser(CreateUserRequest $request, UserFactory $userFactory): Response
+    {
+        if (null === $request->email) {
             return new BadRequestValueMissingResponse('email');
         }
 
-        $password = $createUserRequest->getPassword();
-        if ('' === $password) {
+        if (null === $request->password) {
             return new BadRequestValueMissingResponse('password');
         }
 
         try {
-            $user = $userFactory->create($email, $password);
+            $user = $userFactory->create($request->email, $request->password);
         } catch (UserAlreadyExistsException $userAlreadyExistsException) {
             return new BadRequestResponse(
                 'User already exists',
