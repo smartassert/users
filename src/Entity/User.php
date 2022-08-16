@@ -11,31 +11,22 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\Table(name="`user`")
- */
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: '`user`')]
 class User extends AbstractUser implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSerializable
 {
     public const ROLES = [
         UserRoleInterface::ROLE_USER,
     ];
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="string", length=UserPropertiesInterface::ID_LENGTH, unique=true)
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'string', length: UserPropertiesInterface::ID_LENGTH, unique: true)]
     protected string $id;
 
-    /**
-     * @ORM\Column(type="string", length=254, unique=true)
-     */
+    #[ORM\Column(type: 'string', length: 254, unique: true)]
     protected string $userIdentifier;
 
-    /**
-     * @var string The hashed password
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     protected string $password;
 
     /**
