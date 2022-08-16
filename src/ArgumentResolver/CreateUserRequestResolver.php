@@ -24,13 +24,11 @@ class CreateUserRequestResolver implements ArgumentValueResolverInterface
         if ($this->supports($request, $argument)) {
             $email = $request->request->get(CreateUserRequest::KEY_EMAIL);
             $email = is_string($email) ? trim($email) : null;
-            $email = '' === $email ? null : $email;
 
             $password = $request->request->get(CreateUserRequest::KEY_PASSWORD);
             $password = is_string($password) ? $password : null;
-            $password = '' === $password ? null : $password;
 
-            yield new CreateUserRequest($email, $password);
+            yield new CreateUserRequest('' === $email ? null : $email, '' === $password ? null : $password);
         }
     }
 }
