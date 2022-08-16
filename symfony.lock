@@ -530,9 +530,6 @@
     "theseer/tokenizer": {
         "version": "1.2.1"
     },
-    "webignition/encapsulating-request-resolver-bundle": {
-        "version": "0.1"
-    },
     "webignition/object-reflector": {
         "version": "1.0"
     },
