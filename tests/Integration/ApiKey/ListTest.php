@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Integration\ApiKey;
 
 use App\Tests\Integration\AbstractIntegrationTest;
-use Doctrine\ORM\EntityManagerInterface;
-use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
-use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshTokenRepository;
 
 class ListTest extends AbstractIntegrationTest
 {
