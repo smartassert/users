@@ -22,7 +22,15 @@ class CreateUserRequestResolver implements ArgumentValueResolverInterface
     public function resolve(Request $request, ArgumentMetadata $argument): \Traversable
     {
         if ($this->supports($request, $argument)) {
-            yield CreateUserRequest::create($request);
+            $email = $request->request->get(CreateUserRequest::KEY_EMAIL);
+            $email = is_string($email) ? trim($email) : null;
+            $email = '' === $email ? null : $email;
+
+            $password = $request->request->get(CreateUserRequest::KEY_PASSWORD);
+            $password = is_string($password) ? $password : null;
+            $password = '' === $password ? null : $password;
+
+            yield new CreateUserRequest($email, $password);
         }
     }
 }
