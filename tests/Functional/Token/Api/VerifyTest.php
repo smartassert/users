@@ -31,7 +31,7 @@ class VerifyTest extends AbstractVerifyTest
 
         $user = $testUserFactory->create();
         $apiKey = $apiKeyFactory->create('api key label', $user);
-        $createResponse = $this->application->makeApiCreateTokenRequest((string) $apiKey);
+        $createResponse = $this->application->makeApiCreateTokenRequest($apiKey->getId());
 
         $this->removeAllUsers();
 

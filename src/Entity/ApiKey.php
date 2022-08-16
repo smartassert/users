@@ -8,7 +8,7 @@ use App\Repository\ApiKeyRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ApiKeyRepository::class)]
-class ApiKey implements \Stringable
+class ApiKey
 {
     #[ORM\Id]
     #[ORM\Column(type: 'string', length: ApiKeyPropertiesInterface::ID_LENGTH, unique: true)]
@@ -26,11 +26,6 @@ class ApiKey implements \Stringable
         $this->id = $id;
         $this->label = $label;
         $this->owner = $owner;
-    }
-
-    public function __toString()
-    {
-        return $this->id;
     }
 
     public function getId(): string

@@ -23,7 +23,7 @@ class CreateTest extends AbstractIntegrationTest
         $user = $this->getTestUser();
         $apiKey = $this->apiKeyFactory->create('api key label', $user);
 
-        $response = $this->application->makeApiCreateTokenRequest((string) $apiKey);
+        $response = $this->application->makeApiCreateTokenRequest($apiKey->getId());
 
         $this->applicationResponseAsserter->assertApiTokenCreateSuccessResponse($response, $user);
     }
