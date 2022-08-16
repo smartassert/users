@@ -10,20 +10,19 @@ class RevokeRefreshTokenRequest
 {
     public const KEY_ID = 'id';
 
+    /**
+     * @param null|non-empty-string $id
+     */
     public function __construct(
-        private string $id,
+        public readonly ?string $id,
     ) {
     }
 
     public static function create(Request $request): RevokeRefreshTokenRequest
     {
-        return new RevokeRefreshTokenRequest(
-            (string) $request->request->get(self::KEY_ID)
-        );
-    }
+        $id = $request->request->get(self::KEY_ID);
+        $id = is_string($id) ? trim($id) : null;
 
-    public function getId(): string
-    {
-        return $this->id;
+        return new RevokeRefreshTokenRequest('' === $id ? null : $id);
     }
 }

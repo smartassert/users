@@ -46,14 +46,13 @@ class AdminController
 
     public function revokeRefreshToken(
         RevokeRefreshTokenRequest $request,
-        UserRefreshTokenManager $userRefreshTokenManager,
+        UserRefreshTokenManager $tokenManager,
     ): Response {
-        $id = $request->getId();
-        if ('' === $id) {
+        if (null === $request->id) {
             return new BadRequestValueMissingResponse('id');
         }
 
-        $userRefreshTokenManager->deleteByUserId($id);
+        $tokenManager->deleteByUserId($request->id);
 
         return new Response();
     }

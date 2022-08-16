@@ -22,7 +22,11 @@ class RevokeRefreshTokenRequestResolver implements ArgumentValueResolverInterfac
     public function resolve(Request $request, ArgumentMetadata $argument): \Traversable
     {
         if ($this->supports($request, $argument)) {
-            yield RevokeRefreshTokenRequest::create($request);
+            $id = $request->request->get(RevokeRefreshTokenRequest::KEY_ID);
+            $id = is_string($id) ? trim($id) : null;
+            $id = '' === $id ? null : $id;
+
+            yield new RevokeRefreshTokenRequest($id);
         }
     }
 }
