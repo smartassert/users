@@ -7,6 +7,7 @@ namespace App\Tests\Functional\Token\Api;
 use App\Services\ApiKeyFactory;
 use App\Tests\Functional\Token\AbstractTokenTest;
 use App\Tests\Services\TestUserFactory;
+use webignition\ObjectReflector\ObjectReflector;
 
 class CreateTest extends AbstractTokenTest
 {
@@ -22,8 +23,10 @@ class CreateTest extends AbstractTokenTest
 
         $user = $testUserFactory->create();
         $apiKey = $apiKeyFactory->create('api key label', $user);
+        $apiKeyId = ObjectReflector::getProperty($apiKey, 'id');
+        self::assertIsString($apiKeyId);
 
-        $response = $this->application->makeApiCreateTokenRequest($apiKey->getId());
+        $response = $this->application->makeApiCreateTokenRequest($apiKeyId);
 
         $this->applicationResponseAsserter->assertApiTokenCreateSuccessResponse($response, $user);
     }

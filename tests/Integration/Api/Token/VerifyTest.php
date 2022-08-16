@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Api\Token;
 
 use App\Tests\Integration\AbstractIntegrationTest;
+use webignition\ObjectReflector\ObjectReflector;
 
 class VerifyTest extends AbstractIntegrationTest
 {
@@ -44,8 +45,10 @@ class VerifyTest extends AbstractIntegrationTest
 
         $user = $this->getTestUser();
         $apiKey = $this->apiKeyFactory->create('api key label', $user);
+        $apiKeyId = ObjectReflector::getProperty($apiKey, 'id');
+        self::assertIsString($apiKeyId);
 
-        $createResponse = $this->application->makeApiCreateTokenRequest($apiKey->getId());
+        $createResponse = $this->application->makeApiCreateTokenRequest($apiKeyId);
         $createResponseData = json_decode($createResponse->getBody()->getContents(), true);
         self::assertIsArray($createResponseData);
         self::assertArrayHasKey('token', $createResponseData);

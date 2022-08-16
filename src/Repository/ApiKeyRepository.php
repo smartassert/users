@@ -37,7 +37,7 @@ class ApiKeyRepository extends ServiceEntityRepository implements UserLoaderInte
     {
         $apiKey = $this->find($identifier);
         if ($apiKey instanceof ApiKey) {
-            return $apiKey->getOwner();
+            return $apiKey->owner;
         }
 
         return null;

@@ -8,6 +8,7 @@ use App\Services\ApiKeyFactory;
 use App\Tests\Functional\Token\AbstractVerifyTest;
 use App\Tests\Services\TestUserFactory;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
+use webignition\ObjectReflector\ObjectReflector;
 
 class VerifyTest extends AbstractVerifyTest
 {
@@ -31,7 +32,10 @@ class VerifyTest extends AbstractVerifyTest
 
         $user = $testUserFactory->create();
         $apiKey = $apiKeyFactory->create('api key label', $user);
-        $createResponse = $this->application->makeApiCreateTokenRequest($apiKey->getId());
+        $apiKeyId = ObjectReflector::getProperty($apiKey, 'id');
+        self::assertIsString($apiKeyId);
+
+        $createResponse = $this->application->makeApiCreateTokenRequest($apiKeyId);
 
         $this->removeAllUsers();
 
