@@ -22,9 +22,6 @@ class ResponseAsserter
      */
     private array $bodyAsserters = [];
 
-    /**
-     * @param int $expectedStatusCode
-     */
     public function __construct(
         private int $expectedStatusCode
     ) {
