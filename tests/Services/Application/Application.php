@@ -109,6 +109,19 @@ class Application
         return $this->client->makeRequest('GET', $this->routes->statusUrl);
     }
 
+    public function makeFrontendListApiKeysRequest(string $userIdentifier, string $password): ResponseInterface
+    {
+        return $this->client->makeRequest(
+            'GET',
+            $this->routes->frontendListApiKeysUrl,
+            ['Content-Type' => 'application/json'],
+            (string) json_encode([
+                'username' => $userIdentifier,
+                'password' => $password,
+            ])
+        );
+    }
+
     private function makeVerifyTokenRequest(string $url, ?string $jwt): ResponseInterface
     {
         $headers = (is_string($jwt))
