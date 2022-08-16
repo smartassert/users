@@ -33,12 +33,4 @@ class CreateUserRequest
 
         return new CreateUserRequest($email, $password);
     }
-
-    /**
-     * @return non-empty-string|null
-     */
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
 }

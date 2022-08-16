@@ -24,13 +24,12 @@ class AdminController
             return new BadRequestValueMissingResponse('email');
         }
 
-        $password = $createUserRequest->getPassword();
-        if (null === $password) {
+        if (null === $createUserRequest->password) {
             return new BadRequestValueMissingResponse('password');
         }
 
         try {
-            $user = $userFactory->create($createUserRequest->email, $password);
+            $user = $userFactory->create($createUserRequest->email, $createUserRequest->password);
         } catch (UserAlreadyExistsException $userAlreadyExistsException) {
             return new BadRequestResponse(
                 'User already exists',
