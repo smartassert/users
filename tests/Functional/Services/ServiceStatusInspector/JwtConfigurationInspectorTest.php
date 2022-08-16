@@ -27,7 +27,7 @@ class JwtConfigurationInspectorTest extends AbstractBaseFunctionalTest
 
     public function testInvokeSuccess(): void
     {
-        ($this->inspector)->getStatus();
+        $this->inspector->getStatus();
         self::expectNotToPerformAssertions();
     }
 
@@ -46,7 +46,7 @@ class JwtConfigurationInspectorTest extends AbstractBaseFunctionalTest
         );
 
         self::expectExceptionObject($expectedException);
-        ($this->inspector)->getStatus();
+        $this->inspector->getStatus();
     }
 
     /**
@@ -157,6 +157,6 @@ class JwtConfigurationInspectorTest extends AbstractBaseFunctionalTest
 
         self::expectExceptionObject($encoderException);
 
-        ($this->inspector)->getStatus();
+        $this->inspector->getStatus();
     }
 }
