@@ -9,6 +9,5 @@ return [
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
     Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle::class => ['all' => true],
     Gesdinet\JWTRefreshTokenBundle\GesdinetJWTRefreshTokenBundle::class => ['all' => true],
-    webignition\EncapsulatingRequestResolverBundle\EncapsulatingRequestResolverBundle::class => ['all' => true],
     SmartAssert\HealthCheckBundle\HealthCheckBundle::class => ['all' => true],
 ];

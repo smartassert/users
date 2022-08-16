@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "33d435c02a4ec819d1e57e923c33ba52",
+    "content-hash": "fbd3c9d55b65cc5cead42d68e162a810",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -5940,62 +5940,6 @@
                 }
             ],
             "time": "2021-12-16T22:13:01+00:00"
-        },
-        {
-            "name": "webignition/encapsulating-request-resolver-bundle",
-            "version": "1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webignition/EncapsulatingRequestResolverBundle.git",
-                "reference": "850feea0ebe1ef5977ebecbccbd870631f96e0ae"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/webignition/EncapsulatingRequestResolverBundle/zipball/850feea0ebe1ef5977ebecbccbd870631f96e0ae",
-                "reference": "850feea0ebe1ef5977ebecbccbd870631f96e0ae",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "php": "^8.0|^8.1",
-                "symfony/config": "6.0.*",
-                "symfony/dependency-injection": "6.0.*",
-                "symfony/http-kernel": "6.0.*",
-                "symfony/yaml": "6.0.*"
-            },
-            "require-dev": {
-                "phpstan/extension-installer": "^1.1",
-                "phpstan/phpstan": "^1.4",
-                "phpstan/phpstan-phpunit": "^1.0",
-                "phpunit/phpunit": "^9.5",
-                "squizlabs/php_codesniffer": "^3.6"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "webignition\\EncapsulatingRequestResolverBundle\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jon Cram",
-                    "email": "webignition@gmail.com"
-                }
-            ],
-            "description": "Symfony controller action argument resolver for types that extend Symfony\\Component\\HttpFoundation\\Request",
-            "homepage": "https://github.com/webignition/encapsulating-request-resolver-bundle",
-            "support": {
-                "issues": "https://github.com/webignition/EncapsulatingRequestResolverBundle/issues",
-                "source": "https://github.com/webignition/EncapsulatingRequestResolverBundle/tree/1.1"
-            },
-            "time": "2022-01-20T18:23:08+00:00"
         }
     ],
     "packages-dev": [

@@ -22,8 +22,7 @@
         "symfony/runtime": "6.0.*",
         "symfony/security-bundle": "6.0.*",
         "symfony/uid": "6.0.*",
-        "symfony/yaml": "6.0.*",
-        "webignition/encapsulating-request-resolver-bundle": "^1.1"
+        "symfony/yaml": "6.0.*"
     },
     "require-dev": {
         "guzzlehttp/guzzle": "^7.3",

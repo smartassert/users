@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Request;
 
 use Symfony\Component\HttpFoundation\Request;
-use webignition\EncapsulatingRequestResolverBundle\Model\EncapsulatingRequestInterface;
 
-class RevokeRefreshTokenRequest implements EncapsulatingRequestInterface
+class RevokeRefreshTokenRequest
 {
     public const KEY_ID = 'id';
 

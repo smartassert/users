@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Request;
 
 use Symfony\Component\HttpFoundation\Request;
-use webignition\EncapsulatingRequestResolverBundle\Model\EncapsulatingRequestInterface;
 
-class CreateUserRequest implements EncapsulatingRequestInterface
+class CreateUserRequest
 {
     public const KEY_EMAIL = 'email';
     public const KEY_PASSWORD = 'password';
