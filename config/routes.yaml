@@ -17,6 +17,7 @@ api_token_verify:
 
 admin_user_create:
   path: '%route-admin-user-create%'
+  methods: [POST]
   controller: App\Controller\AdminController::createUser
 
 admin_frontend_refreshtoken_revoke:
