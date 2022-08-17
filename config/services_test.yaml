@@ -91,3 +91,14 @@ services:
 
     Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface:
         class: Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory
+
+    App\Tests\Services\ApplicationClient\ClientFactory:
+        public: true
+
+    SmartAssert\SymfonyTestClient\SymfonyClient:
+        public: true
+
+    SmartAssert\SymfonyTestClient\HttpClient:
+        public: true
+        arguments:
+            $httpClient: '@app.tests.integration.http.client'
