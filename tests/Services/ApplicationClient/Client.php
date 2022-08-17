@@ -63,4 +63,42 @@ class Client
             http_build_query($payload)
         );
     }
+
+    public function makeApiCreateTokenRequest(string $apiKey, string $method = 'POST'): ResponseInterface
+    {
+        $headers = [
+            'Authorization' => $apiKey,
+        ];
+
+        return $this->client->makeRequest(
+            $method,
+            $this->router->generate('api_token_create'),
+            $headers
+        );
+    }
+
+    public function makeApiVerifyTokenRequest(?string $jwt, string $method = 'GET'): ResponseInterface
+    {
+        $headers = (is_string($jwt))
+            ? ['Authorization' => 'Bearer ' . $jwt]
+            : [];
+
+        return $this->client->makeRequest(
+            $method,
+            $this->router->generate('api_token_verify'),
+            $headers
+        );
+    }
+
+    public function makeFrontendRefreshTokenRequest(string $refreshToken, string $method = 'POST'): ResponseInterface
+    {
+        return $this->client->makeRequest(
+            $method,
+            $this->router->generate('frontend_token_refresh'),
+            ['Content-Type' => 'application/json'],
+            (string) json_encode([
+                'refresh_token' => $refreshToken
+            ])
+        );
+    }
 }
