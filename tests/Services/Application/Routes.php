@@ -16,7 +16,6 @@ class Routes
         public string $adminRevokeRefreshTokenUrl,
         public string $healthCheckUrl,
         public string $statusUrl,
-        public string $frontendListApiKeysUrl,
     ) {
     }
 }

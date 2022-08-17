@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ApplicationResponseAsserter
 {
     public function __construct(
-        private readonly JwtTokenBodyAsserterFactory $jwtTokenBodyAsserterFactory,
+        private JwtTokenBodyAsserterFactory $jwtTokenBodyAsserterFactory,
     ) {
     }
 
@@ -113,21 +113,6 @@ class ApplicationResponseAsserter
         Assert::assertSame('', $response->getBody()->getContents());
     }
 
-    public function assertFrontendUnauthorizedResponse(ResponseInterface $response): void
-    {
-        $expectedData = [
-            'error' => 'Invalid credentials.',
-        ];
-
-        $bodyAsserter = new ArrayBodyAsserter($expectedData);
-        $bodyAsserter = $bodyAsserter->errorOnAdditionalActualKeys();
-
-        (new JsonResponseAsserter(401))
-            ->addBodyAsserter($bodyAsserter)
-            ->assert($response)
-        ;
-    }
-
     public function assertHealthCheckResponse(ResponseInterface $response): void
     {
         $expectedData = [
@@ -151,17 +136,6 @@ class ApplicationResponseAsserter
             ->addBodyAsserter(new ArrayBodyAsserter([
                 'ready' => $expectedReady,
             ]))
-            ->assert($response)
-        ;
-    }
-
-    /**
-     * @param array<int, array{label: non-empty-string, key: non-empty-string}> $expected
-     */
-    public function assertFrontendListApiKeysResponse(ResponseInterface $response, array $expected): void
-    {
-        (new JsonResponseAsserter(200))
-            ->addBodyAsserter(new ArrayBodyAsserter($expected))
             ->assert($response)
         ;
     }

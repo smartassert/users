@@ -36,7 +36,6 @@ services:
             $adminRevokeRefreshTokenUrl: '%route-admin-frontend-refresh-token-revoke%'
             $healthCheckUrl: '%health_check_bundle_health_check_path%'
             $statusUrl: '%health_check_bundle_status_path%'
-            $frontendListApiKeysUrl: '%route-frontend-apikey-list%'
 
     App\Tests\Services\Application\SymfonyClient:
     App\Tests\Services\Application\HttpClient:
