@@ -16,22 +16,51 @@ class Client
     ) {
     }
 
-    /**
-     * @param array<mixed>          $routeParameters
-     * @param array<string, string> $headers
-     */
-    public function makeRequest(
-        string $method,
-        string $routeName,
-        array $routeParameters,
-        array $headers = [],
-        ?string $body = null
+    public function makeAdminRevokeRefreshTokenRequest(
+        string $userId,
+        string $adminToken,
+        string $method = 'POST'
     ): ResponseInterface {
+        $headers = [
+            'Authorization' => $adminToken,
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        ];
+
         return $this->client->makeRequest(
             $method,
-            $this->router->generate($routeName, $routeParameters),
+            $this->router->generate('admin_frontend_refreshtoken_revoke'),
             $headers,
-            $body
+            http_build_query([
+                'id' => $userId,
+            ])
+        );
+    }
+
+    public function makeAdminCreateUserRequest(
+        ?string $email,
+        ?string $password,
+        string $adminToken,
+        string $method = 'POST'
+    ): ResponseInterface {
+        $headers = [
+            'Authorization' => $adminToken,
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        ];
+
+        $payload = [];
+        if (is_string($email)) {
+            $payload['email'] = $email;
+        }
+
+        if (is_string($password)) {
+            $payload['password'] = $password;
+        }
+
+        return $this->client->makeRequest(
+            $method,
+            $this->router->generate('admin_user_create'),
+            $headers,
+            http_build_query($payload)
         );
     }
 }
