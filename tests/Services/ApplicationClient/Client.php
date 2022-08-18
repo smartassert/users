@@ -130,4 +130,9 @@ class Client
             $headers
         );
     }
+
+    public function makeStatusRequest(): ResponseInterface
+    {
+        return $this->client->makeRequest('GET', $this->router->generate('status'));
+    }
 }
