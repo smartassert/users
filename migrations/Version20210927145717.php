@@ -20,7 +20,7 @@ final class Version20210927145717 extends AbstractMigration
             CREATE TABLE api_key (
                 id VARCHAR(32) NOT NULL, 
                 owner_id VARCHAR(32) NOT NULL, 
-                label VARCHAR(255) NOT NULL, 
+                label VARCHAR(255), 
                 PRIMARY KEY(id)
             )
         ');
