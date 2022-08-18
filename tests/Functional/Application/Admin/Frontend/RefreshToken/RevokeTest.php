@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Integration\Admin\Frontend\RefreshToken;
+namespace App\Tests\Functional\Application\Admin\Frontend\RefreshToken;
 
 use App\Tests\Application\Admin\Frontend\RefreshToken\AbstractRevokeTest;
-use App\Tests\Integration\Admin\GetAdminTokenTrait;
-use App\Tests\Integration\GetClientAdapterTrait;
+use App\Tests\Functional\Application\Admin\GetAdminTokenTrait;
+use App\Tests\Functional\Application\GetClientAdapterTrait;
 
 class RevokeTest extends AbstractRevokeTest
 {

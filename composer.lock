@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "140a1b402cc8833eb44029c97bf604f5",
+    "content-hash": "4178f28473145997a8a8e69434ac201c",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -8774,6 +8774,62 @@
                 }
             ],
             "time": "2020-09-28T06:39:44+00:00"
+        },
+        {
+            "name": "smartassert/symfony-test-client",
+            "version": "0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/smartassert/symfony-test-client.git",
+                "reference": "9d499d159c4317e49520172cbd360ef7fa8f4995"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/smartassert/symfony-test-client/zipball/9d499d159c4317e49520172cbd360ef7fa8f4995",
+                "reference": "9d499d159c4317e49520172cbd360ef7fa8f4995",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1",
+                "psr/http-client": "^1.0",
+                "psr/http-factory": "^1.0",
+                "psr/http-message": "^1.0",
+                "symfony/browser-kit": "^6.0",
+                "symfony/framework-bundle": "^6.0",
+                "symfony/psr-http-message-bridge": "^2.1"
+            },
+            "require-dev": {
+                "guzzlehttp/guzzle": "^7.4",
+                "mockery/mockery": "^1.5",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan": "^1.5",
+                "phpstan/phpstan-mockery": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.1",
+                "phpunit/phpunit": "^9.5",
+                "squizlabs/php_codesniffer": "^3.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SmartAssert\\SymfonyTestClient\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jon Cram",
+                    "email": "webignition@gmail.com"
+                }
+            ],
+            "homepage": "https://github.com/smartassert/symfony-test-client",
+            "support": {
+                "issues": "https://github.com/smartassert/symfony-test-client/issues",
+                "source": "https://github.com/smartassert/symfony-test-client/tree/0.1"
+            },
+            "time": "2022-03-31T15:46:42+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",

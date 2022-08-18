@@ -22,40 +22,7 @@ services:
     App\Tests\Services\UserRemover:
         public: true
 
-    App\Tests\Services\Asserter\ResponseAsserter\JwtTokenBodyAsserterFactory:
-        public: true
-
-    App\Tests\Services\Application\Routes:
-        arguments:
-            $apiCreateTokenUrl: '%route-api-token-create%'
-            $apiVerifyTokenUrl: '%route-api-token-verify%'
-            $frontendCreateTokenUrl: '%route-frontend-token-create%'
-            $frontendVerifyTokenUrl: '%route-frontend-token-verify%'
-            $frontendRefreshTokenUrl: '%route-frontend-token-refresh%'
-            $adminCreateUserUrl: '%route-admin-user-create%'
-            $adminRevokeRefreshTokenUrl: '%route-admin-frontend-refresh-token-revoke%'
-            $healthCheckUrl: '%health_check_bundle_health_check_path%'
-            $statusUrl: '%health_check_bundle_status_path%'
-
-    App\Tests\Services\Application\SymfonyClient:
-    App\Tests\Services\Application\HttpClient:
-
-    app.tests.services.application.functional:
-        public: true
-        class: App\Tests\Services\Application\Application
-        arguments:
-            $client: '@App\Tests\Services\Application\SymfonyClient'
-
-    app.tests.services.application.integration:
-        public: true
-        class: App\Tests\Services\Application\Application
-        arguments:
-            $client: '@App\Tests\Services\Application\HttpClient'
-
     App\Tests\Services\RefreshTokenManager:
-        public: true
-
-    App\Tests\Services\ApplicationResponseAsserter:
         public: true
 
     app.tests.integration.http.client:
@@ -91,3 +58,14 @@ services:
 
     Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface:
         class: Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory
+
+    App\Tests\Services\ApplicationClient\ClientFactory:
+        public: true
+
+    SmartAssert\SymfonyTestClient\SymfonyClient:
+        public: true
+
+    SmartAssert\SymfonyTestClient\HttpClient:
+        public: true
+        arguments:
+            $httpClient: '@app.tests.integration.http.client'

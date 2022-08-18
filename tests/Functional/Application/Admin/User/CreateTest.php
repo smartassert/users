@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Integration\Admin\User;
+namespace App\Tests\Functional\Application\Admin\User;
 
 use App\Tests\Application\Admin\User\AbstractCreateTest;
-use App\Tests\Integration\Admin\GetAdminTokenTrait;
-use App\Tests\Integration\GetClientAdapterTrait;
+use App\Tests\Functional\Application\Admin\GetAdminTokenTrait;
+use App\Tests\Functional\Application\GetClientAdapterTrait;
 
 class CreateTest extends AbstractCreateTest
 {
