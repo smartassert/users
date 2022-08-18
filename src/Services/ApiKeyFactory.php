@@ -16,7 +16,7 @@ class ApiKeyFactory
     ) {
     }
 
-    public function create(?string $label, User $user): ApiKey
+    public function create(User $user, ?string $label = null): ApiKey
     {
         $key = $this->repository->findOneBy([
             'owner' => $user,

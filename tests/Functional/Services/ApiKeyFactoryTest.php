@@ -42,7 +42,7 @@ class ApiKeyFactoryTest extends AbstractBaseFunctionalTest
 
         $label = 'api key label';
 
-        $apiKey = $this->apiKeyFactory->create($label, $this->user);
+        $apiKey = $this->apiKeyFactory->create($this->user, $label);
         self::assertCount(1, $this->apiKeyRepository->findAll());
         self::assertSame($this->user, $apiKey->owner);
 
@@ -60,9 +60,9 @@ class ApiKeyFactoryTest extends AbstractBaseFunctionalTest
     {
         self::assertCount(0, $this->apiKeyRepository->findAll());
 
-        $this->apiKeyFactory->create($label, $this->user);
-        $this->apiKeyFactory->create($label, $this->user);
-        $this->apiKeyFactory->create($label, $this->user);
+        $this->apiKeyFactory->create($this->user, $label);
+        $this->apiKeyFactory->create($this->user, $label);
+        $this->apiKeyFactory->create($this->user, $label);
 
         self::assertCount(1, $this->apiKeyRepository->findAll());
     }

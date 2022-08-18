@@ -9,6 +9,7 @@ use App\Request\CreateUserRequest;
 use App\Request\RevokeRefreshTokenRequest;
 use App\Response\BadRequestResponse;
 use App\Response\BadRequestValueMissingResponse;
+use App\Services\ApiKeyFactory;
 use App\Services\UserFactory;
 use App\Services\UserRefreshTokenManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,8 +17,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AdminController
 {
-    public function createUser(CreateUserRequest $request, UserFactory $userFactory): Response
-    {
+    public function createUser(
+        CreateUserRequest $request,
+        UserFactory $userFactory,
+        ApiKeyFactory $apiKeyFactory,
+    ): Response {
         if (null === $request->email) {
             return new BadRequestValueMissingResponse('email');
         }
@@ -34,6 +38,8 @@ class AdminController
                 ['user' => $userAlreadyExistsException->getUser()],
             );
         }
+
+        $apiKeyFactory->create($user);
 
         return new JsonResponse([
             'user' => $user,
