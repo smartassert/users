@@ -103,7 +103,7 @@ abstract class AbstractCreateVerifyTest extends AbstractApplicationTest
 
         $apiKeyFactory = self::getContainer()->get(ApiKeyFactory::class);
         \assert($apiKeyFactory instanceof ApiKeyFactory);
-        $apiKey = $apiKeyFactory->create('api key label', $user);
+        $apiKey = $apiKeyFactory->create($user);
         $apiKeyId = ObjectReflector::getProperty($apiKey, 'id');
         self::assertIsString($apiKeyId);
 
