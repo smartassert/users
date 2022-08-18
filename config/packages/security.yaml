@@ -57,6 +57,11 @@ security:
             jwt:
                 authenticator: App\Security\Frontend\VerifyAuthenticator
             provider: jwt
+        frontend_apikey_list:
+            pattern: '%route-frontend-apikey-list%'
+            stateless: true
+            jwt: ~
+            provider: jwt
         admin:
             pattern:  '%route-admin-prefix%'
             stateless: true
@@ -80,6 +85,7 @@ security:
         - { path: '%route-frontend-token-refresh%', roles: PUBLIC_ACCESS }
         - { path: '%route-frontend-token-create%', roles: PUBLIC_ACCESS }
         - { path: '%route-frontend-token-verify%', roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
+        - { path: '%route-frontend-apikey-list%', roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
         - { path: '%route-admin-prefix%', roles: !php/const App\Security\UserRoleInterface::ROLE_ADMIN }
         - { path: '%route-api-token-create%', roles: PUBLIC_ACCESS }
         - { path: '%route-api-token-verify%', roles: !php/const App\Security\UserRoleInterface::ROLE_USER }

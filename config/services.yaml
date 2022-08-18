@@ -9,6 +9,7 @@ parameters:
     route-frontend-token-create: '/frontend/token/create'
     route-frontend-token-verify: '/frontend/token/verify'
     route-frontend-token-refresh: '/frontend/token/refresh'
+    route-frontend-apikey-list: '/frontend/apikey/list'
     route-api-token-create: '/api/token/create'
     route-api-token-verify: '/api/token/verify'
     route-admin-prefix: '/admin'
