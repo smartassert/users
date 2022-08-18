@@ -8,14 +8,15 @@ frontend_token_create:
 
 frontend_token_verify:
   path: '%route-frontend-token-verify%'
+  methods: [GET]
 
 api_token_create:
-  methods: [POST]
   path: '%route-api-token-create%'
+  methods: [POST]
 
 api_token_verify:
-  methods: [GET]
   path: '%route-api-token-verify%'
+  methods: [GET]
 
 admin_user_create:
   path: '%route-admin-user-create%'
