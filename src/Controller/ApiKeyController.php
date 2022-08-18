@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ApiKeyController
 {
-    public function list(UserInterface $user): Response
+    public function list(?UserInterface $user): Response
     {
         return new JsonResponse([]);
     }

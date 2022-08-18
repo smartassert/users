@@ -118,6 +118,19 @@ class Client
         );
     }
 
+    public function makeFrontendListApiKeysRequest(?string $jwt, string $method = 'GET'): ResponseInterface
+    {
+        $headers = (is_string($jwt))
+            ? ['Authorization' => 'Bearer ' . $jwt]
+            : [];
+
+        return $this->client->makeRequest(
+            $method,
+            $this->router->generate('frontend_apikey_list'),
+            $headers
+        );
+    }
+
     public function makeFrontendVerifyTokenRequest(?string $jwt, string $method = 'GET'): ResponseInterface
     {
         $headers = (is_string($jwt))
