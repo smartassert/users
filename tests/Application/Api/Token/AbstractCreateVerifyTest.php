@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Services\ApiKeyFactory;
 use App\Tests\Application\AbstractApplicationTest;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use webignition\ObjectReflector\ObjectReflector;
 
 abstract class AbstractCreateVerifyTest extends AbstractApplicationTest
@@ -106,16 +107,28 @@ abstract class AbstractCreateVerifyTest extends AbstractApplicationTest
         $apiKeyId = ObjectReflector::getProperty($apiKey, 'id');
         self::assertIsString($apiKeyId);
 
-        $response = $this->applicationClient->makeApiCreateTokenRequest($apiKeyId);
+        $createResponse = $this->applicationClient->makeApiCreateTokenRequest($apiKeyId);
+        self::assertSame(200, $createResponse->getStatusCode());
+        self::assertSame('application/json', $createResponse->getHeaderLine('content-type'));
 
-        self::assertSame(200, $response->getStatusCode());
-        self::assertSame('application/json', $response->getHeaderLine('content-type'));
+        $createData = json_decode($createResponse->getBody()->getContents(), true);
+        self::assertIsArray($createData);
+        self::assertArrayHasKey('token', $createData);
 
-        $responseData = json_decode($response->getBody()->getContents(), true);
-        self::assertIsArray($responseData);
-        self::assertArrayHasKey('token', $responseData);
+        $token = $createData['token'];
+        self::assertIsString($token);
 
-        $verifyResponse = $this->applicationClient->makeApiVerifyTokenRequest($responseData['token']);
+        $tokenManager = self::getContainer()->get(JWTTokenManagerInterface::class);
+        \assert($tokenManager instanceof JWTTokenManagerInterface);
+
+        $tokenData = $tokenManager->parse($token);
+        self::assertIsArray($tokenData);
+        self::assertSame($user->getId(), $tokenData['sub']);
+        self::assertSame($user->getUserIdentifier(), $tokenData['email']);
+        self::assertSame(['api'], $tokenData['aud']);
+        self::assertSame(['ROLE_USER'], $tokenData['roles']);
+
+        $verifyResponse = $this->applicationClient->makeApiVerifyTokenRequest($token);
         self::assertSame(200, $verifyResponse->getStatusCode());
     }
 
