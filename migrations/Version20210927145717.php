@@ -31,6 +31,7 @@ final class Version20210927145717 extends AbstractMigration
                 FOREIGN KEY (owner_id) REFERENCES "user" (id) 
                 NOT DEFERRABLE INITIALLY IMMEDIATE
         ');
+        $this->addSql('CREATE UNIQUE INDEX owner_label_idx ON api_key (owner_id, label)');
     }
 
     public function down(Schema $schema): void
