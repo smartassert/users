@@ -101,4 +101,33 @@ class Client
             ])
         );
     }
+
+    public function makeFrontendCreateTokenRequest(
+        string $userIdentifier,
+        string $password,
+        string $method = 'POST'
+    ): ResponseInterface {
+        return $this->client->makeRequest(
+            $method,
+            $this->router->generate('frontend_token_create'),
+            ['Content-Type' => 'application/json'],
+            (string) json_encode([
+                'username' => $userIdentifier,
+                'password' => $password,
+            ])
+        );
+    }
+
+    public function makeFrontendVerifyTokenRequest(?string $jwt, string $method = 'GET'): ResponseInterface
+    {
+        $headers = (is_string($jwt))
+            ? ['Authorization' => 'Bearer ' . $jwt]
+            : [];
+
+        return $this->client->makeRequest(
+            $method,
+            $this->router->generate('frontend_token_verify'),
+            $headers
+        );
+    }
 }
