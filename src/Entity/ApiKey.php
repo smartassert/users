@@ -8,7 +8,7 @@ use App\Repository\ApiKeyRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ApiKeyRepository::class)]
-#[ORM\UniqueConstraint(name: "owner_label_idx", columns: ['owner_id', 'label'])]
+#[ORM\UniqueConstraint(name: 'owner_label_idx', columns: ['owner_id', 'label'])]
 class ApiKey
 {
     #[ORM\ManyToOne(targetEntity: User::class)]
