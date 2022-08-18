@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Application\Frontend\Token;
 
+use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Tests\Application\AbstractApplicationTest;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 abstract class AbstractCreateVerifyRefreshTest extends AbstractApplicationTest
 {
@@ -146,6 +149,12 @@ abstract class AbstractCreateVerifyRefreshTest extends AbstractApplicationTest
         );
         self::assertSame(200, $createUserResponse->getStatusCode());
 
+        $userRepository = self::getContainer()->get(UserRepository::class);
+        \assert($userRepository instanceof UserRepository);
+
+        $user = $userRepository->findAll()[0];
+        self::assertInstanceOf(User::class, $user);
+
         $createResponse = $this->applicationClient->makeFrontendCreateTokenRequest($userEmail, $userPassword);
         self::assertSame(200, $createResponse->getStatusCode());
         self::assertSame('application/json', $createResponse->getHeaderLine('content-type'));
@@ -155,7 +164,20 @@ abstract class AbstractCreateVerifyRefreshTest extends AbstractApplicationTest
         self::assertArrayHasKey('token', $createData);
         self::assertArrayHasKey('refresh_token', $createData);
 
-        $verifyResponse = $this->applicationClient->makeFrontendVerifyTokenRequest($createData['token']);
+        $token = $createData['token'];
+        self::assertIsString($token);
+
+        $tokenManager = self::getContainer()->get(JWTTokenManagerInterface::class);
+        \assert($tokenManager instanceof JWTTokenManagerInterface);
+
+        $tokenData = $tokenManager->parse($token);
+        self::assertIsArray($tokenData);
+        self::assertSame($user->getId(), $tokenData['sub']);
+        self::assertSame($user->getUserIdentifier(), $tokenData['email']);
+        self::assertSame(['frontend'], $tokenData['aud']);
+        self::assertSame(['ROLE_USER'], $tokenData['roles']);
+
+        $verifyResponse = $this->applicationClient->makeFrontendVerifyTokenRequest($token);
         self::assertSame(200, $verifyResponse->getStatusCode());
 
         $refreshResponse = $this->applicationClient->makeFrontendRefreshTokenRequest($createData['refresh_token']);
