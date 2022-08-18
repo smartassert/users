@@ -52,4 +52,17 @@ class ApiKeyFactoryTest extends AbstractBaseFunctionalTest
 
         self::assertEquals($apiKey, $retrievedApiKey);
     }
+
+    public function testCreateIsIdempotent(): void
+    {
+        self::assertCount(0, $this->apiKeyRepository->findAll());
+
+        $label = 'api key label';
+
+        $this->apiKeyFactory->create($label, $this->user);
+        $this->apiKeyFactory->create($label, $this->user);
+        $this->apiKeyFactory->create($label, $this->user);
+
+        self::assertCount(1, $this->apiKeyRepository->findAll());
+    }
 }

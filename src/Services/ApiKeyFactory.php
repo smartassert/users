@@ -16,8 +16,20 @@ class ApiKeyFactory
     ) {
     }
 
+    /**
+     * @param non-empty-string $label
+     */
     public function create(string $label, User $user): ApiKey
     {
-        return $this->repository->add(new ApiKey((string) new Ulid(), $label, $user));
+        $key = $this->repository->findOneBy([
+            'owner' => $user,
+            'label' => $label,
+        ]);
+
+        if (null === $key) {
+            $key = $this->repository->add(new ApiKey((string) new Ulid(), $label, $user));
+        }
+
+        return $key;
     }
 }
