@@ -10,7 +10,7 @@ use App\Services\ApiKeyFactory;
 use App\Tests\Application\AbstractApplicationTest;
 use webignition\ObjectReflector\ObjectReflector;
 
-abstract class AbstractCreateTest extends AbstractApplicationTest
+abstract class AbstractCreateVerifyTest extends AbstractApplicationTest
 {
     /**
      * @dataProvider createBadMethodDataProvider
@@ -40,6 +40,34 @@ abstract class AbstractCreateTest extends AbstractApplicationTest
         ];
     }
 
+    /**
+     * @dataProvider verifyBadMethodDataProvider
+     */
+    public function testVerifyBadMethod(string $method): void
+    {
+        $response = $this->applicationClient->makeApiVerifyTokenRequest($this->getAdminToken(), $method);
+
+        self::assertSame(405, $response->getStatusCode());
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function verifyBadMethodDataProvider(): array
+    {
+        return [
+            'POST' => [
+                'method' => 'POST',
+            ],
+            'PUT' => [
+                'method' => 'PUT',
+            ],
+            'DELETE' => [
+                'method' => 'DELETE',
+            ],
+        ];
+    }
+
     public function testCreateUnauthorized(): void
     {
         $response = $this->applicationClient->makeApiCreateTokenRequest('invalid api key');
@@ -48,7 +76,14 @@ abstract class AbstractCreateTest extends AbstractApplicationTest
         self::assertSame('', $response->getBody()->getContents());
     }
 
-    public function testCreateSuccess(): void
+    public function testVerifyUnauthorized(): void
+    {
+        $response = $this->applicationClient->makeApiVerifyTokenRequest('invalid api key');
+
+        self::assertSame(401, $response->getStatusCode());
+    }
+
+    public function testCreateAndVerifySuccess(): void
     {
         $userEmail = 'user@example.com';
         $userPassword = 'password';
