@@ -42,7 +42,7 @@ class ApiKeyFactoryTest extends AbstractBaseFunctionalTest
 
         $label = 'api key label';
 
-        $apiKey = $this->apiKeyFactory->create($label, $this->user);
+        $apiKey = $this->apiKeyFactory->create($this->user, $label);
         self::assertCount(1, $this->apiKeyRepository->findAll());
         self::assertSame($this->user, $apiKey->owner);
 
@@ -53,16 +53,35 @@ class ApiKeyFactoryTest extends AbstractBaseFunctionalTest
         self::assertEquals($apiKey, $retrievedApiKey);
     }
 
-    public function testCreateIsIdempotent(): void
+    /**
+     * @dataProvider createIsIdempotentDataProvider
+     */
+    public function testCreateIsIdempotent(?string $label): void
     {
         self::assertCount(0, $this->apiKeyRepository->findAll());
 
-        $label = 'api key label';
-
-        $this->apiKeyFactory->create($label, $this->user);
-        $this->apiKeyFactory->create($label, $this->user);
-        $this->apiKeyFactory->create($label, $this->user);
+        $this->apiKeyFactory->create($this->user, $label);
+        $this->apiKeyFactory->create($this->user, $label);
+        $this->apiKeyFactory->create($this->user, $label);
 
         self::assertCount(1, $this->apiKeyRepository->findAll());
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function createIsIdempotentDataProvider(): array
+    {
+        return [
+            'null' => [
+                'label' => null,
+            ],
+            'empty' => [
+                'label' => '',
+            ],
+            'non-empty' => [
+                'label' => 'non-empty value',
+            ],
+        ];
     }
 }

@@ -10,6 +10,11 @@ frontend_token_verify:
   path: '%route-frontend-token-verify%'
   methods: [GET]
 
+frontend_apikey_list:
+  path: '%route-frontend-apikey-list%'
+  methods: [GET]
+  controller: App\Controller\ApiKeyController::list
+
 api_token_create:
   path: '%route-api-token-create%'
   methods: [POST]

@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Tests\Application\Admin\User;
 
 use App\Entity\User;
+use App\Repository\ApiKeyRepository;
 use App\Repository\UserRepository;
 use App\Tests\Application\AbstractApplicationTest;
 
 abstract class AbstractCreateTest extends AbstractApplicationTest
 {
     private UserRepository $userRepository;
+    private ApiKeyRepository $apiKeyRepository;
 
     protected function setUp(): void
     {
@@ -19,6 +21,10 @@ abstract class AbstractCreateTest extends AbstractApplicationTest
         $userRepository = self::getContainer()->get(UserRepository::class);
         \assert($userRepository instanceof UserRepository);
         $this->userRepository = $userRepository;
+
+        $apiKeyRepository = self::getContainer()->get(ApiKeyRepository::class);
+        \assert($apiKeyRepository instanceof ApiKeyRepository);
+        $this->apiKeyRepository = $apiKeyRepository;
     }
 
     /**
@@ -34,6 +40,7 @@ abstract class AbstractCreateTest extends AbstractApplicationTest
         );
 
         self::assertSame(405, $response->getStatusCode());
+        self::assertSame(0, $this->apiKeyRepository->count([]));
     }
 
     /**
@@ -64,6 +71,7 @@ abstract class AbstractCreateTest extends AbstractApplicationTest
 
         self::assertSame(401, $response->getStatusCode());
         self::assertSame('', $response->getBody()->getContents());
+        self::assertSame(0, $this->apiKeyRepository->count([]));
     }
 
     /**
@@ -90,6 +98,7 @@ abstract class AbstractCreateTest extends AbstractApplicationTest
         );
 
         self::assertSame(0, $this->userRepository->count([]));
+        self::assertSame(0, $this->apiKeyRepository->count([]));
     }
 
     /**
@@ -124,6 +133,7 @@ abstract class AbstractCreateTest extends AbstractApplicationTest
 
         self::assertSame(200, $successResponse->getStatusCode());
         self::assertSame(1, $this->userRepository->count([]));
+        self::assertSame(1, $this->apiKeyRepository->count([]));
 
         $badRequestResponse = $this->applicationClient->makeAdminCreateUserRequest(
             $email,
@@ -132,6 +142,7 @@ abstract class AbstractCreateTest extends AbstractApplicationTest
         );
 
         self::assertSame(1, $this->userRepository->count([]));
+        self::assertSame(1, $this->apiKeyRepository->count([]));
         self::assertSame(400, $badRequestResponse->getStatusCode());
 
         self::assertSame('application/json', $badRequestResponse->getHeaderLine('content-type'));
@@ -157,6 +168,7 @@ abstract class AbstractCreateTest extends AbstractApplicationTest
     public function testCreateSuccess(): void
     {
         self::assertSame(0, $this->userRepository->count([]));
+        self::assertSame(0, $this->apiKeyRepository->count([]));
 
         $email = 'user@example.com';
         $password = 'password';
@@ -169,6 +181,7 @@ abstract class AbstractCreateTest extends AbstractApplicationTest
 
         self::assertSame(200, $response->getStatusCode());
         self::assertSame(1, $this->userRepository->count([]));
+        self::assertSame(1, $this->apiKeyRepository->count([]));
 
         $responseData = json_decode($response->getBody()->getContents(), true);
         self::assertIsArray($responseData);
