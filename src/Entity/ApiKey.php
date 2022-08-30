@@ -17,10 +17,10 @@ class ApiKey
 
     #[ORM\Id]
     #[ORM\Column(type: 'string', length: ApiKeyPropertiesInterface::ID_LENGTH, unique: true)]
-    private readonly string $id;
+    public readonly string $id;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private readonly ?string $label;
+    public readonly ?string $label;
 
     public function __construct(string $id, ?string $label, User $owner)
     {
