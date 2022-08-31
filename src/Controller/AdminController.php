@@ -7,7 +7,6 @@ namespace App\Controller;
 use App\Exception\UserAlreadyExistsException;
 use App\Request\CreateUserRequest;
 use App\Request\RevokeRefreshTokenRequest;
-use App\Response\BadRequestResponse;
 use App\Response\BadRequestValueMissingResponse;
 use App\Services\ApiKeyFactory;
 use App\Services\UserFactory;
@@ -30,20 +29,22 @@ class AdminController
             return new BadRequestValueMissingResponse('password');
         }
 
+        $userCreated = false;
+
         try {
             $user = $userFactory->create($request->email, $request->password);
+            $apiKeyFactory->create($user);
+            $userCreated = true;
         } catch (UserAlreadyExistsException $userAlreadyExistsException) {
-            return new BadRequestResponse(
-                'User already exists',
-                ['user' => $userAlreadyExistsException->getUser()],
-            );
+            $user = $userAlreadyExistsException->getUser();
         }
 
-        $apiKeyFactory->create($user);
-
-        return new JsonResponse([
-            'user' => $user,
-        ]);
+        return new JsonResponse(
+            [
+                'user' => $user,
+            ],
+            true === $userCreated ? 200 : 409
+        );
     }
 
     public function revokeRefreshToken(
