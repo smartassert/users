@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Repository\ApiKeyRepository;
 use App\Repository\UserRepository;
 use App\Tests\Application\AbstractApplicationTest;
+use Psr\Http\Message\ResponseInterface;
 
 abstract class AbstractCreateTest extends AbstractApplicationTest
 {
@@ -120,7 +121,7 @@ abstract class AbstractCreateTest extends AbstractApplicationTest
         ];
     }
 
-    public function testCreateBadRequestUserAlreadyExists(): void
+    public function testCreateUserAlreadyExists(): void
     {
         $email = 'user@example.com';
         $password = 'password';
@@ -141,28 +142,10 @@ abstract class AbstractCreateTest extends AbstractApplicationTest
             $this->getAdminToken()
         );
 
+        self::assertSame(409, $badRequestResponse->getStatusCode());
         self::assertSame(1, $this->userRepository->count([]));
         self::assertSame(1, $this->apiKeyRepository->count([]));
-        self::assertSame(400, $badRequestResponse->getStatusCode());
-
-        self::assertSame('application/json', $badRequestResponse->getHeaderLine('content-type'));
-
-        $badRequestResponseData = json_decode($badRequestResponse->getBody()->getContents(), true);
-        self::assertIsArray($badRequestResponseData);
-        self::assertArrayHasKey('message', $badRequestResponseData);
-        self::assertSame('User already exists', $badRequestResponseData['message']);
-
-        $user = $this->userRepository->findAll()[0];
-        self::assertInstanceOf(User::class, $user);
-
-        self::assertArrayHasKey('user', $badRequestResponseData);
-        self::assertSame(
-            [
-                'id' => $user->getId(),
-                'user-identifier' => $email,
-            ],
-            $badRequestResponseData['user']
-        );
+        $this->verifyCreateUserResponse($badRequestResponse, $email);
     }
 
     public function testCreateSuccess(): void
@@ -183,6 +166,15 @@ abstract class AbstractCreateTest extends AbstractApplicationTest
         self::assertSame(1, $this->userRepository->count([]));
         self::assertSame(1, $this->apiKeyRepository->count([]));
 
+        $this->verifyCreateUserResponse($response, $email);
+    }
+
+    abstract protected function getAdminToken(): string;
+
+    private function verifyCreateUserResponse(ResponseInterface $response, string $expectedUserEmail): void
+    {
+        self::assertSame('application/json', $response->getHeaderLine('content-type'));
+
         $responseData = json_decode($response->getBody()->getContents(), true);
         self::assertIsArray($responseData);
 
@@ -193,11 +185,9 @@ abstract class AbstractCreateTest extends AbstractApplicationTest
         self::assertSame(
             [
                 'id' => $user->getId(),
-                'user-identifier' => $email,
+                'user-identifier' => $expectedUserEmail,
             ],
             $responseData['user']
         );
     }
-
-    abstract protected function getAdminToken(): string;
 }
