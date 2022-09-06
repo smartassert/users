@@ -130,6 +130,17 @@ abstract class AbstractCreateVerifyTest extends AbstractApplicationTest
 
         $verifyResponse = $this->applicationClient->makeApiVerifyTokenRequest($token);
         self::assertSame(200, $verifyResponse->getStatusCode());
+        self::assertSame('application/json', $createResponse->getHeaderLine('content-type'));
+
+        $verifyData = json_decode($verifyResponse->getBody()->getContents(), true);
+        self::assertIsArray($verifyData);
+        self::assertEquals(
+            [
+                'id' => $user->getId(),
+                'user-identifier' => $user->getUserIdentifier(),
+            ],
+            $verifyData
+        );
     }
 
     abstract protected function getAdminToken(): string;

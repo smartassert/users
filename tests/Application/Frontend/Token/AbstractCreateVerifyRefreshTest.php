@@ -179,6 +179,17 @@ abstract class AbstractCreateVerifyRefreshTest extends AbstractApplicationTest
 
         $verifyResponse = $this->applicationClient->makeFrontendVerifyTokenRequest($token);
         self::assertSame(200, $verifyResponse->getStatusCode());
+        self::assertSame('application/json', $createResponse->getHeaderLine('content-type'));
+
+        $verifyData = json_decode($verifyResponse->getBody()->getContents(), true);
+        self::assertIsArray($verifyData);
+        self::assertEquals(
+            [
+                'id' => $user->getId(),
+                'user-identifier' => $user->getUserIdentifier(),
+            ],
+            $verifyData
+        );
 
         $refreshResponse = $this->applicationClient->makeFrontendRefreshTokenRequest($createData['refresh_token']);
         self::assertSame(200, $refreshResponse->getStatusCode());
@@ -191,6 +202,17 @@ abstract class AbstractCreateVerifyRefreshTest extends AbstractApplicationTest
 
         $verifyResponse = $this->applicationClient->makeFrontendVerifyTokenRequest($refreshData['token']);
         self::assertSame(200, $verifyResponse->getStatusCode());
+        self::assertSame('application/json', $createResponse->getHeaderLine('content-type'));
+
+        $verifyData = json_decode($verifyResponse->getBody()->getContents(), true);
+        self::assertIsArray($verifyData);
+        self::assertEquals(
+            [
+                'id' => $user->getId(),
+                'user-identifier' => $user->getUserIdentifier(),
+            ],
+            $verifyData
+        );
     }
 
     abstract protected function getAdminToken(): string;
