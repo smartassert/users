@@ -6,8 +6,10 @@ namespace App\Tests\Application\Frontend\Token;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Services\ApiKeyFactory;
 use App\Tests\Application\AbstractApplicationTest;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use webignition\ObjectReflector\ObjectReflector;
 
 abstract class AbstractCreateVerifyRefreshTest extends AbstractApplicationTest
 {
@@ -128,6 +130,45 @@ abstract class AbstractCreateVerifyRefreshTest extends AbstractApplicationTest
                 'token' => 'eyJhbGciOiJIUzI1NiJ9.e30.ZRrHA1JJJW8opsbCGfG_HACGpVUMN_a9IV7pAx_Zmeo',
             ],
         ];
+    }
+
+    public function testVerifyUnauthorizedForApiToken(): void
+    {
+        $userEmail = 'user@example.com';
+        $userPassword = 'password';
+
+        $createUserResponse = $this->applicationClient->makeAdminCreateUserRequest(
+            $userEmail,
+            $userPassword,
+            $this->getAdminToken()
+        );
+        self::assertSame(200, $createUserResponse->getStatusCode());
+
+        $userRepository = self::getContainer()->get(UserRepository::class);
+        \assert($userRepository instanceof UserRepository);
+        $user = $userRepository->findAll()[0];
+        self::assertInstanceOf(User::class, $user);
+
+        $apiKeyFactory = self::getContainer()->get(ApiKeyFactory::class);
+        \assert($apiKeyFactory instanceof ApiKeyFactory);
+        $apiKey = $apiKeyFactory->create($user);
+        $apiKeyId = ObjectReflector::getProperty($apiKey, 'id');
+        self::assertIsString($apiKeyId);
+
+        $createApiTokenResponse = $this->applicationClient->makeApiCreateTokenRequest($apiKeyId);
+        self::assertSame(200, $createApiTokenResponse->getStatusCode());
+        self::assertSame('application/json', $createApiTokenResponse->getHeaderLine('content-type'));
+
+        $createApiTokenData = json_decode($createApiTokenResponse->getBody()->getContents(), true);
+        self::assertIsArray($createApiTokenData);
+        self::assertArrayHasKey('token', $createApiTokenData);
+
+        $apiToken = $createApiTokenData['token'];
+        self::assertIsString($apiToken);
+
+        $verifyResponse = $this->applicationClient->makeFrontendVerifyTokenRequest($apiToken);
+
+        self::assertSame(401, $verifyResponse->getStatusCode());
     }
 
     public function testRefreshUnauthorized(): void

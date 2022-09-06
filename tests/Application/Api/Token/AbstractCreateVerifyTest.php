@@ -84,6 +84,40 @@ abstract class AbstractCreateVerifyTest extends AbstractApplicationTest
         self::assertSame(401, $response->getStatusCode());
     }
 
+    public function testVerifyUnauthorizedForValidFrontendToken(): void
+    {
+        $userEmail = 'user@example.com';
+        $userPassword = 'password';
+
+        $createUserResponse = $this->applicationClient->makeAdminCreateUserRequest(
+            $userEmail,
+            $userPassword,
+            $this->getAdminToken()
+        );
+        self::assertSame(200, $createUserResponse->getStatusCode());
+
+        $createFrontendTokenResponse = $this->applicationClient->makeFrontendCreateTokenRequest(
+            $userEmail,
+            $userPassword
+        );
+        self::assertSame(200, $createFrontendTokenResponse->getStatusCode());
+        self::assertSame('application/json', $createFrontendTokenResponse->getHeaderLine('content-type'));
+
+        $createFrontendTokenData = json_decode($createFrontendTokenResponse->getBody()->getContents(), true);
+        self::assertIsArray($createFrontendTokenData);
+        self::assertArrayHasKey('token', $createFrontendTokenData);
+
+        $frontendToken = $createFrontendTokenData['token'];
+        self::assertIsString($frontendToken);
+
+        $verifyFrontendTokenResponse = $this->applicationClient->makeFrontendVerifyTokenRequest($frontendToken);
+        self::assertSame(200, $verifyFrontendTokenResponse->getStatusCode());
+
+        $verifyResponse = $this->applicationClient->makeApiVerifyTokenRequest($frontendToken);
+
+        self::assertSame(401, $verifyResponse->getStatusCode());
+    }
+
     public function testCreateAndVerifySuccess(): void
     {
         $userEmail = 'user@example.com';
