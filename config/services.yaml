@@ -63,10 +63,7 @@ services:
         arguments:
             $tokenExtractor: '@app.admin-authenticator-token-extractor'
 
-    App\Security\Api\VerifyAuthenticator:
-        parent: lexik_jwt_authentication.security.jwt_authenticator
-
-    App\Security\Frontend\VerifyAuthenticator:
+    App\Security\Jwt\VerifyAuthenticator:
         parent: lexik_jwt_authentication.security.jwt_authenticator
 
     App\Services\ServiceStatusInspector\JwtConfigurationInspector:
