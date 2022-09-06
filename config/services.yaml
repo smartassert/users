@@ -65,6 +65,8 @@ services:
 
     App\Security\Jwt\VerifyAuthenticator:
         parent: lexik_jwt_authentication.security.jwt_authenticator
+        arguments:
+            $firewallMap: '@security.firewall.map'
 
     App\Services\ServiceStatusInspector\JwtConfigurationInspector:
         tags:
