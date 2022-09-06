@@ -40,7 +40,7 @@ class VerifyAuthenticator extends JWTAuthenticator
         $firewallName = $this->getFirewallName($request);
         $jwtAud = $this->getJwtAud($passport);
 
-        if (!str_starts_with($firewallName, $jwtAud)) {
+        if (!is_string($firewallName) || !is_string($jwtAud) || !str_starts_with($firewallName, $jwtAud)) {
             throw new InvalidJwtAudException($firewallName, $jwtAud);
         }
 
