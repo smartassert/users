@@ -22,13 +22,13 @@ class UserRefreshTokenManager
             return false;
         }
 
-        $refreshToken = $this->refreshTokenManager->getLastFromUsername($user->getUserIdentifier());
-        if (null === $refreshToken) {
-            return false;
+        $hasDeleted = false;
+
+        while (null !== $refreshToken = $this->refreshTokenManager->getLastFromUsername($user->getUserIdentifier())) {
+            $this->refreshTokenManager->delete($refreshToken);
+            $hasDeleted = true;
         }
 
-        $this->refreshTokenManager->delete($refreshToken);
-
-        return true;
+        return $hasDeleted;
     }
 }

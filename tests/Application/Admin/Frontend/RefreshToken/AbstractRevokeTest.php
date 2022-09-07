@@ -78,7 +78,10 @@ abstract class AbstractRevokeTest extends AbstractApplicationTest
         );
     }
 
-    public function testRevokeSuccess(): void
+    /**
+     * @dataProvider revokeSuccessDataProvider
+     */
+    public function testRevokeSuccess(int $refreshTokenCount): void
     {
         self::assertSame(0, $this->refreshTokenManager->count());
 
@@ -98,12 +101,33 @@ abstract class AbstractRevokeTest extends AbstractApplicationTest
         $userData = $createUserResponseData['user'] ?? [];
         $userId = $userData['id'] ?? '';
 
-        $this->refreshTokenManager->create(new User($userId, $userEmail, $userPassword));
-        self::assertSame(1, $this->refreshTokenManager->count());
+        for ($refreshTokenIndex = 0; $refreshTokenIndex < $refreshTokenCount; ++$refreshTokenIndex) {
+            $this->refreshTokenManager->create(new User($userId, $userEmail, $userPassword));
+        }
+
+        self::assertSame($refreshTokenCount, $this->refreshTokenManager->count());
 
         $revokeResponse = $this->applicationClient->makeAdminRevokeRefreshTokenRequest($userId, $this->getAdminToken());
         self::assertSame(200, $revokeResponse->getStatusCode());
         self::assertSame(0, $this->refreshTokenManager->count());
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function revokeSuccessDataProvider(): array
+    {
+        return [
+            'one' => [
+                'refreshTokenCount' => 1,
+            ],
+            'two' => [
+                'refreshTokenCount' => 2,
+            ],
+            'three' => [
+                'refreshTokenCount' => 3,
+            ],
+        ];
     }
 
     abstract protected function getAdminToken(): string;
