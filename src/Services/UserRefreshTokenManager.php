@@ -10,8 +10,8 @@ use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
 class UserRefreshTokenManager
 {
     public function __construct(
-        private RefreshTokenManagerInterface $refreshTokenManager,
-        private UserRepository $userRepository,
+        private readonly RefreshTokenManagerInterface $refreshTokenManager,
+        private readonly UserRepository $userRepository,
     ) {
     }
 
