@@ -45,25 +45,54 @@ class UserRefreshTokenManagerTest extends AbstractBaseFunctionalTest
 
     public function testDeleteByUserIdInvalidUserId(): void
     {
-        self::assertFalse(
-            $this->userRefreshTokenManager->deleteByUserId('invalid')
-        );
+        self::assertSame(0, $this->refreshTokenManager->count());
+
+        $this->userRefreshTokenManager->deleteByUserId('invalid');
+
+        self::assertSame(0, $this->refreshTokenManager->count());
     }
 
     public function testDeleteByUserIdUserHasNoRefreshToken(): void
     {
-        self::assertFalse(
-            $this->userRefreshTokenManager->deleteByUserId($this->user->getId())
-        );
+        self::assertSame(0, $this->refreshTokenManager->count());
+
+        $this->userRefreshTokenManager->deleteByUserId($this->user->getId());
+
+        self::assertSame(0, $this->refreshTokenManager->count());
     }
 
-    public function testDeleteByUserIdUserHasRefreshToken(): void
+    /**
+     * @dataProvider deleteByUserIdHasRefreshTokensDataProvider
+     */
+    public function testDeleteByUserIdUserHasRefreshTokens(int $refreshTokenCount): void
     {
-        $this->refreshTokenManager->create($this->user);
+        for ($refreshTokenIndex = 0; $refreshTokenIndex < $refreshTokenCount; ++$refreshTokenIndex) {
+            $this->refreshTokenManager->create($this->user);
+        }
 
-        self::assertTrue(
-            $this->userRefreshTokenManager->deleteByUserId($this->user->getId())
-        );
+        self::assertSame($refreshTokenCount, $this->refreshTokenManager->count());
+
+        $this->userRefreshTokenManager->deleteByUserId($this->user->getId());
+
+        self::assertSame(0, $this->refreshTokenManager->count());
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function deleteByUserIdHasRefreshTokensDataProvider(): array
+    {
+        return [
+            'one' => [
+                'refreshTokenCount' => 1,
+            ],
+            'two' => [
+                'refreshTokenCount' => 2,
+            ],
+            'three' => [
+                'refreshTokenCount' => 3,
+            ],
+        ];
     }
 
     private function removeAllRefreshTokens(): void

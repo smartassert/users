@@ -15,20 +15,15 @@ class UserRefreshTokenManager
     ) {
     }
 
-    public function deleteByUserId(string $id): bool
+    public function deleteByUserId(string $id): void
     {
         $user = $this->userRepository->find($id);
         if (null === $user) {
-            return false;
+            return;
         }
-
-        $hasDeleted = false;
 
         while (null !== $refreshToken = $this->refreshTokenManager->getLastFromUsername($user->getUserIdentifier())) {
             $this->refreshTokenManager->delete($refreshToken);
-            $hasDeleted = true;
         }
-
-        return $hasDeleted;
     }
 }
