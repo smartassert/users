@@ -10,25 +10,20 @@ use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
 class UserRefreshTokenManager
 {
     public function __construct(
-        private RefreshTokenManagerInterface $refreshTokenManager,
-        private UserRepository $userRepository,
+        private readonly RefreshTokenManagerInterface $refreshTokenManager,
+        private readonly UserRepository $userRepository,
     ) {
     }
 
-    public function deleteByUserId(string $id): bool
+    public function deleteByUserId(string $id): void
     {
         $user = $this->userRepository->find($id);
         if (null === $user) {
-            return false;
+            return;
         }
 
-        $refreshToken = $this->refreshTokenManager->getLastFromUsername($user->getUserIdentifier());
-        if (null === $refreshToken) {
-            return false;
+        while (null !== $refreshToken = $this->refreshTokenManager->getLastFromUsername($user->getUserIdentifier())) {
+            $this->refreshTokenManager->delete($refreshToken);
         }
-
-        $this->refreshTokenManager->delete($refreshToken);
-
-        return true;
     }
 }
