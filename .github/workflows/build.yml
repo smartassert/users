@@ -44,7 +44,7 @@ jobs:
         env:
           RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
         run: |
-          [[ -n "$RELEASE_TAG_NAME" ]] && echo "::set-output name=value::$RELEASE_TAG_NAME" || echo "::set-output name=value::master"
+          [[ -n "$RELEASE_TAG_NAME" ]] && echo "value=$RELEASE_TAG_NAME" >> "$GITHUB_OUTPUT" || echo "value=master" >> "$GITHUB_OUTPUT"
 
       - name: Examine build config
         run: |
