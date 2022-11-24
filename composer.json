@@ -10,7 +10,7 @@
         "doctrine/doctrine-bundle": "^2.5",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.10",
-        "gesdinet/jwt-refresh-token-bundle": "^1.0",
+        "gesdinet/jwt-refresh-token-bundle": "^1.1",
         "lexik/jwt-authentication-bundle": "^2.14",
         "smartassert/health-check-bundle": "^2.0",
         "symfony/console": "6.1.*",
