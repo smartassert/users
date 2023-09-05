@@ -7,10 +7,10 @@ namespace App\Tests\Functional\Services;
 use App\Exception\UserAlreadyExistsException;
 use App\Repository\UserRepository;
 use App\Services\UserFactory;
-use App\Tests\Functional\AbstractBaseFunctionalTest;
+use App\Tests\Functional\AbstractBaseFunctionalTestCase;
 use Symfony\Component\Uid\Ulid;
 
-class UserFactoryTest extends AbstractBaseFunctionalTest
+class UserFactoryTest extends AbstractBaseFunctionalTestCase
 {
     private UserFactory $userFactory;
     private UserRepository $userRepository;

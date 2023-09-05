@@ -6,11 +6,11 @@ namespace App\Tests\Functional\Services;
 
 use App\Entity\User;
 use App\Services\UserRefreshTokenManager;
-use App\Tests\Functional\AbstractBaseFunctionalTest;
+use App\Tests\Functional\AbstractBaseFunctionalTestCase;
 use App\Tests\Services\RefreshTokenManager;
 use App\Tests\Services\TestUserFactory;
 
-class UserRefreshTokenManagerTest extends AbstractBaseFunctionalTest
+class UserRefreshTokenManagerTest extends AbstractBaseFunctionalTestCase
 {
     private UserRefreshTokenManager $userRefreshTokenManager;
     private RefreshTokenManager $refreshTokenManager;

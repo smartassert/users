@@ -7,10 +7,10 @@ namespace App\Tests\Functional\Entity;
 use App\Entity\ApiKey;
 use App\Entity\User;
 use App\Repository\ApiKeyRepository;
-use App\Tests\Functional\AbstractBaseFunctionalTest;
+use App\Tests\Functional\AbstractBaseFunctionalTestCase;
 use Doctrine\ORM\EntityManagerInterface;
 
-class ApiKeyTest extends AbstractBaseFunctionalTest
+class ApiKeyTest extends AbstractBaseFunctionalTestCase
 {
     private EntityManagerInterface $entityManager;
     private ApiKeyRepository $apiKeyRepository;

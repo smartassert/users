@@ -7,11 +7,11 @@ namespace App\Tests\Application\Frontend\Token;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Services\ApiKeyFactory;
-use App\Tests\Application\AbstractApplicationTest;
+use App\Tests\Application\AbstractApplicationTestCase;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use webignition\ObjectReflector\ObjectReflector;
 
-abstract class AbstractCreateVerifyRefreshTest extends AbstractApplicationTest
+abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTestCase
 {
     /**
      * @dataProvider createBadMethodDataProvider

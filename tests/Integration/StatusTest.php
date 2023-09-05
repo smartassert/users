@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration;
 
-use App\Tests\Application\AbstractStatusTest;
+use App\Tests\Application\AbstractStatusTestCase;
 
-class StatusTest extends AbstractStatusTest
+class StatusTest extends AbstractStatusTestCase
 {
     use GetClientAdapterTrait;
 

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Tests\Application\Admin\Frontend\RefreshToken;
 
 use App\Entity\User;
-use App\Tests\Application\AbstractApplicationTest;
+use App\Tests\Application\AbstractApplicationTestCase;
 use App\Tests\Services\RefreshTokenManager;
 use Symfony\Component\Uid\Ulid;
 
-abstract class AbstractRevokeTest extends AbstractApplicationTest
+abstract class AbstractRevokeTestCase extends AbstractApplicationTestCase
 {
     private RefreshTokenManager $refreshTokenManager;
 

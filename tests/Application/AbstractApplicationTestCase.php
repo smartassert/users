@@ -13,7 +13,7 @@ use SmartAssert\SymfonyTestClient\ClientInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-abstract class AbstractApplicationTest extends WebTestCase
+abstract class AbstractApplicationTestCase extends WebTestCase
 {
     protected KernelBrowser $kernelBrowser;
     protected Client $applicationClient;
