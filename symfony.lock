@@ -532,9 +532,6 @@
     "theseer/tokenizer": {
         "version": "1.2.1"
     },
-    "webignition/object-reflector": {
-        "version": "1.0"
-    },
     "webmozart/assert": {
         "version": "1.10.0"
     }
