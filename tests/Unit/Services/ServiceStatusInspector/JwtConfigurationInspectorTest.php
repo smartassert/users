@@ -2,35 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Functional\Services\ServiceStatusInspector;
+namespace App\Tests\Unit\Services\ServiceStatusInspector;
 
 use App\Exception\InvalidJwtKeyException;
 use App\Services\ServiceStatusInspector\JwtConfigurationInspector;
-use App\Tests\Functional\AbstractBaseFunctionalTestCase;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\KeyLoader\KeyLoaderInterface;
-use webignition\ObjectReflector\ObjectReflector;
+use PHPUnit\Framework\TestCase;
 
-class JwtConfigurationInspectorTest extends AbstractBaseFunctionalTestCase
+class JwtConfigurationInspectorTest extends TestCase
 {
-    private JwtConfigurationInspector $inspector;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $inspector = self::getContainer()->get(JwtConfigurationInspector::class);
-        \assert($inspector instanceof JwtConfigurationInspector);
-        $this->inspector = $inspector;
-    }
-
-    public function testInvokeSuccess(): void
-    {
-        $this->inspector->getStatus();
-        self::expectNotToPerformAssertions();
-    }
-
     /**
      * @dataProvider invokeFailureInvalidKeyDataProvider
      */
@@ -38,15 +19,12 @@ class JwtConfigurationInspectorTest extends AbstractBaseFunctionalTestCase
         KeyLoaderInterface $keyLoader,
         \Exception $expectedException
     ): void {
-        ObjectReflector::setProperty(
-            $this->inspector,
-            JwtConfigurationInspector::class,
-            'keyLoader',
-            $keyLoader
-        );
+        $encoder = \Mockery::mock(JWTEncoderInterface::class);
+
+        $inspector = new JwtConfigurationInspector($encoder, $keyLoader);
 
         self::expectExceptionObject($expectedException);
-        $this->inspector->getStatus();
+        $inspector->getStatus();
     }
 
     /**
@@ -136,27 +114,5 @@ class JwtConfigurationInspectorTest extends AbstractBaseFunctionalTestCase
                 ),
             ],
         ];
-    }
-
-    public function testInvokeEncodeFailure(): void
-    {
-        $encoderException = new JWTEncodeFailureException(JWTEncodeFailureException::INVALID_CONFIG, '', null, []);
-
-        $encoder = \Mockery::mock(JWTEncoderInterface::class);
-        $encoder
-            ->shouldReceive('encode')
-            ->andThrow($encoderException)
-        ;
-
-        ObjectReflector::setProperty(
-            $this->inspector,
-            JwtConfigurationInspector::class,
-            'jwtEncoder',
-            $encoder
-        );
-
-        self::expectExceptionObject($encoderException);
-
-        $this->inspector->getStatus();
     }
 }

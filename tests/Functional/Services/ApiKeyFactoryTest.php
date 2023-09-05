@@ -9,7 +9,6 @@ use App\Repository\ApiKeyRepository;
 use App\Services\ApiKeyFactory;
 use App\Tests\Functional\AbstractBaseFunctionalTestCase;
 use App\Tests\Services\TestUserFactory;
-use webignition\ObjectReflector\ObjectReflector;
 
 class ApiKeyFactoryTest extends AbstractBaseFunctionalTestCase
 {
@@ -46,9 +45,7 @@ class ApiKeyFactoryTest extends AbstractBaseFunctionalTestCase
         self::assertCount(1, $this->apiKeyRepository->findAll());
         self::assertSame($this->user, $apiKey->owner);
 
-        $retrievedApiKey = $this->apiKeyRepository->findOneBy([
-            'id' => ObjectReflector::getProperty($apiKey, 'id'),
-        ]);
+        $retrievedApiKey = $this->apiKeyRepository->findOneBy(['id' => $apiKey->id]);
 
         self::assertEquals($apiKey, $retrievedApiKey);
     }
