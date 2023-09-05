@@ -9,7 +9,6 @@ use App\Repository\UserRepository;
 use App\Services\ApiKeyFactory;
 use App\Tests\Application\AbstractApplicationTestCase;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use webignition\ObjectReflector\ObjectReflector;
 
 abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
 {
@@ -138,10 +137,9 @@ abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
         $apiKeyFactory = self::getContainer()->get(ApiKeyFactory::class);
         \assert($apiKeyFactory instanceof ApiKeyFactory);
         $apiKey = $apiKeyFactory->create($user);
-        $apiKeyId = ObjectReflector::getProperty($apiKey, 'id');
-        self::assertIsString($apiKeyId);
+        self::assertIsString($apiKey->id);
 
-        $createResponse = $this->applicationClient->makeApiCreateTokenRequest($apiKeyId);
+        $createResponse = $this->applicationClient->makeApiCreateTokenRequest($apiKey->id);
         self::assertSame(200, $createResponse->getStatusCode());
         self::assertSame('application/json', $createResponse->getHeaderLine('content-type'));
 
