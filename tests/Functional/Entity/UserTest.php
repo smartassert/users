@@ -6,12 +6,12 @@ namespace App\Tests\Functional\Entity;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Tests\Functional\AbstractBaseFunctionalTest;
+use App\Tests\Functional\AbstractBaseFunctionalTestCase;
 use App\Tests\Services\TestUserFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Security\User\EntityUserProvider;
 
-class UserTest extends AbstractBaseFunctionalTest
+class UserTest extends AbstractBaseFunctionalTestCase
 {
     private EntityManagerInterface $entityManager;
     private UserRepository $userRepository;

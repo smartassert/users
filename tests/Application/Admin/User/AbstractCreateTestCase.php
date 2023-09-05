@@ -7,10 +7,10 @@ namespace App\Tests\Application\Admin\User;
 use App\Entity\User;
 use App\Repository\ApiKeyRepository;
 use App\Repository\UserRepository;
-use App\Tests\Application\AbstractApplicationTest;
+use App\Tests\Application\AbstractApplicationTestCase;
 use Psr\Http\Message\ResponseInterface;
 
-abstract class AbstractCreateTest extends AbstractApplicationTest
+abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
 {
     private UserRepository $userRepository;
     private ApiKeyRepository $apiKeyRepository;

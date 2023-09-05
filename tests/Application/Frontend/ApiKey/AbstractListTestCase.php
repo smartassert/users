@@ -8,10 +8,10 @@ use App\Entity\ApiKey;
 use App\Entity\User;
 use App\Repository\ApiKeyRepository;
 use App\Repository\UserRepository;
-use App\Tests\Application\AbstractApplicationTest;
+use App\Tests\Application\AbstractApplicationTestCase;
 use App\Tests\Services\ApplicationClient\Client;
 
-abstract class AbstractListTest extends AbstractApplicationTest
+abstract class AbstractListTestCase extends AbstractApplicationTestCase
 {
     /**
      * @dataProvider listBadMethodDataProvider

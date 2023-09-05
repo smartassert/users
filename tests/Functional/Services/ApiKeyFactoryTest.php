@@ -7,11 +7,11 @@ namespace App\Tests\Functional\Services;
 use App\Entity\User;
 use App\Repository\ApiKeyRepository;
 use App\Services\ApiKeyFactory;
-use App\Tests\Functional\AbstractBaseFunctionalTest;
+use App\Tests\Functional\AbstractBaseFunctionalTestCase;
 use App\Tests\Services\TestUserFactory;
 use webignition\ObjectReflector\ObjectReflector;
 
-class ApiKeyFactoryTest extends AbstractBaseFunctionalTest
+class ApiKeyFactoryTest extends AbstractBaseFunctionalTestCase
 {
     private ApiKeyFactory $apiKeyFactory;
     private ApiKeyRepository $apiKeyRepository;

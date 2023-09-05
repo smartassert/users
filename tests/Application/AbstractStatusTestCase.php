@@ -6,11 +6,11 @@ namespace App\Tests\Application;
 
 use PHPUnit\Framework\Assert;
 
-abstract class AbstractHealthCheckTest extends AbstractApplicationTest
+abstract class AbstractStatusTestCase extends AbstractApplicationTestCase
 {
-    public function testGetHealthCheck(): void
+    public function testGetStatus(): void
     {
-        $response = $this->applicationClient->makeHealthCheckRequest();
+        $response = $this->applicationClient->makeStatusRequest();
 
         self::assertSame(200, $response->getStatusCode());
         self::assertSame('application/json', $response->getHeaderLine('content-type'));
@@ -19,11 +19,11 @@ abstract class AbstractHealthCheckTest extends AbstractApplicationTest
         self::assertIsArray($responseData);
 
         $expectedResponseData = [
-            'database_connection' => true,
-            'database_entities' => true,
-            'jwt_configuration' => true,
+            'ready' => $this->getExpectedReadyValue(),
         ];
 
-        Assert::assertEquals($expectedResponseData, $responseData);
+        Assert::assertSame($expectedResponseData, $responseData);
     }
+
+    abstract protected function getExpectedReadyValue(): bool;
 }

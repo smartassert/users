@@ -6,13 +6,13 @@ namespace App\Tests\Functional\Services\ServiceStatusInspector;
 
 use App\Exception\InvalidJwtKeyException;
 use App\Services\ServiceStatusInspector\JwtConfigurationInspector;
-use App\Tests\Functional\AbstractBaseFunctionalTest;
+use App\Tests\Functional\AbstractBaseFunctionalTestCase;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\KeyLoader\KeyLoaderInterface;
 use webignition\ObjectReflector\ObjectReflector;
 
-class JwtConfigurationInspectorTest extends AbstractBaseFunctionalTest
+class JwtConfigurationInspectorTest extends AbstractBaseFunctionalTestCase
 {
     private JwtConfigurationInspector $inspector;
 
