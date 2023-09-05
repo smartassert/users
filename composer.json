@@ -12,7 +12,7 @@
         "doctrine/orm": "^2.10",
         "gesdinet/jwt-refresh-token-bundle": "^1.1",
         "lexik/jwt-authentication-bundle": "^2.14",
-        "smartassert/health-check-bundle": "^2.0",
+        "smartassert/health-check-bundle": "^5.0",
         "symfony/console": "6.3.*",
         "symfony/dotenv": "6.3.*",
         "symfony/flex": "^2.0",
