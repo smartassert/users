@@ -15,6 +15,9 @@ class ApiKey
     #[ORM\JoinColumn(nullable: false)]
     public readonly User $owner;
 
+    /**
+     * @var non-empty-string
+     */
     #[ORM\Id]
     #[ORM\Column(type: 'string', length: ApiKeyPropertiesInterface::ID_LENGTH, unique: true)]
     public readonly string $id;
@@ -22,6 +25,9 @@ class ApiKey
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     public readonly ?string $label;
 
+    /**
+     * @param non-empty-string $id
+     */
     public function __construct(string $id, ?string $label, User $owner)
     {
         $this->id = $id;
