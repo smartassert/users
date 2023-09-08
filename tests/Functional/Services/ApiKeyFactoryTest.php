@@ -52,6 +52,8 @@ class ApiKeyFactoryTest extends AbstractBaseFunctionalTestCase
 
     /**
      * @dataProvider createIsIdempotentDataProvider
+     *
+     * @param ?non-empty-string $label
      */
     public function testCreateIsIdempotent(?string $label): void
     {
