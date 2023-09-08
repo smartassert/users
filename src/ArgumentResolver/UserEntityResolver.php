@@ -12,11 +12,11 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class UserEntityResolver implements ValueResolverInterface
+readonly class UserEntityResolver implements ValueResolverInterface
 {
     public function __construct(
-        private readonly Security $security,
-        private readonly UserRepository $userRepository,
+        private Security $security,
+        private UserRepository $userRepository,
     ) {
     }
 
