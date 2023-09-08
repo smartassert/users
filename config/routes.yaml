@@ -15,6 +15,11 @@ frontend_apikey_list:
   methods: [GET]
   controller: App\Controller\ApiKeyController::list
 
+frontend_apikey_get_default:
+  path: '%route-frontend-apikey-get-default%'
+  methods: [GET]
+  controller: App\Controller\ApiKeyController::getDefault
+
 api_token_create:
   path: '%route-api-token-create%'
   methods: [POST]
