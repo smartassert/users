@@ -20,11 +20,6 @@ class UserEntityResolver implements ValueResolverInterface
     ) {
     }
 
-    public function supports(Request $request, ArgumentMetadata $argument): bool
-    {
-        return User::class === $argument->getType();
-    }
-
     /**
      * @return User[]
      */
