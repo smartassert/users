@@ -34,7 +34,7 @@
         "phpstan/phpstan-symfony": "^1.2",
         "phpunit/phpunit": "^9.5",
         "smartassert/symfony-test-client": "^0.1.0",
-        "squizlabs/php_codesniffer": "^3.6",
+        "squizlabs/php_codesniffer": "dev-master#7c452b0ff35ab2cf1d0c60965fea3e79f621b2d2",
         "symfony/browser-kit": "6.3.*",
         "symfony/css-selector": "6.3.*",
         "symfony/maker-bundle": "^1.33",
