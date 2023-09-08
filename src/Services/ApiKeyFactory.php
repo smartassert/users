@@ -16,6 +16,9 @@ class ApiKeyFactory
     ) {
     }
 
+    /**
+     * @param ?non-empty-string $label
+     */
     public function create(User $user, ?string $label = null): ApiKey
     {
         $key = $this->repository->findOneBy([
