@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ApiKeyController
 {
-    public function list(ApiKeyRepository $apiKeyRepository, ?User $user): Response
+    public function list(ApiKeyRepository $apiKeyRepository, User $user): Response
     {
         $serializedApiKeys = [];
         $apiKeys = $apiKeyRepository->findBy(['owner' => $user]);
