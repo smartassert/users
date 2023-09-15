@@ -9,12 +9,10 @@ use App\Response\BadRequestValueMissingResponse;
 use App\Services\UserRefreshTokenManager;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminController
+class RefreshTokenController
 {
-    public function revokeRefreshToken(
-        RevokeRefreshTokenRequest $request,
-        UserRefreshTokenManager $tokenManager,
-    ): Response {
+    public function revoke(RevokeRefreshTokenRequest $request, UserRefreshTokenManager $tokenManager): Response
+    {
         if (null === $request->id) {
             return new BadRequestValueMissingResponse('id');
         }
