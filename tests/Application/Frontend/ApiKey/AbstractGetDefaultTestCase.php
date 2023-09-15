@@ -84,7 +84,7 @@ abstract class AbstractGetDefaultTestCase extends AbstractApplicationTestCase
         $user = $userRepository->findByEmail($userEmail);
         \assert($user instanceof User);
 
-        $createTokenResponse = $this->applicationClient->makeFrontendCreateTokenRequest($userEmail, $userPassword);
+        $createTokenResponse = $this->applicationClient->makeCreateFrontendTokenRequest($userEmail, $userPassword);
         $createTokenData = json_decode($createTokenResponse->getBody()->getContents(), true);
         self::assertIsArray($createTokenData);
         $token = $createTokenData['token'] ?? null;
