@@ -95,7 +95,7 @@ abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
         );
         self::assertSame(200, $createUserResponse->getStatusCode());
 
-        $createFrontendTokenResponse = $this->applicationClient->makeFrontendCreateTokenRequest(
+        $createFrontendTokenResponse = $this->applicationClient->makeCreateFrontendTokenRequest(
             $userEmail,
             $userPassword
         );
@@ -109,7 +109,7 @@ abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
         $frontendToken = $createFrontendTokenData['token'];
         self::assertIsString($frontendToken);
 
-        $verifyFrontendTokenResponse = $this->applicationClient->makeFrontendVerifyTokenRequest($frontendToken);
+        $verifyFrontendTokenResponse = $this->applicationClient->makeVerifyFrontendTokenRequest($frontendToken);
         self::assertSame(200, $verifyFrontendTokenResponse->getStatusCode());
 
         $verifyResponse = $this->applicationClient->makeApiVerifyTokenRequest($frontendToken);

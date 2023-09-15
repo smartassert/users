@@ -90,7 +90,7 @@ class Client
         );
     }
 
-    public function makeFrontendRefreshTokenRequest(string $refreshToken, string $method = 'POST'): ResponseInterface
+    public function makeRefreshFrontendTokenRequest(string $refreshToken, string $method = 'POST'): ResponseInterface
     {
         return $this->client->makeRequest(
             $method,
@@ -102,7 +102,7 @@ class Client
         );
     }
 
-    public function makeFrontendCreateTokenRequest(
+    public function makeCreateFrontendTokenRequest(
         string $userIdentifier,
         string $password,
         string $method = 'POST'
@@ -144,7 +144,7 @@ class Client
         );
     }
 
-    public function makeFrontendVerifyTokenRequest(?string $jwt, string $method = 'GET'): ResponseInterface
+    public function makeVerifyFrontendTokenRequest(?string $jwt, string $method = 'GET'): ResponseInterface
     {
         $headers = (is_string($jwt))
             ? ['Authorization' => 'Bearer ' . $jwt]

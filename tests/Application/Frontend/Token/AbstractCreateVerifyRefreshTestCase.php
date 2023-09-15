@@ -17,7 +17,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
      */
     public function testCreateBadMethod(string $method): void
     {
-        $response = $this->applicationClient->makeFrontendCreateTokenRequest('user@example.com', 'password', $method);
+        $response = $this->applicationClient->makeCreateFrontendTokenRequest('user@example.com', 'password', $method);
 
         self::assertSame(405, $response->getStatusCode());
     }
@@ -45,7 +45,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
      */
     public function testVerifyBadMethod(string $method): void
     {
-        $response = $this->applicationClient->makeFrontendVerifyTokenRequest($this->getAdminToken(), $method);
+        $response = $this->applicationClient->makeVerifyFrontendTokenRequest($this->getAdminToken(), $method);
 
         self::assertSame(405, $response->getStatusCode());
     }
@@ -73,7 +73,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
      */
     public function testRefreshBadMethod(string $method): void
     {
-        $response = $this->applicationClient->makeFrontendRefreshTokenRequest('refresh token', $method);
+        $response = $this->applicationClient->makeRefreshFrontendTokenRequest('refresh token', $method);
 
         self::assertSame(405, $response->getStatusCode());
     }
@@ -98,7 +98,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
 
     public function testCreateUnauthorized(): void
     {
-        $response = $this->applicationClient->makeFrontendCreateTokenRequest('user@example.com', 'password');
+        $response = $this->applicationClient->makeCreateFrontendTokenRequest('user@example.com', 'password');
 
         self::assertSame(401, $response->getStatusCode());
     }
@@ -108,7 +108,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
      */
     public function testVerifyUnauthorized(?string $token): void
     {
-        $response = $this->applicationClient->makeFrontendVerifyTokenRequest($token);
+        $response = $this->applicationClient->makeVerifyFrontendTokenRequest($token);
 
         self::assertSame(401, $response->getStatusCode());
     }
@@ -164,14 +164,14 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         $apiToken = $createApiTokenData['token'];
         self::assertIsString($apiToken);
 
-        $verifyResponse = $this->applicationClient->makeFrontendVerifyTokenRequest($apiToken);
+        $verifyResponse = $this->applicationClient->makeVerifyFrontendTokenRequest($apiToken);
 
         self::assertSame(401, $verifyResponse->getStatusCode());
     }
 
     public function testRefreshUnauthorized(): void
     {
-        $response = $this->applicationClient->makeFrontendRefreshTokenRequest('invalid token');
+        $response = $this->applicationClient->makeRefreshFrontendTokenRequest('invalid token');
 
         self::assertSame(401, $response->getStatusCode());
     }
@@ -194,7 +194,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         $user = $userRepository->findAll()[0];
         self::assertInstanceOf(User::class, $user);
 
-        $createResponse = $this->applicationClient->makeFrontendCreateTokenRequest($userEmail, $userPassword);
+        $createResponse = $this->applicationClient->makeCreateFrontendTokenRequest($userEmail, $userPassword);
         self::assertSame(200, $createResponse->getStatusCode());
         self::assertSame('application/json', $createResponse->getHeaderLine('content-type'));
 
@@ -216,7 +216,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         self::assertSame(['frontend'], $tokenData['aud']);
         self::assertSame(['ROLE_USER'], $tokenData['roles']);
 
-        $verifyResponse = $this->applicationClient->makeFrontendVerifyTokenRequest($token);
+        $verifyResponse = $this->applicationClient->makeVerifyFrontendTokenRequest($token);
         self::assertSame(200, $verifyResponse->getStatusCode());
         self::assertSame('application/json', $createResponse->getHeaderLine('content-type'));
 
@@ -230,7 +230,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
             $verifyData
         );
 
-        $refreshResponse = $this->applicationClient->makeFrontendRefreshTokenRequest($createData['refresh_token']);
+        $refreshResponse = $this->applicationClient->makeRefreshFrontendTokenRequest($createData['refresh_token']);
         self::assertSame(200, $refreshResponse->getStatusCode());
         self::assertSame('application/json', $refreshResponse->getHeaderLine('content-type'));
 
@@ -239,7 +239,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         self::assertArrayHasKey('token', $refreshData);
         self::assertArrayHasKey('refresh_token', $refreshData);
 
-        $verifyResponse = $this->applicationClient->makeFrontendVerifyTokenRequest($refreshData['token']);
+        $verifyResponse = $this->applicationClient->makeVerifyFrontendTokenRequest($refreshData['token']);
         self::assertSame(200, $verifyResponse->getStatusCode());
         self::assertSame('application/json', $createResponse->getHeaderLine('content-type'));
 
