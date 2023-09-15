@@ -58,7 +58,7 @@ class Client
 
         return $this->client->makeRequest(
             $method,
-            $this->router->generate('admin_user_create'),
+            $this->router->generate('user_create'),
             $headers,
             http_build_query($payload)
         );

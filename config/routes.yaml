@@ -28,7 +28,7 @@ api_token_verify:
   path: '%route-api-token-verify%'
   methods: [GET]
 
-admin_user_create:
+user_create:
   path: '%route-admin-user-create%'
   methods: [POST]
   controller: App\Controller\UserController::create
