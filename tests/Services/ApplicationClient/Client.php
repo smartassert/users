@@ -64,7 +64,7 @@ class Client
         );
     }
 
-    public function makeApiCreateTokenRequest(string $apiKey, string $method = 'POST'): ResponseInterface
+    public function makeCreteApiTokenRequest(string $apiKey, string $method = 'POST'): ResponseInterface
     {
         $headers = [
             'Authorization' => $apiKey,
@@ -77,7 +77,7 @@ class Client
         );
     }
 
-    public function makeApiVerifyTokenRequest(?string $jwt, string $method = 'GET'): ResponseInterface
+    public function makeVerifyApiTokenRequest(?string $jwt, string $method = 'GET'): ResponseInterface
     {
         $headers = (is_string($jwt))
             ? ['Authorization' => 'Bearer ' . $jwt]

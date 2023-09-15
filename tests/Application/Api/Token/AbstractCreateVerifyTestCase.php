@@ -17,7 +17,7 @@ abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
      */
     public function testCreateBadMethod(string $method): void
     {
-        $response = $this->applicationClient->makeApiCreateTokenRequest($this->getAdminToken(), $method);
+        $response = $this->applicationClient->makeCreteApiTokenRequest($this->getAdminToken(), $method);
 
         self::assertSame(405, $response->getStatusCode());
     }
@@ -45,7 +45,7 @@ abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
      */
     public function testVerifyBadMethod(string $method): void
     {
-        $response = $this->applicationClient->makeApiVerifyTokenRequest($this->getAdminToken(), $method);
+        $response = $this->applicationClient->makeVerifyApiTokenRequest($this->getAdminToken(), $method);
 
         self::assertSame(405, $response->getStatusCode());
     }
@@ -70,7 +70,7 @@ abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
 
     public function testCreateUnauthorized(): void
     {
-        $response = $this->applicationClient->makeApiCreateTokenRequest('invalid api key');
+        $response = $this->applicationClient->makeCreteApiTokenRequest('invalid api key');
 
         self::assertSame(401, $response->getStatusCode());
         self::assertSame('', $response->getBody()->getContents());
@@ -78,7 +78,7 @@ abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
 
     public function testVerifyUnauthorized(): void
     {
-        $response = $this->applicationClient->makeApiVerifyTokenRequest('invalid api key');
+        $response = $this->applicationClient->makeVerifyApiTokenRequest('invalid api key');
 
         self::assertSame(401, $response->getStatusCode());
     }
@@ -112,7 +112,7 @@ abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
         $verifyFrontendTokenResponse = $this->applicationClient->makeVerifyFrontendTokenRequest($frontendToken);
         self::assertSame(200, $verifyFrontendTokenResponse->getStatusCode());
 
-        $verifyResponse = $this->applicationClient->makeApiVerifyTokenRequest($frontendToken);
+        $verifyResponse = $this->applicationClient->makeVerifyApiTokenRequest($frontendToken);
 
         self::assertSame(401, $verifyResponse->getStatusCode());
     }
@@ -139,7 +139,7 @@ abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
         $apiKey = $apiKeyFactory->create($user);
         self::assertIsString($apiKey->id);
 
-        $createResponse = $this->applicationClient->makeApiCreateTokenRequest($apiKey->id);
+        $createResponse = $this->applicationClient->makeCreteApiTokenRequest($apiKey->id);
         self::assertSame(200, $createResponse->getStatusCode());
         self::assertSame('application/json', $createResponse->getHeaderLine('content-type'));
 
@@ -160,7 +160,7 @@ abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
         self::assertSame(['api'], $tokenData['aud']);
         self::assertSame(['ROLE_USER'], $tokenData['roles']);
 
-        $verifyResponse = $this->applicationClient->makeApiVerifyTokenRequest($token);
+        $verifyResponse = $this->applicationClient->makeVerifyApiTokenRequest($token);
         self::assertSame(200, $verifyResponse->getStatusCode());
         self::assertSame('application/json', $createResponse->getHeaderLine('content-type'));
 

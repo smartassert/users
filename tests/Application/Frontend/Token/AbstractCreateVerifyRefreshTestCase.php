@@ -153,7 +153,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         $apiKey = $apiKeyFactory->create($user);
         self::assertIsString($apiKey->id);
 
-        $createApiTokenResponse = $this->applicationClient->makeApiCreateTokenRequest($apiKey->id);
+        $createApiTokenResponse = $this->applicationClient->makeCreteApiTokenRequest($apiKey->id);
         self::assertSame(200, $createApiTokenResponse->getStatusCode());
         self::assertSame('application/json', $createApiTokenResponse->getHeaderLine('content-type'));
 
