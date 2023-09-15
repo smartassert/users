@@ -10,13 +10,13 @@ frontend_token_verify:
   path: '%route-frontend-token-verify%'
   methods: [GET]
 
-frontend_apikey_list:
-  path: '%route-frontend-apikey-list%'
+apikey_list:
+  path: '%route-apikey-list%'
   methods: [GET]
   controller: App\Controller\ApiKeyController::list
 
-frontend_apikey_get_default:
-  path: '%route-frontend-apikey-get-default%'
+apikey_get_default:
+  path: '%route-apikey-get-default%'
   methods: [GET]
   controller: App\Controller\ApiKeyController::getDefault
 

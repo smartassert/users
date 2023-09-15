@@ -17,7 +17,7 @@ abstract class AbstractGetDefaultTestCase extends AbstractApplicationTestCase
      */
     public function testGetDefaultBadMethod(string $method): void
     {
-        $response = $this->applicationClient->makeFrontendGetDefaultApkKeyRequest('token', $method);
+        $response = $this->applicationClient->makeGetDefaultApkKeyRequest('token', $method);
 
         self::assertSame(405, $response->getStatusCode());
     }
@@ -45,7 +45,7 @@ abstract class AbstractGetDefaultTestCase extends AbstractApplicationTestCase
      */
     public function testGetDefaultUnauthorized(?string $token): void
     {
-        $response = $this->applicationClient->makeFrontendGetDefaultApkKeyRequest($token);
+        $response = $this->applicationClient->makeGetDefaultApkKeyRequest($token);
 
         self::assertSame(401, $response->getStatusCode());
     }
@@ -90,7 +90,7 @@ abstract class AbstractGetDefaultTestCase extends AbstractApplicationTestCase
         $token = $createTokenData['token'] ?? null;
         $token = is_string($token) ? $token : null;
 
-        $response = $this->applicationClient->makeFrontendGetDefaultApkKeyRequest($token);
+        $response = $this->applicationClient->makeGetDefaultApkKeyRequest($token);
         self::assertSame(200, $response->getStatusCode());
         self::assertSame('application/json', $response->getHeaderLine('content-type'));
 
