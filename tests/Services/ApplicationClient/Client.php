@@ -16,7 +16,7 @@ class Client
     ) {
     }
 
-    public function makeAdminRevokeRefreshTokenRequest(
+    public function makeRevokeRefreshTokenRequest(
         string $userId,
         string $adminToken,
         string $method = 'POST'
@@ -28,7 +28,7 @@ class Client
 
         return $this->client->makeRequest(
             $method,
-            $this->router->generate('frontend_refreshtoken_revoke'),
+            $this->router->generate('refreshtoken_revoke'),
             $headers,
             http_build_query([
                 'id' => $userId,

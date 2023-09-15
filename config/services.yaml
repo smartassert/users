@@ -14,7 +14,7 @@ parameters:
     route-api-token-create: '/api-token/create'
     route-api-token-verify: '/api-token/verify'
     route-user-create: '/user/create'
-    route-frontend-refresh-token-revoke: '/frontend/refresh-token/revoke'
+    route-refresh-token-revoke: '/refresh-token/revoke'
     health_check_bundle_status_path: '/'
     health_check_bundle_enable_status_readiness_inspector: true
     health_check_bundle_status_is_ready: '%env(bool:IS_READY)%'
