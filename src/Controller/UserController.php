@@ -6,21 +6,22 @@ namespace App\Controller;
 
 use App\Exception\UserAlreadyExistsException;
 use App\Request\CreateUserRequest;
-use App\Request\RevokeRefreshTokenRequest;
 use App\Response\BadRequestValueMissingResponse;
 use App\Services\ApiKeyFactory;
 use App\Services\UserFactory;
-use App\Services\UserRefreshTokenManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminController
+readonly class UserController
 {
-    public function createUser(
-        CreateUserRequest $request,
-        UserFactory $userFactory,
-        ApiKeyFactory $apiKeyFactory,
-    ): Response {
+    public function __construct(
+        private UserFactory $userFactory,
+        private ApiKeyFactory $apiKeyFactory,
+    ) {
+    }
+
+    public function create(CreateUserRequest $request): Response
+    {
         if (null === $request->email) {
             return new BadRequestValueMissingResponse('email');
         }
@@ -32,8 +33,8 @@ class AdminController
         $userCreated = false;
 
         try {
-            $user = $userFactory->create($request->email, $request->password);
-            $apiKeyFactory->create($user);
+            $user = $this->userFactory->create($request->email, $request->password);
+            $this->apiKeyFactory->create($user);
             $userCreated = true;
         } catch (UserAlreadyExistsException $userAlreadyExistsException) {
             $user = $userAlreadyExistsException->getUser();
@@ -45,18 +46,5 @@ class AdminController
             ],
             true === $userCreated ? 200 : 409
         );
-    }
-
-    public function revokeRefreshToken(
-        RevokeRefreshTokenRequest $request,
-        UserRefreshTokenManager $tokenManager,
-    ): Response {
-        if (null === $request->id) {
-            return new BadRequestValueMissingResponse('id');
-        }
-
-        $tokenManager->deleteByUserId($request->id);
-
-        return new Response();
     }
 }

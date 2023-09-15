@@ -28,15 +28,15 @@ api_token_verify:
   path: '%route-api-token-verify%'
   methods: [GET]
 
-admin_user_create:
+user_create:
   path: '%route-admin-user-create%'
   methods: [POST]
-  controller: App\Controller\AdminController::createUser
+  controller: App\Controller\UserController::create
 
 admin_frontend_refreshtoken_revoke:
   path: '%route-admin-frontend-refresh-token-revoke%'
   methods: [POST]
-  controller: App\Controller\AdminController::revokeRefreshToken
+  controller: App\Controller\RefreshTokenController::revoke
 
 _health_check_bundle_routes:
   resource: '@HealthCheckBundle/Resources/config/routes.yaml'
