@@ -9,15 +9,20 @@ use App\Response\BadRequestValueMissingResponse;
 use App\Services\UserRefreshTokenManager;
 use Symfony\Component\HttpFoundation\Response;
 
-class RefreshTokenController
+readonly class RefreshTokenController
 {
-    public function revoke(RevokeRefreshTokenRequest $request, UserRefreshTokenManager $tokenManager): Response
+    public function __construct(
+        private UserRefreshTokenManager $tokenManager,
+    ) {
+    }
+
+    public function revoke(RevokeRefreshTokenRequest $request): Response
     {
         if (null === $request->id) {
             return new BadRequestValueMissingResponse('id');
         }
 
-        $tokenManager->deleteByUserId($request->id);
+        $this->tokenManager->deleteByUserId($request->id);
 
         return new Response();
     }
