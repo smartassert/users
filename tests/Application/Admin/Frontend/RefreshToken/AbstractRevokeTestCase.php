@@ -29,7 +29,7 @@ abstract class AbstractRevokeTestCase extends AbstractApplicationTestCase
      */
     public function testRevokeBadMethod(string $method): void
     {
-        $response = $this->applicationClient->makeAdminRevokeRefreshTokenRequest(
+        $response = $this->applicationClient->makeRevokeRefreshTokenRequest(
             (string) new Ulid(),
             $this->getAdminToken(),
             $method
@@ -58,7 +58,7 @@ abstract class AbstractRevokeTestCase extends AbstractApplicationTestCase
 
     public function testRevokeUnauthorized(): void
     {
-        $response = $this->applicationClient->makeAdminRevokeRefreshTokenRequest('user-id', 'invalid admin token');
+        $response = $this->applicationClient->makeRevokeRefreshTokenRequest('user-id', 'invalid admin token');
 
         self::assertSame(401, $response->getStatusCode());
         self::assertSame('', $response->getBody()->getContents());
@@ -66,7 +66,7 @@ abstract class AbstractRevokeTestCase extends AbstractApplicationTestCase
 
     public function testRevokeBadRequest(): void
     {
-        $response = $this->applicationClient->makeAdminRevokeRefreshTokenRequest('', $this->getAdminToken());
+        $response = $this->applicationClient->makeRevokeRefreshTokenRequest('', $this->getAdminToken());
 
         self::assertSame(400, $response->getStatusCode());
         self::assertSame('application/json', $response->getHeaderLine('content-type'));
@@ -107,7 +107,7 @@ abstract class AbstractRevokeTestCase extends AbstractApplicationTestCase
 
         self::assertSame($refreshTokenCount, $this->refreshTokenManager->count());
 
-        $revokeResponse = $this->applicationClient->makeAdminRevokeRefreshTokenRequest($userId, $this->getAdminToken());
+        $revokeResponse = $this->applicationClient->makeRevokeRefreshTokenRequest($userId, $this->getAdminToken());
         self::assertSame(200, $revokeResponse->getStatusCode());
         self::assertSame(0, $this->refreshTokenManager->count());
     }
