@@ -59,6 +59,11 @@ services:
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created }
 
+    app.eventlistener.jwt.authentication_success:
+        class: App\EventListener\TokenAuthenticationSuccessListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, priority: 1 }
+
     App\Security\Api\CreateAuthenticator:
         arguments:
             $tokenExtractor: '@app.admin-authenticator-token-extractor'

@@ -146,6 +146,7 @@ abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
         $createData = json_decode($createResponse->getBody()->getContents(), true);
         self::assertIsArray($createData);
         self::assertArrayHasKey('token', $createData);
+        self::assertArrayNotHasKey('refresh_token', $createData);
 
         $token = $createData['token'];
         self::assertIsString($token);
