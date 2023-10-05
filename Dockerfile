@@ -24,10 +24,12 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN apt-get -qq update && apt-get -qq -y install  \
   git \
+  libicu-dev \
   libpq-dev \
   libzip-dev \
   zip \
   && docker-php-ext-install \
+  intl \
   pdo_pgsql \
   zip \
   && apt-get autoremove -y \
