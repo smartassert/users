@@ -36,6 +36,29 @@ class Client
         );
     }
 
+    public function makeRevokeRefreshTokenRequest(
+        ?string $jwt,
+        ?string $refreshToken,
+        string $method = 'POST'
+    ): ResponseInterface {
+        $headers = [
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        ];
+
+        if (is_string($jwt)) {
+            $headers['Authorization'] = 'Bearer ' . $jwt;
+        }
+
+        return $this->client->makeRequest(
+            $method,
+            $this->router->generate('refreshtoken_revoke'),
+            $headers,
+            http_build_query([
+                'refresh_token' => $refreshToken,
+            ])
+        );
+    }
+
     public function makeAdminCreateUserRequest(
         ?string $email,
         ?string $password,
