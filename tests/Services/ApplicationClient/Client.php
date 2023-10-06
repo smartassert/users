@@ -16,7 +16,7 @@ class Client
     ) {
     }
 
-    public function makeRevokeRefreshTokenRequest(
+    public function makeRevokeAllRefreshTokensForUserRequest(
         string $userId,
         string $adminToken,
         string $method = 'POST'
