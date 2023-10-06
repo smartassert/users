@@ -9,7 +9,7 @@ use App\Tests\Application\AbstractApplicationTestCase;
 use App\Tests\Services\RefreshTokenManager;
 use Symfony\Component\Uid\Ulid;
 
-abstract class AbstractRevokeTestCase extends AbstractApplicationTestCase
+abstract class AbstractRevokeAllForUserTestCase extends AbstractApplicationTestCase
 {
     private RefreshTokenManager $refreshTokenManager;
 
@@ -29,7 +29,7 @@ abstract class AbstractRevokeTestCase extends AbstractApplicationTestCase
      */
     public function testRevokeBadMethod(string $method): void
     {
-        $response = $this->applicationClient->makeRevokeRefreshTokenRequest(
+        $response = $this->applicationClient->makeRevokeAllRefreshTokensForUserRequest(
             (string) new Ulid(),
             $this->getAdminToken(),
             $method
@@ -58,7 +58,10 @@ abstract class AbstractRevokeTestCase extends AbstractApplicationTestCase
 
     public function testRevokeUnauthorized(): void
     {
-        $response = $this->applicationClient->makeRevokeRefreshTokenRequest('user-id', 'invalid admin token');
+        $response = $this->applicationClient->makeRevokeAllRefreshTokensForUserRequest(
+            'user-id',
+            'invalid admin token'
+        );
 
         self::assertSame(401, $response->getStatusCode());
         self::assertSame('', $response->getBody()->getContents());
@@ -66,7 +69,7 @@ abstract class AbstractRevokeTestCase extends AbstractApplicationTestCase
 
     public function testRevokeBadRequest(): void
     {
-        $response = $this->applicationClient->makeRevokeRefreshTokenRequest('', $this->getAdminToken());
+        $response = $this->applicationClient->makeRevokeAllRefreshTokensForUserRequest('', $this->getAdminToken());
 
         self::assertSame(400, $response->getStatusCode());
         self::assertSame('application/json', $response->getHeaderLine('content-type'));
@@ -107,7 +110,10 @@ abstract class AbstractRevokeTestCase extends AbstractApplicationTestCase
 
         self::assertSame($refreshTokenCount, $this->refreshTokenManager->count());
 
-        $revokeResponse = $this->applicationClient->makeRevokeRefreshTokenRequest($userId, $this->getAdminToken());
+        $revokeResponse = $this->applicationClient->makeRevokeAllRefreshTokensForUserRequest(
+            $userId,
+            $this->getAdminToken()
+        );
         self::assertSame(200, $revokeResponse->getStatusCode());
         self::assertSame(0, $this->refreshTokenManager->count());
     }

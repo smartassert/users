@@ -33,8 +33,8 @@ user_create:
   methods: [POST]
   controller: App\Controller\UserController::create
 
-refreshtoken_revoke:
-  path: '%route-refresh-token-revoke%'
+refreshtoken_revoke_all_for_user:
+  path: '%route-refresh-token-revoke-all-for-user%'
   methods: [POST]
   controller: App\Controller\RefreshTokenController::revoke
 
