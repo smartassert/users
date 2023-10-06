@@ -64,7 +64,8 @@ jobs:
       - name: Trigger dispatch.service-configure workflow
         if: ${{ github.event_name == 'release' || github.event_name == 'workflow_dispatch' }}
         env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN_SELF }}
+          #GH_TOKEN: ${{ secrets.PAT_TOKEN_SELF }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh workflow run dispatch.service-configure.yml \
           -f version="${{ env.service_version }}"
