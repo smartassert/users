@@ -9,7 +9,7 @@ use App\Tests\Application\AbstractApplicationTestCase;
 use App\Tests\Services\RefreshTokenManager;
 use Symfony\Component\Uid\Ulid;
 
-abstract class AbstractRevokeTestCase extends AbstractApplicationTestCase
+abstract class AbstractRevokeAllForUserTestCase extends AbstractApplicationTestCase
 {
     private RefreshTokenManager $refreshTokenManager;
 
