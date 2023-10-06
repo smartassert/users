@@ -28,7 +28,7 @@ class Client
 
         return $this->client->makeRequest(
             $method,
-            $this->router->generate('refreshtoken_revoke'),
+            $this->router->generate('refreshtoken_revoke_all_for_user'),
             $headers,
             http_build_query([
                 'id' => $userId,
