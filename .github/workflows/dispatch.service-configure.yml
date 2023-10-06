@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Dispatch service-configure event to image builder
-        uses: peter-evans/repository-dispatch@v1
+        uses: peter-evans/repository-dispatch@v2
         with:
           token: ${{ secrets.IMAGE_BUILDER_TOKEN }}
           repository: smartassert/image-builder
@@ -25,7 +25,7 @@ jobs:
             }
 
       - name: Dispatch service-configure event to instance manager
-        uses: peter-evans/repository-dispatch@v1
+        uses: peter-evans/repository-dispatch@v2
         with:
           token: ${{ secrets.INSTANCE_MANAGER_TOKEN }}
           repository: smartassert/instance-manager
@@ -38,7 +38,7 @@ jobs:
             }
 
       - name: Dispatch service-set-env event to instance manager
-        uses: peter-evans/repository-dispatch@v1
+        uses: peter-evans/repository-dispatch@v2
         with:
           token: ${{ secrets.INSTANCE_MANAGER_TOKEN }}
           repository: smartassert/instance-manager
