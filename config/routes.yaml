@@ -36,7 +36,7 @@ user_create:
 refreshtoken_revoke_all_for_user:
   path: '%route-refresh-token-revoke-all-for-user%'
   methods: [POST]
-  controller: App\Controller\RefreshTokenController::revoke
+  controller: App\Controller\RefreshTokenController::revokeAllForUser
 
 _health_check_bundle_routes:
   resource: '@HealthCheckBundle/Resources/config/routes.yaml'

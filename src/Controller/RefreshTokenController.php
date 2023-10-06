@@ -16,7 +16,7 @@ readonly class RefreshTokenController
     ) {
     }
 
-    public function revoke(RevokeRefreshTokenRequest $request): Response
+    public function revokeAllForUser(RevokeRefreshTokenRequest $request): Response
     {
         if (null === $request->id) {
             return new BadRequestValueMissingResponse('id');
