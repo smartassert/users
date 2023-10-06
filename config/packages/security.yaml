@@ -73,13 +73,18 @@ security:
                 - App\Security\Admin\Authenticator
             provider: admin_user_provider
             entry_point: App\Security\Admin\AuthenticationEntryPoint
-        refresh_token_revoke:
+        refresh_token_revoke_all_for_user:
             pattern:  '%route-refresh-token-revoke-all-for-user%'
             stateless: true
             custom_authenticators:
                 - App\Security\Admin\Authenticator
             provider: admin_user_provider
             entry_point: App\Security\Admin\AuthenticationEntryPoint
+        refresh_token_revoke:
+            pattern:  '%route-refresh-token-revoke%'
+            stateless: true
+            jwt: ~
+            provider: jwt
         main:
             lazy: true
             provider: frontend_user_provider
@@ -100,6 +105,7 @@ security:
         - { path: '%route-apikey-get-default%', roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
         - { path: '%route-user-create%', roles: !php/const App\Security\UserRoleInterface::ROLE_ADMIN }
         - { path: '%route-refresh-token-revoke-all-for-user%', roles: !php/const App\Security\UserRoleInterface::ROLE_ADMIN }
+        - { path: '%route-refresh-token-revoke%', roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
         - { path: '%route-api-token-create%', roles: PUBLIC_ACCESS }
         - { path: '%route-api-token-verify%', roles: !php/const App\Security\UserRoleInterface::ROLE_USER }
         # - { path: ^/admin, roles: ROLE_ADMIN }
