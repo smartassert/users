@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\ApiKey;
-use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
@@ -47,13 +46,5 @@ class ApiKeyRepository extends ServiceEntityRepository implements UserLoaderInte
     public function loadUserByUsername(string $username): ?UserInterface
     {
         return $this->loadUserByIdentifier($username);
-    }
-
-    public function getDefault(User $user): ?ApiKey
-    {
-        return $this->findOneBy([
-            'owner' => $user,
-            'label' => null,
-        ]);
     }
 }
