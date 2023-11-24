@@ -200,11 +200,15 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         self::assertSame(200, $createResponse->getStatusCode());
         self::assertSame('application/json', $createResponse->getHeaderLine('content-type'));
 
+        $apiKeyRepository = self::getContainer()->get(ApiKeyRepository::class);
+        \assert($apiKeyRepository instanceof ApiKeyRepository);
+
         $createData = json_decode($createResponse->getBody()->getContents(), true);
         self::assertIsArray($createData);
         self::assertArrayHasKey('token', $createData);
         self::assertArrayHasKey('refresh_token', $createData);
-        self::assertArrayHasKey('api_key', $createData);
+        $apiKey = $apiKeyRepository->find($createData['api_key']);
+        self::assertInstanceOf(ApiKey::class, $apiKey);
 
         $token = $createData['token'];
         self::assertIsString($token);
@@ -218,11 +222,6 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         self::assertSame($user->getUserIdentifier(), $tokenData['email']);
         self::assertSame(['frontend'], $tokenData['aud']);
         self::assertSame(['ROLE_USER'], $tokenData['roles']);
-
-        $apiKeyRepository = self::getContainer()->get(ApiKeyRepository::class);
-        \assert($apiKeyRepository instanceof ApiKeyRepository);
-        $apiKey = $apiKeyRepository->find($createData['api_key']);
-        self::assertInstanceOf(ApiKey::class, $apiKey);
 
         $verifyResponse = $this->applicationClient->makeVerifyFrontendTokenRequest($token);
         self::assertSame(200, $verifyResponse->getStatusCode());
@@ -246,6 +245,9 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         self::assertIsArray($refreshData);
         self::assertArrayHasKey('token', $refreshData);
         self::assertArrayHasKey('refresh_token', $refreshData);
+        self::assertArrayHasKey('api_key', $refreshData);
+        $apiKey = $apiKeyRepository->find($refreshData['api_key']);
+        self::assertInstanceOf(ApiKey::class, $apiKey);
 
         $verifyResponse = $this->applicationClient->makeVerifyFrontendTokenRequest($refreshData['token']);
         self::assertSame(200, $verifyResponse->getStatusCode());
