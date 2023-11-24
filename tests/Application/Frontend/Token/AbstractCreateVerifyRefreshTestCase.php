@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Application\Frontend\Token;
 
+use App\Entity\ApiKey;
 use App\Entity\User;
+use App\Repository\ApiKeyRepository;
 use App\Repository\UserRepository;
 use App\Services\ApiKeyFactory;
 use App\Tests\Application\AbstractApplicationTestCase;
@@ -202,6 +204,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         self::assertIsArray($createData);
         self::assertArrayHasKey('token', $createData);
         self::assertArrayHasKey('refresh_token', $createData);
+        self::assertArrayHasKey('api_key', $createData);
 
         $token = $createData['token'];
         self::assertIsString($token);
@@ -215,6 +218,11 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         self::assertSame($user->getUserIdentifier(), $tokenData['email']);
         self::assertSame(['frontend'], $tokenData['aud']);
         self::assertSame(['ROLE_USER'], $tokenData['roles']);
+
+        $apiKeyRepository = self::getContainer()->get(ApiKeyRepository::class);
+        \assert($apiKeyRepository instanceof ApiKeyRepository);
+        $apiKey = $apiKeyRepository->find($createData['api_key']);
+        self::assertInstanceOf(ApiKey::class, $apiKey);
 
         $verifyResponse = $this->applicationClient->makeVerifyFrontendTokenRequest($token);
         self::assertSame(200, $verifyResponse->getStatusCode());
