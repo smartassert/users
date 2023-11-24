@@ -19,7 +19,7 @@ class JWTUserTest extends TestCase
     public function testCreateFromPayloadThrowsException(
         mixed $username,
         array $payload,
-        InvalidJwtUserUsernameException|InvalidJwtUserPayloadException $expectedException
+        InvalidJwtUserPayloadException|InvalidJwtUserUsernameException $expectedException
     ): void {
         self::expectExceptionObject($expectedException);
 
