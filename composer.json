@@ -103,10 +103,10 @@
             "@test-functional"
         ],
         "functional-create-jwt-keys": "php bin/console lexik:jwt:generate-keypair --env=test --skip-if-exists",
-        "functional-start": "docker-compose -f ./tests/build/docker-compose.yml up -d postgres",
-        "functional-status": "docker-compose -f ./tests/build/docker-compose.yml ps postgres",
+        "functional-start": "docker compose -f ./tests/build/docker-compose.yml up -d postgres",
+        "functional-status": "docker compose -f ./tests/build/docker-compose.yml ps postgres",
         "functional-teardown": [
-            "docker-compose -f ./tests/build/docker-compose.yml down"
+            "docker compose -f ./tests/build/docker-compose.yml down"
         ],
         "functional-setup": [
             "@functional-start",
@@ -114,15 +114,15 @@
             "@db-setup",
             "@functional-create-jwt-keys"
         ],
-        "integration-build": "docker-compose -f tests/build/docker-compose.yml build app",
-        "integration-pull": "docker-compose -f tests/build/docker-compose.yml pull",
-        "integration-up": "docker-compose -f tests/build/docker-compose.yml  up -d --build",
-        "integration-status": "docker-compose -f tests/build/docker-compose.yml ps",
-        "integration-generate-jwt-keys": "docker-compose -f tests/build/docker-compose.yml exec -T app php bin/console lexik:jwt:generate-keypair --skip-if-exists",
+        "integration-build": "docker compose -f tests/build/docker-compose.yml build app",
+        "integration-pull": "docker compose -f tests/build/docker-compose.yml pull",
+        "integration-up": "docker compose -f tests/build/docker-compose.yml  up -d --build",
+        "integration-status": "docker compose -f tests/build/docker-compose.yml ps",
+        "integration-generate-jwt-keys": "docker compose -f tests/build/docker-compose.yml exec -T app php bin/console lexik:jwt:generate-keypair --skip-if-exists",
         "integration-copy-jwt-keys": [
             "mkdir -p ./config/jwt",
-            "docker-compose -f tests/build/docker-compose.yml exec -T app cat /app/config/jwt/public.pem > ./config/jwt/public-test.pem",
-            "docker-compose -f tests/build/docker-compose.yml exec -T app cat /app/config/jwt/private.pem > ./config/jwt/private-test.pem"
+            "docker compose -f tests/build/docker-compose.yml exec -T app cat /app/config/jwt/public.pem > ./config/jwt/public-test.pem",
+            "docker compose -f tests/build/docker-compose.yml exec -T app cat /app/config/jwt/private.pem > ./config/jwt/private-test.pem"
         ],
         "integration-teardown": "@functional-teardown",
         "integration-setup": [
