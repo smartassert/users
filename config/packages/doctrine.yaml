@@ -17,3 +17,4 @@ doctrine:
                 alias: App
         enable_lazy_ghost_objects: true
         validate_xml_mapping: true
+        report_fields_where_declared: true
