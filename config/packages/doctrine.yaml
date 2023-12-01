@@ -16,3 +16,4 @@ doctrine:
                 prefix: 'App\Entity'
                 alias: App
         enable_lazy_ghost_objects: true
+        validate_xml_mapping: true
