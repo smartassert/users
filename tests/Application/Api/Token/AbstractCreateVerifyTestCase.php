@@ -157,7 +157,7 @@ abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
         $tokenData = $tokenManager->parse($token);
         self::assertIsArray($tokenData);
         self::assertSame($user->getId(), $tokenData['sub']);
-        self::assertSame($user->getUserIdentifier(), $tokenData['email']);
+        self::assertSame($user->getUserIdentifier(), $tokenData['userIdentifier']);
         self::assertSame(['api'], $tokenData['aud']);
         self::assertSame(['ROLE_USER'], $tokenData['roles']);
 
