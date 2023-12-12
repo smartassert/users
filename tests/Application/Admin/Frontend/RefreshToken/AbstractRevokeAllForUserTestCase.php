@@ -88,11 +88,11 @@ abstract class AbstractRevokeAllForUserTestCase extends AbstractApplicationTestC
     {
         self::assertSame(0, $this->refreshTokenManager->count());
 
-        $userEmail = 'user@example.com';
+        $userIdentifier = 'user@example.com';
         $userPassword = 'password';
 
         $createUserResponse = $this->applicationClient->makeAdminCreateUserRequest(
-            $userEmail,
+            $userIdentifier,
             $userPassword,
             $this->getAdminToken()
         );
@@ -105,7 +105,7 @@ abstract class AbstractRevokeAllForUserTestCase extends AbstractApplicationTestC
         $userId = $userData['id'] ?? '';
 
         for ($refreshTokenIndex = 0; $refreshTokenIndex < $refreshTokenCount; ++$refreshTokenIndex) {
-            $this->refreshTokenManager->create(new User($userId, $userEmail, $userPassword));
+            $this->refreshTokenManager->create(new User($userId, $userIdentifier, $userPassword));
         }
 
         self::assertSame($refreshTokenCount, $this->refreshTokenManager->count());

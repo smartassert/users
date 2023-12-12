@@ -28,12 +28,12 @@ class UserTest extends TestCase
             'default' => [
                 'user' => new User(
                     'id-value',
-                    'email-value',
+                    'identifier-value',
                     'password-value'
                 ),
                 'expectedSerializedUser' => [
                     'id' => 'id-value',
-                    'user-identifier' => 'email-value',
+                    'user-identifier' => 'identifier-value',
                 ],
             ],
         ];

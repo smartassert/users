@@ -133,11 +133,11 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
 
     public function testVerifyUnauthorizedForApiToken(): void
     {
-        $userEmail = 'user@example.com';
+        $userIdentifier = 'user@example.com';
         $userPassword = 'password';
 
         $createUserResponse = $this->applicationClient->makeAdminCreateUserRequest(
-            $userEmail,
+            $userIdentifier,
             $userPassword,
             $this->getAdminToken()
         );
@@ -178,11 +178,11 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
 
     public function testCreateAndVerifyAndRefreshSuccess(): void
     {
-        $userEmail = 'user@example.com';
+        $userIdentifier = 'user@example.com';
         $userPassword = 'password';
 
         $createUserResponse = $this->applicationClient->makeAdminCreateUserRequest(
-            $userEmail,
+            $userIdentifier,
             $userPassword,
             $this->getAdminToken()
         );
@@ -194,7 +194,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         $user = $userRepository->findAll()[0];
         self::assertInstanceOf(User::class, $user);
 
-        $createResponse = $this->applicationClient->makeCreateFrontendTokenRequest($userEmail, $userPassword);
+        $createResponse = $this->applicationClient->makeCreateFrontendTokenRequest($userIdentifier, $userPassword);
         self::assertSame(200, $createResponse->getStatusCode());
         self::assertSame('application/json', $createResponse->getHeaderLine('content-type'));
 

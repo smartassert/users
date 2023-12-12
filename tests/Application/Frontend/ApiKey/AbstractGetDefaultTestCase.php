@@ -70,21 +70,21 @@ abstract class AbstractGetDefaultTestCase extends AbstractApplicationTestCase
 
     public function testGetDefaultSuccess(): void
     {
-        $userEmail = md5((string) rand());
+        $userIdentifier = md5((string) rand());
         $userPassword = md5((string) rand());
 
         $this->applicationClient->makeAdminCreateUserRequest(
-            $userEmail,
+            $userIdentifier,
             $userPassword,
             $this->getAdminToken()
         );
 
         $userRepository = self::getContainer()->get(UserRepository::class);
         \assert($userRepository instanceof UserRepository);
-        $user = $userRepository->findByEmail($userEmail);
+        $user = $userRepository->findByUserIdentifier($userIdentifier);
         \assert($user instanceof User);
 
-        $createTokenResponse = $this->applicationClient->makeCreateFrontendTokenRequest($userEmail, $userPassword);
+        $createTokenResponse = $this->applicationClient->makeCreateFrontendTokenRequest($userIdentifier, $userPassword);
         $createTokenData = json_decode($createTokenResponse->getBody()->getContents(), true);
         self::assertIsArray($createTokenData);
         $token = $createTokenData['token'] ?? null;

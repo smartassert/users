@@ -34,7 +34,7 @@ readonly class UserEntityResolver implements ValueResolverInterface
             return [];
         }
 
-        $userEntity = $this->userRepository->findByEmail($user->getUserIdentifier());
+        $userEntity = $this->userRepository->findByUserIdentifier($user->getUserIdentifier());
 
         return $userEntity instanceof User ? [$userEntity] : [];
     }

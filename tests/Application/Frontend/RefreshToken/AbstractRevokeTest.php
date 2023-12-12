@@ -66,18 +66,18 @@ abstract class AbstractRevokeTest extends AbstractApplicationTestCase
 
     public function testRevokeSuccess(): void
     {
-        $userEmail = 'user@example.com';
+        $userIdentifier = 'user@example.com';
         $userPassword = 'password';
 
         $createUserResponse = $this->applicationClient->makeAdminCreateUserRequest(
-            $userEmail,
+            $userIdentifier,
             $userPassword,
             $this->getAdminToken()
         );
         self::assertSame(200, $createUserResponse->getStatusCode());
 
         $createFrontendTokenResponse = $this->applicationClient->makeCreateFrontendTokenRequest(
-            $userEmail,
+            $userIdentifier,
             $userPassword
         );
         self::assertSame(200, $createFrontendTokenResponse->getStatusCode());

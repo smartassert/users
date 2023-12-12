@@ -1,5 +1,5 @@
 parameters:
-    test_user_email: 'test-user-email'
+    test_user_identifier: 'test-user-identifier'
     test_user_password: 'test-user-password'
 
 services:
@@ -16,7 +16,7 @@ services:
     App\Tests\Services\TestUserFactory:
         public: true
         arguments:
-            $testUserEmail: '%test_user_email%'
+            $testUserIdentifier: '%test_user_identifier%'
             $testUserPassword: '%test_user_password%'
 
     App\Tests\Services\UserRemover:

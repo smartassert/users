@@ -25,7 +25,7 @@ class UserFactory
      */
     public function create(string $userIdentifier, string $plainPassword): User
     {
-        $user = $this->userRepository->findByEmail($userIdentifier);
+        $user = $this->userRepository->findByUserIdentifier($userIdentifier);
 
         if ($user instanceof User) {
             throw new UserAlreadyExistsException($user);

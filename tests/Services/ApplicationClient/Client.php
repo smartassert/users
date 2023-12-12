@@ -60,7 +60,7 @@ class Client
     }
 
     public function makeAdminCreateUserRequest(
-        ?string $email,
+        ?string $identifier,
         ?string $password,
         string $adminToken,
         string $method = 'POST'
@@ -71,8 +71,8 @@ class Client
         ];
 
         $payload = [];
-        if (is_string($email)) {
-            $payload['email'] = $email;
+        if (is_string($identifier)) {
+            $payload['identifier'] = $identifier;
         }
 
         if (is_string($password)) {

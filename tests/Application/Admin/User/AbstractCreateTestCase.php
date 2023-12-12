@@ -34,7 +34,7 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
     public function testCreateBadMethod(string $method): void
     {
         $response = $this->applicationClient->makeAdminCreateUserRequest(
-            'email',
+            'identifier',
             'password',
             $this->getAdminToken(),
             $method
@@ -65,7 +65,7 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
     public function testCreateUnauthorized(): void
     {
         $response = $this->applicationClient->makeAdminCreateUserRequest(
-            'email',
+            'identifier',
             'password',
             'invalid admin token'
         );
@@ -79,12 +79,12 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
      * @dataProvider createBadRequestValueMissingDataProvider
      */
     public function testCreateBadRequestValueMissing(
-        ?string $email,
+        ?string $identifier,
         ?string $password,
         string $expectedMissingField
     ): void {
         $response = $this->applicationClient->makeAdminCreateUserRequest(
-            $email,
+            $identifier,
             $password,
             $this->getAdminToken()
         );
@@ -108,13 +108,13 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
     public function createBadRequestValueMissingDataProvider(): array
     {
         return [
-            'email missing' => [
-                'email' => null,
+            'identifier missing' => [
+                'identifier' => null,
                 'password' => 'non-empty value',
-                'expectedMissingField' => 'email',
+                'expectedMissingField' => 'identifier',
             ],
             'password missing' => [
-                'email' => 'non-empty value',
+                'identifier' => 'non-empty value',
                 'password' => null,
                 'expectedMissingField' => 'password',
             ],
@@ -123,11 +123,11 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
 
     public function testCreateUserAlreadyExists(): void
     {
-        $email = 'user@example.com';
+        $identifier = 'user@example.com';
         $password = 'password';
 
         $successResponse = $this->applicationClient->makeAdminCreateUserRequest(
-            $email,
+            $identifier,
             $password,
             $this->getAdminToken()
         );
@@ -137,7 +137,7 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
         self::assertSame(1, $this->apiKeyRepository->count([]));
 
         $badRequestResponse = $this->applicationClient->makeAdminCreateUserRequest(
-            $email,
+            $identifier,
             $password,
             $this->getAdminToken()
         );
@@ -145,7 +145,7 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
         self::assertSame(409, $badRequestResponse->getStatusCode());
         self::assertSame(1, $this->userRepository->count([]));
         self::assertSame(1, $this->apiKeyRepository->count([]));
-        $this->verifyCreateUserResponse($badRequestResponse, $email);
+        $this->verifyCreateUserResponse($badRequestResponse, $identifier);
     }
 
     public function testCreateSuccess(): void
@@ -153,11 +153,11 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
         self::assertSame(0, $this->userRepository->count([]));
         self::assertSame(0, $this->apiKeyRepository->count([]));
 
-        $email = 'user@example.com';
+        $identifier = 'user@example.com';
         $password = 'password';
 
         $response = $this->applicationClient->makeAdminCreateUserRequest(
-            $email,
+            $identifier,
             $password,
             $this->getAdminToken()
         );
@@ -166,12 +166,12 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
         self::assertSame(1, $this->userRepository->count([]));
         self::assertSame(1, $this->apiKeyRepository->count([]));
 
-        $this->verifyCreateUserResponse($response, $email);
+        $this->verifyCreateUserResponse($response, $identifier);
     }
 
     abstract protected function getAdminToken(): string;
 
-    private function verifyCreateUserResponse(ResponseInterface $response, string $expectedUserEmail): void
+    private function verifyCreateUserResponse(ResponseInterface $response, string $expectedUserIdentifier): void
     {
         self::assertSame('application/json', $response->getHeaderLine('content-type'));
 
@@ -185,7 +185,7 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
         self::assertSame(
             [
                 'id' => $user->getId(),
-                'user-identifier' => $expectedUserEmail,
+                'user-identifier' => $expectedUserIdentifier,
             ],
             $responseData['user']
         );
