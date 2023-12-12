@@ -181,13 +181,12 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
         $user = $this->userRepository->findAll()[0];
         self::assertInstanceOf(User::class, $user);
 
-        self::assertArrayHasKey('user', $responseData);
         self::assertSame(
             [
                 'id' => $user->getId(),
                 'user-identifier' => $expectedUserIdentifier,
             ],
-            $responseData['user']
+            $responseData
         );
     }
 }
