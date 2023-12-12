@@ -98,6 +98,7 @@ abstract class AbstractRevokeTest extends AbstractApplicationTestCase
             $frontendTokenData['refresh_token']
         );
         self::assertSame(200, $revokeResponse->getStatusCode());
+        self::assertSame('', $revokeResponse->getHeaderLine('content-type'));
 
         $refreshResponse = $this->applicationClient->makeRefreshFrontendTokenRequest(
             $frontendTokenData['refresh_token']
