@@ -20,12 +20,12 @@ class CreateUserRequestResolver implements ValueResolverInterface
             return [];
         }
 
-        $email = $request->request->get(CreateUserRequest::KEY_EMAIL);
-        $email = is_string($email) ? trim($email) : null;
+        $identifier = $request->request->get(CreateUserRequest::KEY_IDENTIFIER);
+        $identifier = is_string($identifier) ? trim($identifier) : null;
 
         $password = $request->request->get(CreateUserRequest::KEY_PASSWORD);
         $password = is_string($password) ? $password : null;
 
-        return [new CreateUserRequest('' === $email ? null : $email, '' === $password ? null : $password)];
+        return [new CreateUserRequest('' === $identifier ? null : $identifier, '' === $password ? null : $password)];
     }
 }

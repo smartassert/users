@@ -74,24 +74,24 @@ abstract class AbstractListTestCase extends AbstractApplicationTestCase
      */
     public function testListSuccess(
         callable $setup,
-        string $userEmail,
+        string $userIdentifier,
         string $userPassword,
         callable $expectedResponseDataCreator,
     ): void {
         $setup($this->applicationClient);
 
         $this->applicationClient->makeAdminCreateUserRequest(
-            $userEmail,
+            $userIdentifier,
             $userPassword,
             $this->getAdminToken()
         );
 
         $userRepository = self::getContainer()->get(UserRepository::class);
         \assert($userRepository instanceof UserRepository);
-        $user = $userRepository->findByEmail($userEmail);
+        $user = $userRepository->findByUserIdentifier($userIdentifier);
         \assert($user instanceof User);
 
-        $createTokenResponse = $this->applicationClient->makeCreateFrontendTokenRequest($userEmail, $userPassword);
+        $createTokenResponse = $this->applicationClient->makeCreateFrontendTokenRequest($userIdentifier, $userPassword);
         $createTokenData = json_decode($createTokenResponse->getBody()->getContents(), true);
         self::assertIsArray($createTokenData);
         $token = $createTokenData['token'] ?? null;
@@ -120,7 +120,7 @@ abstract class AbstractListTestCase extends AbstractApplicationTestCase
             'single user' => [
                 'setup' => function (Client $applicationClient) {
                 },
-                'userEmail' => 'user@example.com',
+                'userIdentifier' => 'user@example.com',
                 'userPassword' => 'password',
                 'expectedResponseDataCreator' => function (User $user, ApiKeyRepository $apiKeyRepository) {
                     $apiKeys = $apiKeyRepository->findBy(['owner' => $user, 'label' => null]);
@@ -144,7 +144,7 @@ abstract class AbstractListTestCase extends AbstractApplicationTestCase
                         $this->getAdminToken()
                     );
                 },
-                'userEmail' => 'user@example.com',
+                'userIdentifier' => 'user@example.com',
                 'userPassword' => 'password',
                 'expectedResponseDataCreator' => function (User $user, ApiKeyRepository $apiKeyRepository) {
                     $apiKeys = $apiKeyRepository->findBy(['owner' => $user, 'label' => null]);

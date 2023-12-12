@@ -11,14 +11,14 @@ class TestUserFactory
 {
     public function __construct(
         private UserFactory $userFactory,
-        private string $testUserEmail,
+        private string $testUserIdentifier,
         private string $testUserPassword,
     ) {
     }
 
     public function create(): User
     {
-        return $this->userFactory->create($this->testUserEmail, $this->testUserPassword);
+        return $this->userFactory->create($this->testUserIdentifier, $this->testUserPassword);
     }
 
     /**
@@ -27,7 +27,7 @@ class TestUserFactory
     public function getCredentials(): array
     {
         return [
-            'userIdentifier' => $this->testUserEmail,
+            'userIdentifier' => $this->testUserIdentifier,
             'password' => $this->testUserPassword,
         ];
     }

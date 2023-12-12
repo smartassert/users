@@ -34,28 +34,28 @@ class UserFactoryTest extends AbstractBaseFunctionalTestCase
     {
         self::assertCount(0, $this->userRepository->findAll());
 
-        $email = 'user@example.com';
+        $identifier = 'user@example.com';
         $plainPassword = 'password';
 
-        $user = $this->userFactory->create($email, $plainPassword);
+        $user = $this->userFactory->create($identifier, $plainPassword);
 
         self::assertNotEquals($plainPassword, $user->getPassword());
         self::assertTrue(Ulid::isValid($user->getId()));
 
-        $retrievedUser = $this->userRepository->findByEmail($email);
+        $retrievedUser = $this->userRepository->findByUserIdentifier($identifier);
 
         self::assertEquals($user, $retrievedUser);
     }
 
     public function testCreateUserAlreadyExists(): void
     {
-        $email = 'user@example.com';
+        $identifier = 'user@example.com';
         $plainPassword = 'password';
 
-        $user = $this->userFactory->create($email, $plainPassword);
+        $user = $this->userFactory->create($identifier, $plainPassword);
 
         try {
-            $this->userFactory->create($email, $plainPassword);
+            $this->userFactory->create($identifier, $plainPassword);
             $this->fail(UserAlreadyExistsException::class . ' not thrown');
         } catch (UserAlreadyExistsException $userAlreadyExistsException) {
             self::assertEquals($user, $userAlreadyExistsException->getUser());

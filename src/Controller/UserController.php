@@ -22,8 +22,8 @@ readonly class UserController
 
     public function create(CreateUserRequest $request): Response
     {
-        if (null === $request->email) {
-            return new BadRequestValueMissingResponse('email');
+        if (null === $request->identifier) {
+            return new BadRequestValueMissingResponse('identifier');
         }
 
         if (null === $request->password) {
@@ -33,7 +33,7 @@ readonly class UserController
         $userCreated = false;
 
         try {
-            $user = $this->userFactory->create($request->email, $request->password);
+            $user = $this->userFactory->create($request->identifier, $request->password);
             $this->apiKeyFactory->create($user);
             $userCreated = true;
         } catch (UserAlreadyExistsException $userAlreadyExistsException) {
