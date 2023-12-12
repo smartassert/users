@@ -176,14 +176,18 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         self::assertSame(401, $response->getStatusCode());
     }
 
-    public function testCreateInvalidRequestJson(): void
-    {
-        $userIdentifier = 'user@example.com';
-        $userPassword = 'password';
-
+    /**
+     * @dataProvider createBadRequestDataProvider
+     */
+    public function testCreateBadRequest(
+        string $createUserIdentifier,
+        string $createUserPassword,
+        ?string $createTokenIdentifier,
+        ?string $createTokenPassword
+    ): void {
         $createUserResponse = $this->applicationClient->makeAdminCreateUserRequest(
-            $userIdentifier,
-            $userPassword,
+            $createUserIdentifier,
+            $createUserPassword,
             $this->getAdminToken()
         );
         self::assertSame(200, $createUserResponse->getStatusCode());
@@ -194,9 +198,42 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         $user = $userRepository->findAll()[0];
         self::assertInstanceOf(User::class, $user);
 
-        $createResponse = $this->applicationClient->makeCreateFrontendTokenRequest(null, null);
+        $createResponse = $this->applicationClient->makeCreateFrontendTokenRequest(
+            $createTokenIdentifier,
+            $createTokenPassword
+        );
         self::assertSame(401, $createResponse->getStatusCode());
         self::assertSame('', $createResponse->getHeaderLine('content-type'));
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function createBadRequestDataProvider(): array
+    {
+        $userIdentifier = 'user@example.com';
+        $userPassword = 'password';
+
+        return [
+            'no credentials' => [
+                'createUserIdentifier' => $userIdentifier,
+                'createUserPassword' => $userPassword,
+                'createTokenIdentifier' => null,
+                'createTokenPassword' => null,
+            ],
+            'user identifier missing' => [
+                'createUserIdentifier' => $userIdentifier,
+                'createUserPassword' => $userPassword,
+                'createTokenIdentifier' => null,
+                'createTokenPassword' => $userPassword,
+            ],
+            'password missing' => [
+                'createUserIdentifier' => $userIdentifier,
+                'createUserPassword' => $userPassword,
+                'createTokenIdentifier' => $userIdentifier,
+                'createTokenPassword' => null,
+            ],
+        ];
     }
 
     public function testCreateAndVerifyAndRefreshSuccess(): void
