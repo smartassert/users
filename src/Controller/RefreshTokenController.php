@@ -27,7 +27,7 @@ readonly class RefreshTokenController
 
         $this->tokenManager->deleteByUserId($request->id);
 
-        return new Response();
+        return new Response(null, 200, ['content-type' => null]);
     }
 
     public function revoke(Request $request, RefreshTokenManagerInterface $refreshTokenManager): Response
@@ -42,6 +42,6 @@ readonly class RefreshTokenController
             $refreshTokenManager->delete($refreshTokenEntity);
         }
 
-        return new Response();
+        return new Response(null, 200, ['content-type' => null]);
     }
 }

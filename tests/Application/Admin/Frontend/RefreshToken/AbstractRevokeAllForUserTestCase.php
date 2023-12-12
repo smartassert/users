@@ -114,6 +114,7 @@ abstract class AbstractRevokeAllForUserTestCase extends AbstractApplicationTestC
             $this->getAdminToken()
         );
         self::assertSame(200, $revokeResponse->getStatusCode());
+        self::assertSame('', $revokeResponse->getHeaderLine('content-type'));
         self::assertSame(0, $this->refreshTokenManager->count());
     }
 
