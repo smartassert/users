@@ -101,8 +101,7 @@ abstract class AbstractRevokeAllForUserTestCase extends AbstractApplicationTestC
         $createUserResponseData = json_decode($createUserResponse->getBody()->getContents(), true);
         \assert(is_array($createUserResponseData));
 
-        $userData = $createUserResponseData['user'] ?? [];
-        $userId = $userData['id'] ?? '';
+        $userId = $createUserResponseData['id'] ?? '';
 
         for ($refreshTokenIndex = 0; $refreshTokenIndex < $refreshTokenCount; ++$refreshTokenIndex) {
             $this->refreshTokenManager->create(new User($userId, $userIdentifier, $userPassword));

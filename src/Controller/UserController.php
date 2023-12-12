@@ -40,11 +40,6 @@ readonly class UserController
             $user = $userAlreadyExistsException->getUser();
         }
 
-        return new JsonResponse(
-            [
-                'user' => $user,
-            ],
-            true === $userCreated ? 200 : 409
-        );
+        return new JsonResponse($user, true === $userCreated ? 200 : 409);
     }
 }
