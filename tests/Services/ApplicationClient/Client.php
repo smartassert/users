@@ -126,18 +126,24 @@ class Client
     }
 
     public function makeCreateFrontendTokenRequest(
-        string $userIdentifier,
-        string $password,
+        ?string $userIdentifier,
+        ?string $password,
         string $method = 'POST'
     ): ResponseInterface {
+        $payload = [];
+        if (is_string($userIdentifier)) {
+            $payload['username'] = $userIdentifier;
+        }
+
+        if (is_string($password)) {
+            $payload['password'] = $password;
+        }
+
         return $this->client->makeRequest(
             $method,
             $this->router->generate('frontend_token_create'),
             ['Content-Type' => 'application/json'],
-            (string) json_encode([
-                'username' => $userIdentifier,
-                'password' => $password,
-            ])
+            (string) json_encode($payload)
         );
     }
 

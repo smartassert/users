@@ -10,6 +10,6 @@ class UnauthorizedResponse extends Response
 {
     public function __construct()
     {
-        parent::__construct(null, Response::HTTP_UNAUTHORIZED);
+        parent::__construct(null, Response::HTTP_UNAUTHORIZED, ['content-type' => null]);
     }
 }

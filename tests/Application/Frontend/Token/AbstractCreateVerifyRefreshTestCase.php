@@ -176,6 +176,29 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         self::assertSame(401, $response->getStatusCode());
     }
 
+    public function testCreateInvalidRequestJson(): void
+    {
+        $userIdentifier = 'user@example.com';
+        $userPassword = 'password';
+
+        $createUserResponse = $this->applicationClient->makeAdminCreateUserRequest(
+            $userIdentifier,
+            $userPassword,
+            $this->getAdminToken()
+        );
+        self::assertSame(200, $createUserResponse->getStatusCode());
+
+        $userRepository = self::getContainer()->get(UserRepository::class);
+        \assert($userRepository instanceof UserRepository);
+
+        $user = $userRepository->findAll()[0];
+        self::assertInstanceOf(User::class, $user);
+
+        $createResponse = $this->applicationClient->makeCreateFrontendTokenRequest(null, null);
+        self::assertSame(401, $createResponse->getStatusCode());
+        self::assertSame('', $createResponse->getHeaderLine('content-type'));
+    }
+
     public function testCreateAndVerifyAndRefreshSuccess(): void
     {
         $userIdentifier = 'user@example.com';
