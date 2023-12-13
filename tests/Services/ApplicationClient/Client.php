@@ -113,15 +113,23 @@ class Client
         );
     }
 
-    public function makeRefreshFrontendTokenRequest(string $refreshToken, string $method = 'POST'): ResponseInterface
-    {
+    public function makeRefreshFrontendTokenRequest(
+        ?string $refreshToken,
+        string $method = 'POST',
+        bool $forceEmptyPayload = false
+    ): ResponseInterface {
+        $payload = null;
+        if (is_string($refreshToken) || $forceEmptyPayload) {
+            $payload = (string) json_encode([
+                'refresh_token' => $refreshToken
+            ]);
+        }
+
         return $this->client->makeRequest(
             $method,
             $this->router->generate('frontend_token_refresh'),
             ['Content-Type' => 'application/json'],
-            (string) json_encode([
-                'refresh_token' => $refreshToken
-            ])
+            $payload
         );
     }
 
