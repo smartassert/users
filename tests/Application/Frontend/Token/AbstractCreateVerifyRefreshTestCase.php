@@ -169,11 +169,36 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         self::assertSame(401, $verifyResponse->getStatusCode());
     }
 
-    public function testRefreshUnauthorized(): void
+    /**
+     * @dataProvider refreshUnauthorizedDataProvider
+     */
+    public function testRefreshUnauthorized(?string $token, bool $forceEmptyPayload = false): void
     {
-        $response = $this->applicationClient->makeRefreshFrontendTokenRequest('invalid token');
+        $response = $this->applicationClient->makeRefreshFrontendTokenRequest($token, 'POST', $forceEmptyPayload);
 
         self::assertSame(401, $response->getStatusCode());
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function refreshUnauthorizedDataProvider(): array
+    {
+        return [
+            'non-empty invalid token' => [
+                'token' => 'invalid token',
+            ],
+            'empty token' => [
+                'token' => '',
+            ],
+            'null token, no payload' => [
+                'token' => null,
+            ],
+            'null token, forced empty payload' => [
+                'token' => null,
+                'forceEmptyPayload' => true,
+            ],
+        ];
     }
 
     /**
