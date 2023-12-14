@@ -13,7 +13,7 @@ parameters:
     route-apikey-get-default: '/apikey'
     route-api-token-create: '/api-token/create'
     route-api-token-verify: '/api-token/verify'
-    route-user-create: '/user/create'
+    route-user-create: '/create'
     route-refresh-token-revoke-all-for-user: '/refresh-token/revoke-all-for-user'
     route-refresh-token-revoke: '/refresh-token/revoke'
     health_check_bundle_status_path: '/'
