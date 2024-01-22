@@ -33,6 +33,9 @@ class ApiKeyRepository extends ServiceEntityRepository implements UserLoaderInte
         return $entity;
     }
 
+    /**
+     * Required by the api_user_provider entity-based user provider.
+     */
     public function loadUserByIdentifier(string $identifier): ?UserInterface
     {
         $apiKey = $this->find($identifier);
@@ -41,10 +44,5 @@ class ApiKeyRepository extends ServiceEntityRepository implements UserLoaderInte
         }
 
         return null;
-    }
-
-    public function loadUserByUsername(string $username): ?UserInterface
-    {
-        return $this->loadUserByIdentifier($username);
     }
 }
