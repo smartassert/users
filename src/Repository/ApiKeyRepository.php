@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\ApiKey;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
@@ -44,5 +45,33 @@ class ApiKeyRepository extends ServiceEntityRepository implements UserLoaderInte
         }
 
         return null;
+    }
+
+    /**
+     * @return ApiKey[]
+     */
+    public function findAllNonDefaultForUser(User $owner): array
+    {
+        $queryBuilder = $this->createQueryBuilder('ApiKey');
+        $queryBuilder
+            ->where('ApiKey.owner = :Owner AND ApiKey.label IS NOT NULL')
+            ->setParameter('Owner', $owner)
+        ;
+
+        $query = $queryBuilder->getQuery();
+        $result = $query->getResult();
+
+        $apiKeys = [];
+        if (!is_iterable($result)) {
+            return $apiKeys;
+        }
+
+        foreach ($result as $apiKey) {
+            if ($apiKey instanceof ApiKey) {
+                $apiKeys[] = $apiKey;
+            }
+        }
+
+        return $apiKeys;
     }
 }

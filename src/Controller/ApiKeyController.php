@@ -20,9 +20,7 @@ readonly class ApiKeyController
     public function list(User $user): Response
     {
         $serializedApiKeys = [];
-        $apiKeys = $this->apiKeyRepository->findBy(['owner' => $user]);
-
-        foreach ($apiKeys as $apiKey) {
+        foreach ($this->apiKeyRepository->findAllNonDefaultForUser($user) as $apiKey) {
             $serializedApiKeys[] = $this->serializeApiKey($apiKey);
         }
 

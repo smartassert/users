@@ -8,6 +8,7 @@ use App\Entity\ApiKey;
 use App\Entity\User;
 use App\Repository\ApiKeyRepository;
 use App\Repository\UserRepository;
+use App\Services\ApiKeyFactory;
 use App\Tests\Application\AbstractApplicationTestCase;
 use App\Tests\Services\ApplicationClient\Client;
 
@@ -78,7 +79,8 @@ abstract class AbstractListTestCase extends AbstractApplicationTestCase
         string $userPassword,
         callable $expectedResponseDataCreator,
     ): void {
-        $setup($this->applicationClient);
+        $apiKeyFactory = self::getContainer()->get(ApiKeyFactory::class);
+        \assert($apiKeyFactory instanceof ApiKeyFactory);
 
         $this->applicationClient->makeAdminCreateUserRequest(
             $userIdentifier,
@@ -90,6 +92,8 @@ abstract class AbstractListTestCase extends AbstractApplicationTestCase
         \assert($userRepository instanceof UserRepository);
         $user = $userRepository->findByUserIdentifier($userIdentifier);
         \assert($user instanceof User);
+
+        $setup($this->applicationClient, $apiKeyFactory, $user);
 
         $createTokenResponse = $this->applicationClient->makeCreateFrontendTokenRequest($userIdentifier, $userPassword);
         $createTokenData = json_decode($createTokenResponse->getBody()->getContents(), true);
@@ -117,20 +121,35 @@ abstract class AbstractListTestCase extends AbstractApplicationTestCase
     public function listSuccessDataProvider(): array
     {
         return [
-            'single user' => [
+            'single user, default api key only' => [
                 'setup' => function (Client $applicationClient) {
                 },
                 'userIdentifier' => 'user@example.com',
                 'userPassword' => 'password',
+                'expectedResponseDataCreator' => function () {
+                    return [];
+                },
+            ],
+            'single user, single non-default api key' => [
+                'setup' => function (Client $applicationClient, ApiKeyFactory $apiKeyFactory, User $user) {
+                    $apiKeyFactory->create($user, 'label value');
+                },
+                'userIdentifier' => 'user@example.com',
+                'userPassword' => 'password',
                 'expectedResponseDataCreator' => function (User $user, ApiKeyRepository $apiKeyRepository) {
-                    $apiKeys = $apiKeyRepository->findBy(['owner' => $user, 'label' => null]);
-                    self::assertIsArray($apiKeys);
-                    self::assertCount(1, $apiKeys);
+                    $allApiKeys = $apiKeyRepository->findBy(['owner' => $user]);
+
+                    $apiKeys = [];
+                    foreach ($allApiKeys as $apiKey) {
+                        if ('label value' === $apiKey->label) {
+                            $apiKeys[] = $apiKey;
+                        }
+                    }
 
                     return $this->createExpectedResponseDataFromApiKeyCollection($apiKeys);
                 },
             ],
-            'multiple users' => [
+            'multiple users, specific has has default api key only' => [
                 'setup' => function (Client $applicationClient) {
                     $applicationClient->makeAdminCreateUserRequest(
                         'user2@example.com',
@@ -146,12 +165,8 @@ abstract class AbstractListTestCase extends AbstractApplicationTestCase
                 },
                 'userIdentifier' => 'user@example.com',
                 'userPassword' => 'password',
-                'expectedResponseDataCreator' => function (User $user, ApiKeyRepository $apiKeyRepository) {
-                    $apiKeys = $apiKeyRepository->findBy(['owner' => $user, 'label' => null]);
-                    self::assertIsArray($apiKeys);
-                    self::assertCount(1, $apiKeys);
-
-                    return $this->createExpectedResponseDataFromApiKeyCollection($apiKeys);
+                'expectedResponseDataCreator' => function () {
+                    return [];
                 },
             ],
         ];
