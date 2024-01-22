@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\ApiKey;
 use App\Entity\User;
 use App\Repository\ApiKeyRepository;
+use App\Services\ApiKeyFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,6 +15,7 @@ readonly class ApiKeyController
 {
     public function __construct(
         private ApiKeyRepository $apiKeyRepository,
+        private ApiKeyFactory $apiKeyFactory,
     ) {
     }
 
@@ -29,14 +31,12 @@ readonly class ApiKeyController
 
     public function getDefault(User $user): Response
     {
-        $apiKey = $this->apiKeyRepository->findOneBy([
-            'owner' => $user,
-            'label' => null,
-        ]);
+        $apiKey = $this->apiKeyRepository->findOneBy(['owner' => $user, 'label' => null]);
+        if (null === $apiKey) {
+            $apiKey = $this->apiKeyFactory->create($user);
+        }
 
-        return $apiKey instanceof ApiKey
-            ? new JsonResponse($this->serializeApiKey($apiKey))
-            : new Response(null, 404);
+        return new JsonResponse($this->serializeApiKey($apiKey));
     }
 
     /**
