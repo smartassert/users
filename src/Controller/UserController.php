@@ -7,7 +7,6 @@ namespace App\Controller;
 use App\Exception\UserAlreadyExistsException;
 use App\Request\CreateUserRequest;
 use App\Response\BadRequestValueMissingResponse;
-use App\Services\ApiKeyFactory;
 use App\Services\UserFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +15,6 @@ readonly class UserController
 {
     public function __construct(
         private UserFactory $userFactory,
-        private ApiKeyFactory $apiKeyFactory,
     ) {
     }
 
@@ -34,7 +32,6 @@ readonly class UserController
 
         try {
             $user = $this->userFactory->create($request->identifier, $request->password);
-            $this->apiKeyFactory->create($user);
             $userCreated = true;
         } catch (UserAlreadyExistsException $userAlreadyExistsException) {
             $user = $userAlreadyExistsException->getUser();
