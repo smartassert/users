@@ -23,7 +23,7 @@ class User extends AbstractUser implements UserInterface, PasswordAuthenticatedU
     #[ORM\Column(type: 'string', length: UserPropertiesInterface::ID_LENGTH, unique: true)]
     protected string $id;
 
-    #[ORM\Column(type: 'string', length: 254, unique: true)]
+    #[ORM\Column(type: 'string', length: UserPropertiesInterface::IDENTIFIER_MAX_LENGTH, unique: true)]
     protected string $userIdentifier;
 
     #[ORM\Column(type: 'string')]
