@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use App\Entity\RefreshToken;
 use App\Request\RevokeRefreshTokenRequest;
-use App\Response\BadRequestValueMissingResponse;
 use App\Services\UserRefreshTokenManager;
 use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,10 +20,6 @@ readonly class RefreshTokenController
 
     public function revokeAllForUser(RevokeRefreshTokenRequest $request): Response
     {
-        if (null === $request->id) {
-            return new BadRequestValueMissingResponse('id');
-        }
-
         $this->tokenManager->deleteByUserId($request->id);
 
         return new Response(null, 200, ['content-type' => null]);

@@ -73,9 +73,21 @@ abstract class AbstractRevokeAllForUserTestCase extends AbstractApplicationTestC
 
         self::assertSame(400, $response->getStatusCode());
         self::assertSame('application/json', $response->getHeaderLine('content-type'));
-        self::assertSame(
+        self::assertEquals(
             [
-                'message' => 'Value for field "id" missing',
+                'class' => 'bad_request',
+                'parameter' => [
+                    'name' => 'id',
+                    'value' => '',
+                    'requirements' => [
+                        'data_type' => 'string',
+                        'size' => [
+                            'minimum' => 1,
+                            'maximum' => null,
+                        ]
+                    ],
+                ],
+                'type' => 'wrong_size',
             ],
             json_decode($response->getBody()->getContents(), true)
         );

@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use App\Exception\UserAlreadyExistsException;
 use App\Request\CreateUserRequest;
-use App\Response\BadRequestValueMissingResponse;
 use App\Services\UserFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,14 +19,6 @@ readonly class UserController
 
     public function create(CreateUserRequest $request): Response
     {
-        if (null === $request->identifier) {
-            return new BadRequestValueMissingResponse('identifier');
-        }
-
-        if (null === $request->password) {
-            return new BadRequestValueMissingResponse('password');
-        }
-
         $userCreated = false;
 
         try {

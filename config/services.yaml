@@ -80,3 +80,9 @@ services:
 
     Lexik\Bundle\JWTAuthenticationBundle\Services\KeyLoader\KeyLoaderInterface:
         alias: lexik_jwt_authentication.key_loader.raw
+
+    SmartAssert\ServiceRequest\Exception\ErrorResponseExceptionFactory: ~
+
+    SmartAssert\ServiceRequest\Parameter\Validator\StringParameterValidator: ~
+
+    SmartAssert\ServiceRequest\Parameter\Factory: ~

@@ -10,12 +10,12 @@ class CreateUserRequest
     public const KEY_PASSWORD = 'password';
 
     /**
-     * @param null|non-empty-string $identifier
-     * @param null|non-empty-string $password
+     * @param non-empty-string $identifier
+     * @param non-empty-string $password
      */
     public function __construct(
-        public readonly ?string $identifier,
-        public readonly ?string $password,
+        public readonly string $identifier,
+        public readonly string $password,
     ) {
     }
 }

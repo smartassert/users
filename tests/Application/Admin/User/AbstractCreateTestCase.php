@@ -68,12 +68,14 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
     }
 
     /**
-     * @dataProvider createBadRequestValueMissingDataProvider
+     * @dataProvider createBadRequestDataProvider
+     *
+     * @param array<mixed> $expectedResponseData
      */
-    public function testCreateBadRequestValueMissing(
+    public function testCreateBadRequest(
         ?string $identifier,
         ?string $password,
-        string $expectedMissingField
+        array $expectedResponseData,
     ): void {
         $response = $this->applicationClient->makeAdminCreateUserRequest(
             $identifier,
@@ -83,31 +85,112 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
 
         self::assertSame(400, $response->getStatusCode());
         self::assertSame('application/json', $response->getHeaderLine('content-type'));
-        self::assertSame(
-            [
-                'message' => 'Value for field "' . $expectedMissingField . '" missing',
-            ],
-            json_decode($response->getBody()->getContents(), true)
-        );
-
+        self::assertEquals($expectedResponseData, json_decode($response->getBody()->getContents(), true));
         self::assertSame(0, $this->userRepository->count([]));
     }
 
     /**
      * @return array<mixed>
      */
-    public function createBadRequestValueMissingDataProvider(): array
+    public function createBadRequestDataProvider(): array
     {
+        $identifierTooLong = str_repeat('.', 255);
+
         return [
             'identifier missing' => [
                 'identifier' => null,
                 'password' => 'non-empty value',
-                'expectedMissingField' => 'identifier',
+                'expectedResponseData' => [
+                    'class' => 'bad_request',
+                    'parameter' => [
+                        'name' => 'identifier',
+                        'value' => '',
+                        'requirements' => [
+                            'data_type' => 'string',
+                            'size' => [
+                                'minimum' => 1,
+                                'maximum' => 254,
+                            ]
+                        ],
+                    ],
+                    'type' => 'wrong_size',
+                ],
+            ],
+            'identifier empty' => [
+                'identifier' => '',
+                'password' => 'non-empty value',
+                'expectedResponseData' => [
+                    'class' => 'bad_request',
+                    'parameter' => [
+                        'name' => 'identifier',
+                        'value' => '',
+                        'requirements' => [
+                            'data_type' => 'string',
+                            'size' => [
+                                'minimum' => 1,
+                                'maximum' => 254,
+                            ]
+                        ],
+                    ],
+                    'type' => 'wrong_size',
+                ],
+            ],
+            'identifier too long' => [
+                'identifier' => $identifierTooLong,
+                'password' => 'non-empty value',
+                'expectedResponseData' => [
+                    'class' => 'bad_request',
+                    'parameter' => [
+                        'name' => 'identifier',
+                        'value' => $identifierTooLong,
+                        'requirements' => [
+                            'data_type' => 'string',
+                            'size' => [
+                                'minimum' => 1,
+                                'maximum' => 254,
+                            ]
+                        ],
+                    ],
+                    'type' => 'wrong_size',
+                ],
             ],
             'password missing' => [
                 'identifier' => 'non-empty value',
                 'password' => null,
-                'expectedMissingField' => 'password',
+                'expectedResponseData' => [
+                    'class' => 'bad_request',
+                    'parameter' => [
+                        'name' => 'password',
+                        'value' => '',
+                        'requirements' => [
+                            'data_type' => 'string',
+                            'size' => [
+                                'minimum' => 1,
+                                'maximum' => null,
+                            ]
+                        ],
+                    ],
+                    'type' => 'wrong_size',
+                ],
+            ],
+            'password empty' => [
+                'identifier' => 'non-empty value',
+                'password' => '',
+                'expectedResponseData' => [
+                    'class' => 'bad_request',
+                    'parameter' => [
+                        'name' => 'password',
+                        'value' => '',
+                        'requirements' => [
+                            'data_type' => 'string',
+                            'size' => [
+                                'minimum' => 1,
+                                'maximum' => null,
+                            ]
+                        ],
+                    ],
+                    'type' => 'wrong_size',
+                ],
             ],
         ];
     }
