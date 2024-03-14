@@ -16,8 +16,8 @@ class AuthenticationInvalidJsonResponseConverter implements EventSubscriberInter
      */
     private array $expectedExceptionMessages = [
         'Invalid JSON.',
-        'The key "username" must be provided.',
-        'The key "password" must be provided.',
+        'The key "username" must be ',
+        'The key "password" must be ',
     ];
 
     /**
@@ -39,8 +39,10 @@ class AuthenticationInvalidJsonResponseConverter implements EventSubscriberInter
             return;
         }
 
+        $message = $throwable->getMessage();
+
         foreach ($this->expectedExceptionMessages as $expectedExceptionMessage) {
-            if ($expectedExceptionMessage === $throwable->getMessage()) {
+            if (str_starts_with($message, $expectedExceptionMessage)) {
                 $event->setResponse(new UnauthorizedResponse());
                 $event->stopPropagation();
             }
