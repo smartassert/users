@@ -50,6 +50,6 @@ COPY migrations /app/migrations
 RUN mkdir -p /app/var/log \
   && chown -R www-data:www-data /app/var/log \
   && echo "APP_SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)" > .env \
-  && composer install --no-dev --no-scripts \
+  && COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --no-scripts \
   && rm composer.lock \
   && php bin/console cache:clear
