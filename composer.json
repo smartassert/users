@@ -17,12 +17,12 @@
         "symfony/console": "7.1.*",
         "symfony/dotenv": "7.1.*",
         "symfony/flex": "^2.0",
-        "symfony/framework-bundle": "7.0.*",
+        "symfony/framework-bundle": "7.1.*",
         "symfony/monolog-bundle": "^3.7",
-        "symfony/runtime": "7.0.*",
-        "symfony/security-bundle": "7.0.*",
-        "symfony/uid": "7.0.*",
-        "symfony/yaml": "7.0.*"
+        "symfony/runtime": "7.1.*",
+        "symfony/security-bundle": "7.1.*",
+        "symfony/uid": "7.1.*",
+        "symfony/yaml": "7.1.*"
     },
     "require-dev": {
         "guzzlehttp/guzzle": "^7.5",
@@ -37,11 +37,11 @@
         "phpunit/phpunit": "^9.5",
         "smartassert/symfony-test-client": "^2.1",
         "squizlabs/php_codesniffer": "^4",
-        "symfony/browser-kit": "7.0.*",
-        "symfony/css-selector": "7.0.*",
+        "symfony/browser-kit": "7.1.*",
+        "symfony/css-selector": "7.1.*",
         "symfony/maker-bundle": "^1.33",
-        "symfony/phpunit-bridge": "7.0.*",
-        "symfony/psr-http-message-bridge": "7.0.*"
+        "symfony/phpunit-bridge": "7.1.*",
+        "symfony/psr-http-message-bridge": "7.1.*"
     },
     "config": {
         "optimize-autoloader": true,
@@ -142,7 +142,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.0.*"
+            "require": "7.1.*"
         }
     }
 }
