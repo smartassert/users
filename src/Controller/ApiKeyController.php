@@ -40,7 +40,7 @@ readonly class ApiKeyController
     }
 
     /**
-     * @return array{label: ?non-empty-string, key: non-empty-string}
+     * @return array{label: ?string, key: string}
      */
     private function serializeApiKey(ApiKey $apiKey): array
     {

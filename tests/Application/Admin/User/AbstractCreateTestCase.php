@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Application\Admin\User;
 
-use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Tests\Application\AbstractApplicationTestCase;
 use Psr\Http\Message\ResponseInterface;
@@ -249,7 +248,6 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
         self::assertIsArray($responseData);
 
         $user = $this->userRepository->findAll()[0];
-        self::assertInstanceOf(User::class, $user);
 
         self::assertSame(
             [

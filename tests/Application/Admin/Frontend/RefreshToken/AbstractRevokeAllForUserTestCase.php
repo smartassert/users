@@ -114,6 +114,7 @@ abstract class AbstractRevokeAllForUserTestCase extends AbstractApplicationTestC
         \assert(is_array($createUserResponseData));
 
         $userId = $createUserResponseData['id'] ?? '';
+        $userId = is_string($userId) ? $userId : '';
 
         for ($refreshTokenIndex = 0; $refreshTokenIndex < $refreshTokenCount; ++$refreshTokenIndex) {
             $this->refreshTokenManager->create(new User($userId, $userIdentifier, $userPassword));
