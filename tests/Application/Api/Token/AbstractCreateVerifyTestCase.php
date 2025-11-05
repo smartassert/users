@@ -132,12 +132,10 @@ abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
         $userRepository = self::getContainer()->get(UserRepository::class);
         \assert($userRepository instanceof UserRepository);
         $user = $userRepository->findAll()[0];
-        self::assertInstanceOf(User::class, $user);
 
         $apiKeyFactory = self::getContainer()->get(ApiKeyFactory::class);
         \assert($apiKeyFactory instanceof ApiKeyFactory);
         $apiKey = $apiKeyFactory->create($user);
-        self::assertIsString($apiKey->id);
 
         $createResponse = $this->applicationClient->makeCreteApiTokenRequest($apiKey->id);
         self::assertSame(200, $createResponse->getStatusCode());
@@ -155,7 +153,6 @@ abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
         \assert($tokenManager instanceof JWTTokenManagerInterface);
 
         $tokenData = $tokenManager->parse($token);
-        self::assertIsArray($tokenData);
         self::assertSame($user->getId(), $tokenData['sub']);
         self::assertSame($user->getUserIdentifier(), $tokenData['userIdentifier']);
         self::assertSame(['api'], $tokenData['aud']);

@@ -146,12 +146,10 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         $userRepository = self::getContainer()->get(UserRepository::class);
         \assert($userRepository instanceof UserRepository);
         $user = $userRepository->findAll()[0];
-        self::assertInstanceOf(User::class, $user);
 
         $apiKeyFactory = self::getContainer()->get(ApiKeyFactory::class);
         \assert($apiKeyFactory instanceof ApiKeyFactory);
         $apiKey = $apiKeyFactory->create($user);
-        self::assertIsString($apiKey->id);
 
         $createApiTokenResponse = $this->applicationClient->makeCreteApiTokenRequest($apiKey->id);
         self::assertSame(200, $createApiTokenResponse->getStatusCode());
@@ -220,9 +218,6 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         $userRepository = self::getContainer()->get(UserRepository::class);
         \assert($userRepository instanceof UserRepository);
 
-        $user = $userRepository->findAll()[0];
-        self::assertInstanceOf(User::class, $user);
-
         $createResponse = $this->applicationClient->makeCreateFrontendTokenRequest(
             $createTokenIdentifier,
             $createTokenPassword
@@ -277,7 +272,6 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         \assert($userRepository instanceof UserRepository);
 
         $user = $userRepository->findAll()[0];
-        self::assertInstanceOf(User::class, $user);
 
         $createResponse = $this->applicationClient->makeCreateFrontendTokenRequest($userIdentifier, $userPassword);
         self::assertSame(200, $createResponse->getStatusCode());
@@ -295,7 +289,6 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         \assert($tokenManager instanceof JWTTokenManagerInterface);
 
         $tokenData = $tokenManager->parse($token);
-        self::assertIsArray($tokenData);
         self::assertSame($user->getId(), $tokenData['sub']);
         self::assertSame($user->getUserIdentifier(), $tokenData['userIdentifier']);
         self::assertSame(['frontend'], $tokenData['aud']);

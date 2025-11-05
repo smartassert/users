@@ -22,11 +22,6 @@ class UserTest extends TestCase
         $this->user = new User(self::TOKEN);
     }
 
-    public function testIsUserInterfaceInstance(): void
-    {
-        self::assertInstanceOf(UserInterface::class, $this->user);
-    }
-
     public function testGetRoles(): void
     {
         self::assertSame(
