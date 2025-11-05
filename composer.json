@@ -15,7 +15,7 @@
         "smartassert/health-check-bundle": "^6.0",
         "smartassert/service-request": "^1.4",
         "symfony/console": "7.1.*",
-        "symfony/dotenv": "7.0.*",
+        "symfony/dotenv": "7.1.*",
         "symfony/flex": "^2.0",
         "symfony/framework-bundle": "7.0.*",
         "symfony/monolog-bundle": "^3.7",
