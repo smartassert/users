@@ -9,18 +9,18 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ApiKeyRepository::class)]
 #[ORM\UniqueConstraint(name: 'owner_label_idx', columns: ['owner_id', 'label'])]
-class ApiKey
+readonly class ApiKey
 {
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
-    public readonly User $owner;
+    public User $owner;
 
     #[ORM\Id]
     #[ORM\Column(type: 'string', length: ApiKeyPropertiesInterface::ID_LENGTH, unique: true)]
-    public readonly string $id;
+    public string $id;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    public readonly ?string $label;
+    public ?string $label;
 
     /**
      * @param non-empty-string  $id
