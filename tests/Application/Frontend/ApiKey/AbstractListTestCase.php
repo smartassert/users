@@ -8,6 +8,7 @@ use App\Entity\ApiKey;
 use App\Entity\User;
 use App\Repository\ApiKeyRepository;
 use App\Repository\UserRepository;
+use App\Security\IdentifiableUserInterface;
 use App\Services\ApiKeyFactory;
 use App\Tests\Application\AbstractApplicationTestCase;
 use App\Tests\Services\ApplicationClient\Client;
@@ -136,8 +137,11 @@ abstract class AbstractListTestCase extends AbstractApplicationTestCase
                 },
                 'userIdentifier' => 'user@example.com',
                 'userPassword' => 'password',
-                'expectedResponseDataCreator' => function (User $user, ApiKeyRepository $apiKeyRepository) {
-                    $allApiKeys = $apiKeyRepository->findBy(['owner' => $user]);
+                'expectedResponseDataCreator' => function (
+                    IdentifiableUserInterface $user,
+                    ApiKeyRepository $apiKeyRepository
+                ) {
+                    $allApiKeys = $apiKeyRepository->findBy(['ownerId' => $user->getId()]);
 
                     $apiKeys = [];
                     foreach ($allApiKeys as $apiKey) {

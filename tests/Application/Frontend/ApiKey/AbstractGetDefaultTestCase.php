@@ -97,7 +97,7 @@ abstract class AbstractGetDefaultTestCase extends AbstractApplicationTestCase
         $apiKeyRepository = self::getContainer()->get(ApiKeyRepository::class);
         \assert($apiKeyRepository instanceof ApiKeyRepository);
 
-        $apKey = $apiKeyRepository->findOneBy(['owner' => $user]);
+        $apKey = $apiKeyRepository->findOneBy(['ownerId' => $user->getId()]);
         \assert($apKey instanceof ApiKey);
 
         self::assertEquals(
