@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Application\Admin\User;
 
-use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Tests\Application\AbstractApplicationTestCase;
 use Psr\Http\Message\ResponseInterface;

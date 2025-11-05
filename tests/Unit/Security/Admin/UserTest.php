@@ -7,7 +7,6 @@ namespace App\Tests\Unit\Security\Admin;
 use App\Security\Admin\User;
 use App\Security\UserRoleInterface;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserTest extends TestCase
 {

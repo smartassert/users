@@ -34,10 +34,10 @@ class JWTUser extends AbstractUser implements JWTUserInterface, \JsonSerializabl
         }
 
         if (
-            $payloadRoles !== [UserRoleInterface::ROLE_USER] &&
-            $payloadRoles !== [UserRoleInterface::ROLE_ADMIN] &&
-            $payloadRoles !== [UserRoleInterface::ROLE_USER, UserRoleInterface::ROLE_ADMIN] &&
-            $payloadRoles !== [UserRoleInterface::ROLE_ADMIN, UserRoleInterface::ROLE_USER]
+            $payloadRoles !== [UserRoleInterface::ROLE_USER]
+            && $payloadRoles !== [UserRoleInterface::ROLE_ADMIN]
+            && $payloadRoles !== [UserRoleInterface::ROLE_USER, UserRoleInterface::ROLE_ADMIN]
+            && $payloadRoles !== [UserRoleInterface::ROLE_ADMIN, UserRoleInterface::ROLE_USER]
         ) {
             throw new InvalidJwtUserPayloadException($username, $payload, 'roles');
         }

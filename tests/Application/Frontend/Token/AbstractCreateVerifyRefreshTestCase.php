@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Application\Frontend\Token;
 
-use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Services\ApiKeyFactory;
 use App\Tests\Application\AbstractApplicationTestCase;
