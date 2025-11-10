@@ -31,7 +31,7 @@ readonly class ApiKeyController
 
     public function getDefault(User $user): Response
     {
-        $apiKey = $this->apiKeyRepository->findOneBy(['owner' => $user, 'label' => null]);
+        $apiKey = $this->apiKeyRepository->findOneBy(['ownerId' => $user->getId(), 'label' => null]);
         if (null === $apiKey) {
             $apiKey = $this->apiKeyFactory->create($user);
         }

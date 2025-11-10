@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\ApiKey;
-use App\Entity\User;
+use App\Security\IdentifiableUserInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
@@ -16,9 +16,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class ApiKeyRepository extends ServiceEntityRepository implements UserLoaderInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    private readonly UserRepository $userRepository;
+
+    public function __construct(ManagerRegistry $registry, UserRepository $userRepository)
     {
         parent::__construct($registry, ApiKey::class);
+        $this->userRepository = $userRepository;
     }
 
     public function add(ApiKey $entity): ApiKey
@@ -35,22 +38,23 @@ class ApiKeyRepository extends ServiceEntityRepository implements UserLoaderInte
     public function loadUserByIdentifier(string $identifier): ?UserInterface
     {
         $apiKey = $this->find($identifier);
-        if ($apiKey instanceof ApiKey) {
-            return $apiKey->owner;
+
+        if (!$apiKey instanceof ApiKey) {
+            return null;
         }
 
-        return null;
+        return $this->userRepository->findOneBy(['id' => $apiKey->ownerId]);
     }
 
     /**
      * @return ApiKey[]
      */
-    public function findAllNonDefaultForUser(User $owner): array
+    public function findAllNonDefaultForUser(IdentifiableUserInterface $owner): array
     {
         $queryBuilder = $this->createQueryBuilder('ApiKey');
         $queryBuilder
-            ->where('ApiKey.owner = :Owner AND ApiKey.label IS NOT NULL')
-            ->setParameter('Owner', $owner)
+            ->where('ApiKey.ownerId = :Owner AND ApiKey.label IS NOT NULL')
+            ->setParameter('Owner', $owner->getId())
         ;
 
         $query = $queryBuilder->getQuery();

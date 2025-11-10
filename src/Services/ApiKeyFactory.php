@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Entity\ApiKey;
-use App\Entity\User;
 use App\Repository\ApiKeyRepository;
+use App\Security\IdentifiableUserInterface;
 use Symfony\Component\Uid\Ulid;
 
 class ApiKeyFactory
@@ -19,15 +19,15 @@ class ApiKeyFactory
     /**
      * @param ?non-empty-string $label
      */
-    public function create(User $user, ?string $label = null): ApiKey
+    public function create(IdentifiableUserInterface $user, ?string $label = null): ApiKey
     {
         $key = $this->repository->findOneBy([
-            'owner' => $user,
+            'ownerId' => $user->getId(),
             'label' => $label,
         ]);
 
         if (null === $key) {
-            $key = $this->repository->add(new ApiKey($this->generateId(), $label, $user));
+            $key = $this->repository->add(new ApiKey($this->generateId(), $label, $user->getId()));
         }
 
         return $key;

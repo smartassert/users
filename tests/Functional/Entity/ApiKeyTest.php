@@ -46,7 +46,7 @@ class ApiKeyTest extends AbstractBaseFunctionalTestCase
         $apiKey = new ApiKey(
             '98765432109876543210987654321098',
             'label value',
-            $user
+            $user->getId()
         );
 
         $this->entityManager->persist($apiKey);

@@ -43,7 +43,7 @@ class ApiKeyFactoryTest extends AbstractBaseFunctionalTestCase
 
         $apiKey = $this->apiKeyFactory->create($this->user, $label);
         self::assertCount(1, $this->apiKeyRepository->findAll());
-        self::assertSame($this->user, $apiKey->owner);
+        self::assertSame($this->user->getId(), $apiKey->ownerId);
 
         $retrievedApiKey = $this->apiKeyRepository->findOneBy(['id' => $apiKey->id]);
 
