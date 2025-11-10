@@ -9,6 +9,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class User implements UserInterface
 {
+    /**
+     * @param non-empty-string $token
+     */
     public function __construct(
         private string $token
     ) {
@@ -43,6 +46,9 @@ class User implements UserInterface
         return $this->getUserIdentifier();
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getUserIdentifier(): string
     {
         return $this->token;

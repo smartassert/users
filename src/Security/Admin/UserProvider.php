@@ -22,11 +22,17 @@ class UserProvider implements UserProviderInterface
         return User::class === $class;
     }
 
+    /**
+     * @param non-empty-string $username
+     */
     public function loadUserByUsername(string $username): UserInterface
     {
         return $this->loadUserByIdentifier($username);
     }
 
+    /**
+     * @param non-empty-string $identifier
+     */
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
         return new User($identifier);
