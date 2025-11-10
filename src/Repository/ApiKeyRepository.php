@@ -73,4 +73,9 @@ class ApiKeyRepository extends ServiceEntityRepository implements UserLoaderInte
 
         return $apiKeys;
     }
+
+    public function getDefault(IdentifiableUserInterface $user): ?ApiKey
+    {
+        return $this->findOneBy(['ownerId' => $user->getId(), 'label' => null]);
+    }
 }
