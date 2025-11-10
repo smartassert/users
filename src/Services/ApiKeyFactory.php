@@ -27,21 +27,9 @@ class ApiKeyFactory
         ]);
 
         if (null === $key) {
-            $key = $this->repository->add(new ApiKey($this->generateId(), $label, $user->getId()));
+            $key = $this->repository->add(new ApiKey((string) new Ulid(), $label, $user->getId()));
         }
 
         return $key;
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    private function generateId(): string
-    {
-        do {
-            $id = (string) new Ulid();
-        } while ('' === $id);
-
-        return $id;
     }
 }
