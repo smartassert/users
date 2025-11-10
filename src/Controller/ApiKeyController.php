@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\ApiKey;
-use App\Entity\User;
 use App\Repository\ApiKeyRepository;
+use App\Security\IdentifiableUserInterface;
 use App\Services\ApiKeyFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +19,7 @@ readonly class ApiKeyController
     ) {
     }
 
-    public function list(User $user): Response
+    public function list(IdentifiableUserInterface $user): Response
     {
         $serializedApiKeys = [];
         foreach ($this->apiKeyRepository->findAllNonDefaultForUser($user) as $apiKey) {
@@ -29,7 +29,7 @@ readonly class ApiKeyController
         return new JsonResponse($serializedApiKeys);
     }
 
-    public function getDefault(User $user): Response
+    public function getDefault(IdentifiableUserInterface $user): Response
     {
         $apiKey = $this->apiKeyRepository->findOneBy(['ownerId' => $user->getId(), 'label' => null]);
         if (null === $apiKey) {
