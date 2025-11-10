@@ -36,9 +36,9 @@ class VerifyAuthenticator extends JWTAuthenticator
         parent::__construct($jwtManager, $eventDispatcher, $tokenExtractor, $userProvider);
     }
 
-    public function doAuthenticate(Request $request): Passport
+    public function authenticate(Request $request): Passport
     {
-        $passport = parent::doAuthenticate($request);
+        $passport = parent::authenticate($request);
 
         $firewallName = $this->getFirewallName($request);
         $jwtAud = $this->getJwtAud($passport);
