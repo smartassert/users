@@ -9,9 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ApiKeyRepository::class)]
 #[ORM\UniqueConstraint(name: 'owner_label_idx', columns: ['owner_id', 'label'])]
+#[ORM\Index(name: 'owner_id_idx', columns: ['owner_id'])]
 readonly class ApiKey
 {
-    #[ORM\Column(nullable: false)]
+    #[ORM\Column(length: UserPropertiesInterface::ID_LENGTH, nullable: false)]
     public string $ownerId;
 
     #[ORM\Id]

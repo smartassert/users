@@ -24,13 +24,7 @@ final class Version20210927145717 extends AbstractMigration
                 PRIMARY KEY(id)
             )
         ');
-        $this->addSql('CREATE INDEX IDX_C912ED9D7E3C61F9 ON api_key (owner_id)');
-        $this->addSql('
-            ALTER TABLE api_key 
-                ADD CONSTRAINT FK_C912ED9D7E3C61F9 
-                FOREIGN KEY (owner_id) REFERENCES "user" (id) 
-                NOT DEFERRABLE INITIALLY IMMEDIATE
-        ');
+        $this->addSql('CREATE INDEX owner_id_idx ON api_key (owner_id)');
         $this->addSql('CREATE UNIQUE INDEX owner_label_idx ON api_key (owner_id, label)');
     }
 
