@@ -9,7 +9,6 @@
         "ext-iconv": "*",
         "doctrine/doctrine-bundle": "^3.0",
         "doctrine/doctrine-migrations-bundle": "^3.6",
-        "doctrine/orm": "^3.5",
         "gesdinet/jwt-refresh-token-bundle": "^1.5",
         "lexik/jwt-authentication-bundle": "^3.1",
         "smartassert/health-check-bundle": "^6.0",
