@@ -21,6 +21,8 @@ class UserFactory
     }
 
     /**
+     * @param non-empty-string $userIdentifier
+     *
      * @throws UserAlreadyExistsException
      */
     public function create(string $userIdentifier, string $plainPassword): User

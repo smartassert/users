@@ -9,6 +9,9 @@ use App\Services\UserFactory;
 
 class TestUserFactory
 {
+    /**
+     * @param non-empty-string $testUserIdentifier
+     */
     public function __construct(
         private UserFactory $userFactory,
         private string $testUserIdentifier,
@@ -22,7 +25,7 @@ class TestUserFactory
     }
 
     /**
-     * @return array{"userIdentifier": string, "password": string}
+     * @return array{"userIdentifier": non-empty-string, "password": string}
      */
     public function getCredentials(): array
     {
