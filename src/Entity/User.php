@@ -34,6 +34,9 @@ class User extends AbstractUser implements UserInterface, PasswordAuthenticatedU
      */
     protected array $roles = self::ROLES;
 
+    /**
+     * @param non-empty-string $userIdentifier
+     */
     public function __construct(string $id, string $userIdentifier, string $password)
     {
         $this->id = $id;

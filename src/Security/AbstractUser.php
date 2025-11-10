@@ -55,19 +55,24 @@ abstract class AbstractUser implements IdentifiableUserInterface, UserInterface,
         return $this->getUserIdentifier();
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getUserIdentifier(): string
     {
+        \assert('' !== $this->userIdentifier);
+
         return $this->userIdentifier;
     }
 
     /**
-     * @return array{"id": string, "user-identifier": string}
+     * @return array{"id": string, "user-identifier": non-empty-string}
      */
     public function jsonSerialize(): array
     {
         return [
             'id' => $this->id,
-            'user-identifier' => $this->userIdentifier,
+            'user-identifier' => $this->getUserIdentifier(),
         ];
     }
 }
