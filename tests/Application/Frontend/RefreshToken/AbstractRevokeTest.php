@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace App\Tests\Application\Frontend\RefreshToken;
 
 use App\Tests\Application\AbstractApplicationTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 abstract class AbstractRevokeTest extends AbstractApplicationTestCase
 {
-    /**
-     * @dataProvider badMethodDataProvider
-     */
+    #[DataProvider('badMethodDataProvider')]
     public function testRevokeBadMethod(string $method): void
     {
         $response = $this->applicationClient->makeRevokeRefreshTokenRequest('jwt', 'refresh token', $method);
@@ -36,9 +35,7 @@ abstract class AbstractRevokeTest extends AbstractApplicationTestCase
         ];
     }
 
-    /**
-     * @dataProvider revokeUnauthorizedDataProvider
-     */
+    #[DataProvider('revokeUnauthorizedDataProvider')]
     public function testRevokeUnauthorized(?string $jwt): void
     {
         $response = $this->applicationClient->makeRevokeRefreshTokenRequest($jwt, 'refresh token');

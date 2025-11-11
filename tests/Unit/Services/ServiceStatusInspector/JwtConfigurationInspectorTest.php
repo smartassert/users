@@ -8,13 +8,12 @@ use App\Exception\InvalidJwtKeyException;
 use App\Services\ServiceStatusInspector\JwtConfigurationInspector;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\KeyLoader\KeyLoaderInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class JwtConfigurationInspectorTest extends TestCase
 {
-    /**
-     * @dataProvider invokeFailureInvalidKeyDataProvider
-     */
+    #[DataProvider('invokeFailureInvalidKeyDataProvider')]
     public function testInvokeFailureInvalidKey(
         KeyLoaderInterface $keyLoader,
         \Exception $expectedException

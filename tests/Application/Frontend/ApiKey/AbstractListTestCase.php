@@ -11,12 +11,11 @@ use App\Security\IdentifiableUserInterface;
 use App\Services\ApiKeyFactory;
 use App\Tests\Application\AbstractApplicationTestCase;
 use App\Tests\Services\ApplicationClient\Client;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 abstract class AbstractListTestCase extends AbstractApplicationTestCase
 {
-    /**
-     * @dataProvider listBadMethodDataProvider
-     */
+    #[DataProvider('listBadMethodDataProvider')]
     public function testListBadMethod(string $method): void
     {
         $response = $this->applicationClient->makeListApiKeysRequest('token', $method);
@@ -42,9 +41,7 @@ abstract class AbstractListTestCase extends AbstractApplicationTestCase
         ];
     }
 
-    /**
-     * @dataProvider listUnauthorizedDataProvider
-     */
+    #[DataProvider('listUnauthorizedDataProvider')]
     public function testListUnauthorized(?string $token): void
     {
         $response = $this->applicationClient->makeListApiKeysRequest($token);
@@ -70,9 +67,7 @@ abstract class AbstractListTestCase extends AbstractApplicationTestCase
         ];
     }
 
-    /**
-     * @dataProvider listSuccessDataProvider
-     */
+    #[DataProvider('listSuccessDataProvider')]
     public function testListSuccess(
         callable $setup,
         string $userIdentifier,

@@ -6,6 +6,7 @@ namespace App\Tests\Functional\Security\Admin;
 
 use App\Security\Admin\Authenticator;
 use App\Tests\Functional\AbstractBaseFunctionalTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
@@ -32,9 +33,7 @@ class AuthenticatorTest extends AbstractBaseFunctionalTestCase
         $this->secondaryAdminToken = is_string($secondaryAdminToken) ? $secondaryAdminToken : '';
     }
 
-    /**
-     * @dataProvider authenticateFailureDataProvider
-     */
+    #[DataProvider('authenticateFailureDataProvider')]
     public function testAuthenticateFailure(Request $request): void
     {
         self::expectExceptionObject(

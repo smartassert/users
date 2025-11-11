@@ -9,6 +9,7 @@ use App\Services\UserRefreshTokenManager;
 use App\Tests\Functional\AbstractBaseFunctionalTestCase;
 use App\Tests\Services\RefreshTokenManager;
 use App\Tests\Services\TestUserFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class UserRefreshTokenManagerTest extends AbstractBaseFunctionalTestCase
 {
@@ -61,9 +62,7 @@ class UserRefreshTokenManagerTest extends AbstractBaseFunctionalTestCase
         self::assertSame(0, $this->refreshTokenManager->count());
     }
 
-    /**
-     * @dataProvider deleteByUserIdHasRefreshTokensDataProvider
-     */
+    #[DataProvider('deleteByUserIdHasRefreshTokensDataProvider')]
     public function testDeleteByUserIdUserHasRefreshTokens(int $refreshTokenCount): void
     {
         for ($refreshTokenIndex = 0; $refreshTokenIndex < $refreshTokenCount; ++$refreshTokenIndex) {

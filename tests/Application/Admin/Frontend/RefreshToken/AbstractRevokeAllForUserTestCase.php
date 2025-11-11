@@ -7,6 +7,7 @@ namespace App\Tests\Application\Admin\Frontend\RefreshToken;
 use App\Entity\User;
 use App\Tests\Application\AbstractApplicationTestCase;
 use App\Tests\Services\RefreshTokenManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Uid\Ulid;
 
 abstract class AbstractRevokeAllForUserTestCase extends AbstractApplicationTestCase
@@ -24,9 +25,7 @@ abstract class AbstractRevokeAllForUserTestCase extends AbstractApplicationTestC
         $this->refreshTokenManager->removeAll();
     }
 
-    /**
-     * @dataProvider revokeBadMethodDataProvider
-     */
+    #[DataProvider('revokeBadMethodDataProvider')]
     public function testRevokeBadMethod(string $method): void
     {
         $response = $this->applicationClient->makeRevokeAllRefreshTokensForUserRequest(
@@ -93,9 +92,7 @@ abstract class AbstractRevokeAllForUserTestCase extends AbstractApplicationTestC
         );
     }
 
-    /**
-     * @dataProvider revokeSuccessDataProvider
-     */
+    #[DataProvider('revokeSuccessDataProvider')]
     public function testRevokeSuccess(int $refreshTokenCount): void
     {
         self::assertSame(0, $this->refreshTokenManager->count());
