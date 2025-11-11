@@ -24,7 +24,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
     /**
      * @return array<mixed>
      */
-    public function createBadMethodDataProvider(): array
+    public static function createBadMethodDataProvider(): array
     {
         return [
             'GET' => [
@@ -52,7 +52,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
     /**
      * @return array<mixed>
      */
-    public function verifyBadMethodDataProvider(): array
+    public static function verifyBadMethodDataProvider(): array
     {
         return [
             'POST' => [
@@ -80,7 +80,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
     /**
      * @return array<mixed>
      */
-    public function refreshBadMethodDataProvider(): array
+    public static function refreshBadMethodDataProvider(): array
     {
         return [
             'GET' => [
@@ -115,7 +115,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
     /**
      * @return array<mixed>
      */
-    public function verifyUnauthorizedDataProvider(): array
+    public static function verifyUnauthorizedDataProvider(): array
     {
         return [
             'no jwt' => [
@@ -179,7 +179,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
     /**
      * @return array<mixed>
      */
-    public function refreshUnauthorizedDataProvider(): array
+    public static function refreshUnauthorizedDataProvider(): array
     {
         return [
             'non-empty invalid token' => [
@@ -228,7 +228,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
     /**
      * @return array<mixed>
      */
-    public function createBadRequestDataProvider(): array
+    public static function createBadRequestDataProvider(): array
     {
         $userIdentifier = 'user@example.com';
         $userPassword = 'password';

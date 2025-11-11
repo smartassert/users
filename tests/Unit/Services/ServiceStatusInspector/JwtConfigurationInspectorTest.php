@@ -30,7 +30,7 @@ class JwtConfigurationInspectorTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function invokeFailureInvalidKeyDataProvider(): array
+    public static function invokeFailureInvalidKeyDataProvider(): array
     {
         return [
             'non-string public key' => [

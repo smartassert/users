@@ -80,7 +80,7 @@ class UserRefreshTokenManagerTest extends AbstractBaseFunctionalTestCase
     /**
      * @return array<mixed>
      */
-    public function deleteByUserIdHasRefreshTokensDataProvider(): array
+    public static function deleteByUserIdHasRefreshTokensDataProvider(): array
     {
         return [
             'one' => [

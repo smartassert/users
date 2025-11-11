@@ -22,7 +22,7 @@ class UserTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function jsonSerializeDataProvider(): array
+    public static function jsonSerializeDataProvider(): array
     {
         return [
             'default' => [

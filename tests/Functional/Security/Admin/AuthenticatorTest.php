@@ -47,7 +47,7 @@ class AuthenticatorTest extends AbstractBaseFunctionalTestCase
     /**
      * @return array<mixed>
      */
-    public function authenticateFailureDataProvider(): array
+    public static function authenticateFailureDataProvider(): array
     {
         return [
             'no authorization header' => [

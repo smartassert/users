@@ -21,7 +21,7 @@ abstract class AbstractRevokeTest extends AbstractApplicationTestCase
     /**
      * @return array<mixed>
      */
-    public function badMethodDataProvider(): array
+    public static function badMethodDataProvider(): array
     {
         return [
             'GET' => [
@@ -49,17 +49,17 @@ abstract class AbstractRevokeTest extends AbstractApplicationTestCase
     /**
      * @return array<mixed>
      */
-    public function revokeUnauthorizedDataProvider(): array
+    public static function revokeUnauthorizedDataProvider(): array
     {
         return [
             'no jwt' => [
-                'token' => null,
+                'jwt' => null,
             ],
             'malformed jwt' => [
-                'token' => 'malformed.jwt.token',
+                'jwt' => 'malformed.jwt.token',
             ],
             'invalid jwt' => [
-                'token' => 'eyJhbGciOiJIUzI1NiJ9.e30.ZRrHA1JJJW8opsbCGfG_HACGpVUMN_a9IV7pAx_Zmeo',
+                'jwt' => 'eyJhbGciOiJIUzI1NiJ9.e30.ZRrHA1JJJW8opsbCGfG_HACGpVUMN_a9IV7pAx_Zmeo',
             ],
         ];
     }

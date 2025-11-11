@@ -25,7 +25,7 @@ abstract class AbstractGetDefaultTestCase extends AbstractApplicationTestCase
     /**
      * @return array<mixed>
      */
-    public function badMethodDataProvider(): array
+    public static function badMethodDataProvider(): array
     {
         return [
             'POST' => [
@@ -53,7 +53,7 @@ abstract class AbstractGetDefaultTestCase extends AbstractApplicationTestCase
     /**
      * @return array<mixed>
      */
-    public function unauthorizedDataProvider(): array
+    public static function unauthorizedDataProvider(): array
     {
         return [
             'no jwt' => [

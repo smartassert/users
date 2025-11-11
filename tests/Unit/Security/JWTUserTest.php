@@ -29,7 +29,7 @@ class JWTUserTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function createFromPayloadThrowsExceptionDataProvider(): array
+    public static function createFromPayloadThrowsExceptionDataProvider(): array
     {
         return [
             'username not string' => [

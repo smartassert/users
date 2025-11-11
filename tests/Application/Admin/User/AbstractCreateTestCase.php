@@ -39,7 +39,7 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
     /**
      * @return array<mixed>
      */
-    public function createBadMethodDataProvider(): array
+    public static function createBadMethodDataProvider(): array
     {
         return [
             'GET' => [
@@ -91,7 +91,7 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
     /**
      * @return array<mixed>
      */
-    public function createBadRequestDataProvider(): array
+    public static function createBadRequestDataProvider(): array
     {
         $identifierTooLong = str_repeat('.', 255);
 
