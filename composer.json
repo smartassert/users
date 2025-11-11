@@ -81,6 +81,7 @@
             "@auto-scripts"
         ],
         "db-setup": [
+            "echo \"CREATE DATABASE users;\" | docker exec -i postgres psql -h localhost -U postgres -f-",
             "php bin/console doctrine:database:create --if-not-exists --quiet",
             "php bin/console doctrine:migrations:migrate --no-interaction --quiet --allow-no-migration"
         ],
