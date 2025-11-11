@@ -9,12 +9,11 @@ use App\Entity\User;
 use App\Repository\ApiKeyRepository;
 use App\Repository\UserRepository;
 use App\Tests\Application\AbstractApplicationTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 abstract class AbstractGetDefaultTestCase extends AbstractApplicationTestCase
 {
-    /**
-     * @dataProvider badMethodDataProvider
-     */
+    #[DataProvider('badMethodDataProvider')]
     public function testGetDefaultBadMethod(string $method): void
     {
         $response = $this->applicationClient->makeGetDefaultApkKeyRequest('token', $method);
@@ -40,9 +39,7 @@ abstract class AbstractGetDefaultTestCase extends AbstractApplicationTestCase
         ];
     }
 
-    /**
-     * @dataProvider unauthorizedDataProvider
-     */
+    #[DataProvider('unauthorizedDataProvider')]
     public function testGetDefaultUnauthorized(?string $token): void
     {
         $response = $this->applicationClient->makeGetDefaultApkKeyRequest($token);

@@ -8,12 +8,11 @@ use App\Repository\UserRepository;
 use App\Services\ApiKeyFactory;
 use App\Tests\Application\AbstractApplicationTestCase;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
 {
-    /**
-     * @dataProvider createBadMethodDataProvider
-     */
+    #[DataProvider('createBadMethodDataProvider')]
     public function testCreateBadMethod(string $method): void
     {
         $response = $this->applicationClient->makeCreteApiTokenRequest($this->getAdminToken(), $method);
@@ -39,9 +38,7 @@ abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
         ];
     }
 
-    /**
-     * @dataProvider verifyBadMethodDataProvider
-     */
+    #[DataProvider('verifyBadMethodDataProvider')]
     public function testVerifyBadMethod(string $method): void
     {
         $response = $this->applicationClient->makeVerifyApiTokenRequest($this->getAdminToken(), $method);

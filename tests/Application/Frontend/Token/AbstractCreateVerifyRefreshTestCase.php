@@ -8,12 +8,11 @@ use App\Repository\UserRepository;
 use App\Services\ApiKeyFactory;
 use App\Tests\Application\AbstractApplicationTestCase;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTestCase
 {
-    /**
-     * @dataProvider createBadMethodDataProvider
-     */
+    #[DataProvider('createBadMethodDataProvider')]
     public function testCreateBadMethod(string $method): void
     {
         $response = $this->applicationClient->makeCreateFrontendTokenRequest('user@example.com', 'password', $method);
@@ -39,9 +38,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         ];
     }
 
-    /**
-     * @dataProvider verifyBadMethodDataProvider
-     */
+    #[DataProvider('verifyBadMethodDataProvider')]
     public function testVerifyBadMethod(string $method): void
     {
         $response = $this->applicationClient->makeVerifyFrontendTokenRequest($this->getAdminToken(), $method);
@@ -67,9 +64,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         ];
     }
 
-    /**
-     * @dataProvider refreshBadMethodDataProvider
-     */
+    #[DataProvider('refreshBadMethodDataProvider')]
     public function testRefreshBadMethod(string $method): void
     {
         $response = $this->applicationClient->makeRefreshFrontendTokenRequest('refresh token', $method);
@@ -102,9 +97,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         self::assertSame(401, $response->getStatusCode());
     }
 
-    /**
-     * @dataProvider verifyUnauthorizedDataProvider
-     */
+    #[DataProvider('verifyUnauthorizedDataProvider')]
     public function testVerifyUnauthorized(?string $token): void
     {
         $response = $this->applicationClient->makeVerifyFrontendTokenRequest($token);
@@ -166,9 +159,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         self::assertSame(401, $verifyResponse->getStatusCode());
     }
 
-    /**
-     * @dataProvider refreshUnauthorizedDataProvider
-     */
+    #[DataProvider('refreshUnauthorizedDataProvider')]
     public function testRefreshUnauthorized(?string $token, bool $forceEmptyPayload = false): void
     {
         $response = $this->applicationClient->makeRefreshFrontendTokenRequest($token, 'POST', $forceEmptyPayload);
@@ -198,9 +189,7 @@ abstract class AbstractCreateVerifyRefreshTestCase extends AbstractApplicationTe
         ];
     }
 
-    /**
-     * @dataProvider createBadRequestDataProvider
-     */
+    #[DataProvider('createBadRequestDataProvider')]
     public function testCreateBadRequest(
         string $createUserIdentifier,
         string $createUserPassword,

@@ -9,6 +9,7 @@ use App\Repository\ApiKeyRepository;
 use App\Services\ApiKeyFactory;
 use App\Tests\Functional\AbstractBaseFunctionalTestCase;
 use App\Tests\Services\TestUserFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ApiKeyFactoryTest extends AbstractBaseFunctionalTestCase
 {
@@ -51,10 +52,9 @@ class ApiKeyFactoryTest extends AbstractBaseFunctionalTestCase
     }
 
     /**
-     * @dataProvider createIsIdempotentDataProvider
-     *
      * @param ?non-empty-string $label
      */
+    #[DataProvider('createIsIdempotentDataProvider')]
     public function testCreateIsIdempotent(?string $label): void
     {
         self::assertCount(0, $this->apiKeyRepository->findAll());

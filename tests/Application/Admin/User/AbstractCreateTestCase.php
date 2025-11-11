@@ -6,6 +6,7 @@ namespace App\Tests\Application\Admin\User;
 
 use App\Repository\UserRepository;
 use App\Tests\Application\AbstractApplicationTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\ResponseInterface;
 
 abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
@@ -21,9 +22,7 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
         $this->userRepository = $userRepository;
     }
 
-    /**
-     * @dataProvider createBadMethodDataProvider
-     */
+    #[DataProvider('createBadMethodDataProvider')]
     public function testCreateBadMethod(string $method): void
     {
         $response = $this->applicationClient->makeAdminCreateUserRequest(
@@ -67,10 +66,9 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
     }
 
     /**
-     * @dataProvider createBadRequestDataProvider
-     *
      * @param array<mixed> $expectedResponseData
      */
+    #[DataProvider('createBadRequestDataProvider')]
     public function testCreateBadRequest(
         ?string $identifier,
         ?string $password,

@@ -7,15 +7,15 @@ namespace App\Tests\Unit\Security;
 use App\Exception\InvalidJwtUserPayloadException;
 use App\Exception\InvalidJwtUserUsernameException;
 use App\Security\JWTUser;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class JWTUserTest extends TestCase
 {
     /**
-     * @dataProvider createFromPayloadThrowsExceptionDataProvider
-     *
      * @param array<mixed> $payload
      */
+    #[DataProvider('createFromPayloadThrowsExceptionDataProvider')]
     public function testCreateFromPayloadThrowsException(
         mixed $username,
         array $payload,
