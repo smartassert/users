@@ -69,7 +69,7 @@ class ApiKeyFactoryTest extends AbstractBaseFunctionalTestCase
     /**
      * @return array<mixed>
      */
-    public function createIsIdempotentDataProvider(): array
+    public static function createIsIdempotentDataProvider(): array
     {
         return [
             'null' => [

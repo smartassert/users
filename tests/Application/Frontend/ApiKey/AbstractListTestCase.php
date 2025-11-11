@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Application\Frontend\ApiKey;
 
-use App\Entity\ApiKey;
 use App\Entity\User;
 use App\Repository\ApiKeyRepository;
 use App\Repository\UserRepository;
@@ -28,7 +27,7 @@ abstract class AbstractListTestCase extends AbstractApplicationTestCase
     /**
      * @return array<mixed>
      */
-    public function listBadMethodDataProvider(): array
+    public static function listBadMethodDataProvider(): array
     {
         return [
             'POST' => [
@@ -56,7 +55,7 @@ abstract class AbstractListTestCase extends AbstractApplicationTestCase
     /**
      * @return array<mixed>
      */
-    public function listUnauthorizedDataProvider(): array
+    public static function listUnauthorizedDataProvider(): array
     {
         return [
             'no jwt' => [
@@ -94,7 +93,7 @@ abstract class AbstractListTestCase extends AbstractApplicationTestCase
         $user = $userRepository->findByUserIdentifier($userIdentifier);
         \assert($user instanceof User);
 
-        $setup($this->applicationClient, $apiKeyFactory, $user);
+        $setup($this->applicationClient, $apiKeyFactory, $user, $this->getAdminToken());
 
         $createTokenResponse = $this->applicationClient->makeCreateFrontendTokenRequest($userIdentifier, $userPassword);
         $createTokenData = json_decode($createTokenResponse->getBody()->getContents(), true);
@@ -119,7 +118,7 @@ abstract class AbstractListTestCase extends AbstractApplicationTestCase
     /**
      * @return array<mixed>
      */
-    public function listSuccessDataProvider(): array
+    public static function listSuccessDataProvider(): array
     {
         return [
             'single user, default api key only' => [
@@ -150,21 +149,35 @@ abstract class AbstractListTestCase extends AbstractApplicationTestCase
                         }
                     }
 
-                    return $this->createExpectedResponseDataFromApiKeyCollection($apiKeys);
+                    $expectedResponseData = [];
+
+                    foreach ($apiKeys as $apiKey) {
+                        $expectedResponseData[] = [
+                            'label' => $apiKey->label,
+                            'key' => $apiKey->id,
+                        ];
+                    }
+
+                    return $expectedResponseData;
                 },
             ],
             'multiple users, specific has has default api key only' => [
-                'setup' => function (Client $applicationClient) {
+                'setup' => function (
+                    Client $applicationClient,
+                    ApiKeyFactory $apiKeyFactory,
+                    User $user,
+                    string $adminToken
+                ) {
                     $applicationClient->makeAdminCreateUserRequest(
                         'user2@example.com',
                         'password',
-                        $this->getAdminToken()
+                        $adminToken
                     );
 
                     $applicationClient->makeAdminCreateUserRequest(
                         'user3@example.com',
                         'password',
-                        $this->getAdminToken()
+                        $adminToken
                     );
                 },
                 'userIdentifier' => 'user@example.com',
@@ -177,23 +190,4 @@ abstract class AbstractListTestCase extends AbstractApplicationTestCase
     }
 
     abstract protected function getAdminToken(): string;
-
-    /**
-     * @param ApiKey[] $apiKeys
-     *
-     * @return array<mixed>
-     */
-    private function createExpectedResponseDataFromApiKeyCollection(iterable $apiKeys): array
-    {
-        $expectedResponseData = [];
-
-        foreach ($apiKeys as $apiKey) {
-            $expectedResponseData[] = [
-                'label' => $apiKey->label,
-                'key' => $apiKey->id,
-            ];
-        }
-
-        return $expectedResponseData;
-    }
 }

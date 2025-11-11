@@ -41,7 +41,7 @@ abstract class AbstractRevokeAllForUserTestCase extends AbstractApplicationTestC
     /**
      * @return array<mixed>
      */
-    public function revokeBadMethodDataProvider(): array
+    public static function revokeBadMethodDataProvider(): array
     {
         return [
             'GET' => [
@@ -134,7 +134,7 @@ abstract class AbstractRevokeAllForUserTestCase extends AbstractApplicationTestC
     /**
      * @return array<mixed>
      */
-    public function revokeSuccessDataProvider(): array
+    public static function revokeSuccessDataProvider(): array
     {
         return [
             'one' => [

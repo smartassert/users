@@ -24,7 +24,7 @@ abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
     /**
      * @return array<mixed>
      */
-    public function createBadMethodDataProvider(): array
+    public static function createBadMethodDataProvider(): array
     {
         return [
             'GET' => [
@@ -52,7 +52,7 @@ abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
     /**
      * @return array<mixed>
      */
-    public function verifyBadMethodDataProvider(): array
+    public static function verifyBadMethodDataProvider(): array
     {
         return [
             'POST' => [

@@ -33,7 +33,7 @@
         "phpstan/phpstan-mockery": "^2.0",
         "phpstan/phpstan-phpunit": "^2.0",
         "phpstan/phpstan-symfony": "^2.0",
-        "phpunit/phpunit": "^9.5",
+        "phpunit/phpunit": "^10",
         "smartassert/symfony-test-client": "^2.1",
         "squizlabs/php_codesniffer": "^4",
         "symfony/browser-kit": "7.3.*",
