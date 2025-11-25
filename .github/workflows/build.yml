@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: Checkout code for non-manual run
         if: ${{ github.event_name != 'workflow_dispatch' }}
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Output inputs for manual run
         if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -40,7 +40,7 @@ jobs:
 
       - name: Checkout code for manual run
         if: ${{ github.event_name == 'workflow_dispatch' }}
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.inputs.version }}
 
