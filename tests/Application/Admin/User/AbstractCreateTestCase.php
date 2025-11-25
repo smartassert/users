@@ -107,7 +107,7 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
                             'size' => [
                                 'minimum' => 1,
                                 'maximum' => 254,
-                            ]
+                            ],
                         ],
                     ],
                     'type' => 'wrong_size',
@@ -126,7 +126,7 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
                             'size' => [
                                 'minimum' => 1,
                                 'maximum' => 254,
-                            ]
+                            ],
                         ],
                     ],
                     'type' => 'wrong_size',
@@ -145,7 +145,7 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
                             'size' => [
                                 'minimum' => 1,
                                 'maximum' => 254,
-                            ]
+                            ],
                         ],
                     ],
                     'type' => 'wrong_size',
@@ -164,7 +164,7 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
                             'size' => [
                                 'minimum' => 1,
                                 'maximum' => null,
-                            ]
+                            ],
                         ],
                     ],
                     'type' => 'wrong_size',
@@ -183,7 +183,7 @@ abstract class AbstractCreateTestCase extends AbstractApplicationTestCase
                             'size' => [
                                 'minimum' => 1,
                                 'maximum' => null,
-                            ]
+                            ],
                         ],
                     ],
                     'type' => 'wrong_size',

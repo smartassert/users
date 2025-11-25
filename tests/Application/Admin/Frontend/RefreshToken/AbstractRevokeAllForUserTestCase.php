@@ -83,7 +83,7 @@ abstract class AbstractRevokeAllForUserTestCase extends AbstractApplicationTestC
                         'size' => [
                             'minimum' => 1,
                             'maximum' => null,
-                        ]
+                        ],
                     ],
                 ],
                 'type' => 'wrong_size',
