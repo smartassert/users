@@ -16,8 +16,7 @@ class UserRemover
         private EntityManagerInterface $entityManager,
         private UserRepository $userRepository,
         private ApiKeyRepository $apiKeyRepository,
-    ) {
-    }
+    ) {}
 
     public function removeAll(): void
     {

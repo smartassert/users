@@ -14,8 +14,7 @@ readonly class UserController
 {
     public function __construct(
         private UserFactory $userFactory,
-    ) {
-    }
+    ) {}
 
     public function create(CreateUserRequest $request): Response
     {

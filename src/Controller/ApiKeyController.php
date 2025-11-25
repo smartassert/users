@@ -16,8 +16,7 @@ readonly class ApiKeyController
     public function __construct(
         private ApiKeyRepository $apiKeyRepository,
         private ApiKeyFactory $apiKeyFactory,
-    ) {
-    }
+    ) {}
 
     public function list(IdentifiableUserInterface $user): Response
     {

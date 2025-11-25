@@ -23,8 +23,7 @@ class Authenticator extends AbstractAuthenticator
     public function __construct(
         private TokenExtractorInterface $tokenExtractor,
         private array $validTokens
-    ) {
-    }
+    ) {}
 
     public function supports(Request $request): bool
     {

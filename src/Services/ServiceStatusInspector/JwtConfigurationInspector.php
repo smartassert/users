@@ -18,8 +18,7 @@ class JwtConfigurationInspector implements ComponentStatusInspectorInterface
         private JWTEncoderInterface $jwtEncoder,
         private KeyLoaderInterface $keyLoader,
         private readonly string $identifier = self::DEFAULT_IDENTIFIER,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws InvalidJwtKeyException

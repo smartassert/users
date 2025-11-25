@@ -15,8 +15,7 @@ abstract class AbstractUser implements IdentifiableUserInterface, UserInterface,
         protected string $id,
         protected string $userIdentifier,
         protected array $roles
-    ) {
-    }
+    ) {}
 
     public function getId(): string
     {

@@ -11,8 +11,7 @@ readonly class JwtToken
      */
     public function __construct(
         private array $data,
-    ) {
-    }
+    ) {}
 
     /**
      * @return string[]

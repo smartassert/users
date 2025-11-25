@@ -13,8 +13,7 @@ class ApiKeyFactory
 {
     public function __construct(
         private readonly ApiKeyRepository $repository,
-    ) {
-    }
+    ) {}
 
     /**
      * @param ?non-empty-string $label

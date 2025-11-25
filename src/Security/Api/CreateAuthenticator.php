@@ -25,8 +25,7 @@ class CreateAuthenticator extends AbstractAuthenticator
         private TokenExtractorInterface $tokenExtractor,
         private JWTTokenManagerInterface $JWTTokenManager,
         private AuthenticationSuccessHandler $successHandler,
-    ) {
-    }
+    ) {}
 
     public function supports(Request $request): bool
     {
