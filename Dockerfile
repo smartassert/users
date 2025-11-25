@@ -43,7 +43,6 @@ COPY public/index.php public/
 COPY src /app/src
 COPY config/bundles.php config/services.yaml /app/config/
 COPY config/packages/*.yaml /app/config/packages/
-COPY config/packages/prod /app/config/packages/prod
 COPY config/routes.yaml /app/config/
 COPY migrations /app/migrations
 
