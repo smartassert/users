@@ -12,8 +12,7 @@ class UserRefreshTokenManager
     public function __construct(
         private readonly RefreshTokenManagerInterface $refreshTokenManager,
         private readonly UserRepository $userRepository,
-    ) {
-    }
+    ) {}
 
     public function deleteByUserId(string $id): void
     {

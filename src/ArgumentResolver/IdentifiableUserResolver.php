@@ -14,8 +14,7 @@ readonly class IdentifiableUserResolver implements ValueResolverInterface
 {
     public function __construct(
         private Security $security,
-    ) {
-    }
+    ) {}
 
     /**
      * @return IdentifiableUserInterface[]

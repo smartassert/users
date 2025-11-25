@@ -16,8 +16,7 @@ class TestUserFactory
         private UserFactory $userFactory,
         private string $testUserIdentifier,
         private string $testUserPassword,
-    ) {
-    }
+    ) {}
 
     public function create(): User
     {

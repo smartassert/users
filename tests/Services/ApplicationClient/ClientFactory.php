@@ -11,8 +11,7 @@ class ClientFactory
 {
     public function __construct(
         private RouterInterface $router,
-    ) {
-    }
+    ) {}
 
     public function create(ClientInterface $client): Client
     {

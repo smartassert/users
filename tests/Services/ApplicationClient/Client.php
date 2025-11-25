@@ -13,8 +13,7 @@ class Client
     public function __construct(
         private readonly ClientInterface $client,
         private readonly RouterInterface $router,
-    ) {
-    }
+    ) {}
 
     public function makeRevokeAllRefreshTokensForUserRequest(
         string $userId,
@@ -121,7 +120,7 @@ class Client
         $payload = null;
         if (is_string($refreshToken) || $forceEmptyPayload) {
             $payload = (string) json_encode([
-                'refresh_token' => $refreshToken
+                'refresh_token' => $refreshToken,
             ]);
         }
 

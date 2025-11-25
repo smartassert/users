@@ -12,8 +12,7 @@ readonly class TokenAuthenticationSuccessListener
 {
     public function __construct(
         private JWTTokenManagerInterface $jwtTokenManager,
-    ) {
-    }
+    ) {}
 
     public function __invoke(AuthenticationSuccessEvent $event): void
     {

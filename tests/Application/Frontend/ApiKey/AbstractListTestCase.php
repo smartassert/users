@@ -117,8 +117,7 @@ abstract class AbstractListTestCase extends AbstractApplicationTestCase
     {
         return [
             'single user, default api key only' => [
-                'setup' => function (Client $applicationClient) {
-                },
+                'setup' => function (Client $applicationClient) {},
                 'userIdentifier' => 'user@example.com',
                 'userPassword' => 'password',
                 'expectedResponseDataCreator' => function () {

@@ -15,8 +15,7 @@ readonly class RefreshTokenController
 {
     public function __construct(
         private UserRefreshTokenManager $tokenManager,
-    ) {
-    }
+    ) {}
 
     public function revokeAllForUser(RevokeRefreshTokenRequest $request): Response
     {

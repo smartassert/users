@@ -14,8 +14,7 @@ class User implements UserInterface
      */
     public function __construct(
         private string $token
-    ) {
-    }
+    ) {}
 
     /**
      * @return string[]
@@ -37,9 +36,7 @@ class User implements UserInterface
         return null;
     }
 
-    public function eraseCredentials(): void
-    {
-    }
+    public function eraseCredentials(): void {}
 
     public function getUsername(): string
     {

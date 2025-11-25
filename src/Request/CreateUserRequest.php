@@ -16,6 +16,5 @@ class CreateUserRequest
     public function __construct(
         public readonly string $identifier,
         public readonly string $password,
-    ) {
-    }
+    ) {}
 }

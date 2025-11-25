@@ -71,7 +71,7 @@ class AuthenticatorTest extends AbstractBaseFunctionalTestCase
     {
         $adminTokens = [
             $this->primaryAdminToken,
-            $this->secondaryAdminToken
+            $this->secondaryAdminToken,
         ];
 
         foreach ($adminTokens as $adminToken) {

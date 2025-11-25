@@ -17,8 +17,7 @@ class UserFactory
         private EntityManagerInterface $entityManager,
         private UserRepository $userRepository,
         private UserPasswordHasherInterface $passwordHasher,
-    ) {
-    }
+    ) {}
 
     /**
      * @param non-empty-string $userIdentifier
