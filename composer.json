@@ -11,7 +11,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.6",
         "gesdinet/jwt-refresh-token-bundle": "^1.5",
         "lexik/jwt-authentication-bundle": "^3.1",
-        "smartassert/health-check-bundle": "^6.0",
+        "smartassert/health-check-bundle": "^8.1",
         "smartassert/service-request": "^1.4",
         "symfony/console": "7.3.*",
         "symfony/dotenv": "7.3.*",
