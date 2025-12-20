@@ -13,7 +13,7 @@
         "lexik/jwt-authentication-bundle": "^3.1",
         "smartassert/health-check-bundle": "^8.1",
         "smartassert/service-request": "^1.4",
-        "symfony/console": "7.4.*",
+        "symfony/console": "8.0.*",
         "symfony/dotenv": "7.4.*",
         "symfony/flex": "^2.0",
         "symfony/framework-bundle": "7.4.*",
