@@ -20,7 +20,7 @@
         "symfony/monolog-bundle": "^4.0",
         "symfony/runtime": "7.4.*",
         "symfony/security-bundle": "7.4.*",
-        "symfony/uid": "7.4.*",
+        "symfony/uid": "8.0.*",
         "symfony/yaml": "7.4.*"
     },
     "require-dev": {
