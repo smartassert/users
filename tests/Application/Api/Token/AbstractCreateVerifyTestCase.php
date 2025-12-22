@@ -95,6 +95,7 @@ abstract class AbstractCreateVerifyTestCase extends AbstractApplicationTestCase
             $userIdentifier,
             $userPassword
         );
+
         self::assertSame(200, $createFrontendTokenResponse->getStatusCode());
         self::assertSame('application/json', $createFrontendTokenResponse->getHeaderLine('content-type'));
 
