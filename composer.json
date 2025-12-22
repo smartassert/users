@@ -9,19 +9,19 @@
         "ext-iconv": "*",
         "doctrine/doctrine-bundle": "^3.0",
         "doctrine/doctrine-migrations-bundle": "^4.0",
-        "gesdinet/jwt-refresh-token-bundle": "dev-master#e72b2a1d4972cc06a605d8628e33116db64ced8a",
+        "gesdinet/jwt-refresh-token-bundle": "dev-master#e4b98ff53c7c88709da77df7a19d8183c7d23d50",
         "lexik/jwt-authentication-bundle": "^3.1",
         "smartassert/health-check-bundle": "^8.1",
         "smartassert/service-request": "^1.4",
         "symfony/console": "8.0.*",
-        "symfony/dotenv": "7.4.*",
+        "symfony/dotenv": "8.0.*",
         "symfony/flex": "^2.0",
-        "symfony/framework-bundle": "7.4.*",
+        "symfony/framework-bundle": "8.0.*",
         "symfony/monolog-bundle": "^4.0",
-        "symfony/runtime": "7.4.*",
-        "symfony/security-bundle": "7.4.*",
+        "symfony/runtime": "8.0.*",
+        "symfony/security-bundle": "8.0.*",
         "symfony/uid": "8.0.*",
-        "symfony/yaml": "7.4.*"
+        "symfony/yaml": "8.0.*"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.90",
@@ -37,11 +37,11 @@
         "phpunit/phpunit": "^12",
         "smartassert/symfony-test-client": "^3.0",
         "squizlabs/php_codesniffer": "^4",
-        "symfony/browser-kit": "7.4.*",
-        "symfony/css-selector": "7.4.*",
+        "symfony/browser-kit": "8.0.*",
+        "symfony/css-selector": "8.0.*",
         "symfony/maker-bundle": "^1.33",
-        "symfony/phpunit-bridge": "7.4.*",
-        "symfony/psr-http-message-bridge": "7.4.*"
+        "symfony/phpunit-bridge": "8.0.*",
+        "symfony/psr-http-message-bridge": "8.0.*"
     },
     "config": {
         "optimize-autoloader": true,
@@ -143,7 +143,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.4.*"
+            "require": "8.0.*"
         }
     }
 }
