@@ -3,7 +3,7 @@ WORKDIR /app
 COPY composer.json .
 RUN composer install --no-dev --no-scripts --no-interaction --prefer-dist
 COPY . .
-RUN composer dump-autoload --optimize --classmap-authoritative
+RUN composer dump-autoload --optimize --classmap-authoritative && rm composer.lock
 
 FROM php:8.5-fpm-alpine
 
@@ -28,7 +28,7 @@ ENV JWT_PASSPHRASE=$JWT_PASSPHRASE
 ENV JWT_TOKEN_TTL=$JWT_TOKEN_TTL
 ENV PRIMARY_ADMIN_TOKEN=$PRIMARY_ADMIN_TOKEN
 ENV SECONDARY_ADMIN_TOKEN=$SECONDARY_ADMIN_TOKEN
-ENV IS_READY=$READY
+ENV IS_READY=$IS_READY
 
 RUN apk add --no-cache \
     curl \
