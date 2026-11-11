@@ -5,7 +5,7 @@ RUN composer install --no-dev --no-scripts --no-interaction --prefer-dist
 COPY . .
 RUN composer dump-autoload --optimize --classmap-authoritative
 
-FROM php:8.5-fpm-bookworm
+FROM php:8.5-fpm-alpine
 
 WORKDIR /app
 COPY --from=composer_build /app /app
@@ -30,18 +30,18 @@ ENV PRIMARY_ADMIN_TOKEN=$PRIMARY_ADMIN_TOKEN
 ENV SECONDARY_ADMIN_TOKEN=$SECONDARY_ADMIN_TOKEN
 ENV IS_READY=$READY
 
-RUN apt-get -qq update && apt-get -qq -y install  \
-  git \
-  libicu-dev \
-  libpq-dev \
-  libzip-dev \
-  zip \
-  && docker-php-ext-install \
-  intl \
-  pdo_pgsql \
-  zip \
-  && apt-get autoremove -y \
-  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apk add --no-cache \
+    curl \
+    icu-dev \
+    libzip-dev \
+    postgresql-dev \
+    linux-headers \
+    && docker-php-ext-install \
+    intl \
+    zip \
+    pdo \
+    pdo_pgsql \
+    && rm -rf /var/cache/apk/*
 
 RUN mkdir -p /app/var/log \
   && chown -R www-data:www-data /app/var/log \
