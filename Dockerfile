@@ -1,6 +1,14 @@
-FROM php:8.5-fpm-bookworm
+FROM composer:2 AS composer_build
+WORKDIR /app
+COPY composer.json .
+RUN composer install --no-dev --no-scripts --no-interaction --prefer-dist
+COPY . .
+RUN composer dump-autoload --optimize --classmap-authoritative && rm composer.lock
+
+FROM php:8.5-fpm-alpine
 
 WORKDIR /app
+COPY --from=composer_build /app /app
 
 ARG APP_ENV=prod
 ARG DATABASE_URL=postgresql://database_user:database_password@0.0.0.0:5432/database_name?serverVersion=12&charset=utf8
@@ -20,35 +28,22 @@ ENV JWT_PASSPHRASE=$JWT_PASSPHRASE
 ENV JWT_TOKEN_TTL=$JWT_TOKEN_TTL
 ENV PRIMARY_ADMIN_TOKEN=$PRIMARY_ADMIN_TOKEN
 ENV SECONDARY_ADMIN_TOKEN=$SECONDARY_ADMIN_TOKEN
-ENV IS_READY=$READY
+ENV IS_READY=$IS_READY
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-RUN apt-get -qq update && apt-get -qq -y install  \
-  git \
-  libicu-dev \
-  libpq-dev \
-  libzip-dev \
-  zip \
-  && docker-php-ext-install \
-  intl \
-  pdo_pgsql \
-  zip \
-  && apt-get autoremove -y \
-  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-COPY composer.json /app/
-COPY bin/console /app/bin/console
-COPY public/index.php public/
-COPY src /app/src
-COPY config/bundles.php config/services.yaml /app/config/
-COPY config/packages/*.yaml /app/config/packages/
-COPY config/routes.yaml /app/config/
-COPY migrations /app/migrations
+RUN apk add --no-cache \
+    curl \
+    icu-dev \
+    libzip-dev \
+    postgresql-dev \
+    linux-headers \
+    && docker-php-ext-install \
+    intl \
+    zip \
+    pdo \
+    pdo_pgsql \
+    && rm -rf /var/cache/apk/*
 
 RUN mkdir -p /app/var/log \
   && chown -R www-data:www-data /app/var/log \
   && echo "APP_SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)" > .env \
-  && COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --no-scripts \
-  && rm composer.lock \
   && php bin/console cache:clear
