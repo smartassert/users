@@ -21,4 +21,5 @@ return (new PhpCsFixer\Config())
         'declare_strict_types' => true,
     ])
     ->setFinder($finder)
+    ->setUnsupportedPhpVersionAllowed(true)
     ;
