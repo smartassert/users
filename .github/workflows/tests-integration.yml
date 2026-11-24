@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         operating-system: [ubuntu-latest]
-        php: ['8.5']
+        php: ['8.5', '8.6']
     runs-on: ${{ matrix.operating-system }}
 
     steps:
@@ -28,6 +28,11 @@ jobs:
 
       - name: Install Composer dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Set PHP version in Dockerfile
+        run: |
+          sed -i 's/8.5-fpm/${{ matrix.php }}-fpm/g' Dockerfile
+          cat Dockerfile
 
       - name: Pull images
         run: composer integration-pull
